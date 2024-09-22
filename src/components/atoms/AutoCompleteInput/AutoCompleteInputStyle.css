@@ -1,0 +1,5 @@
+/* NEEDED TO OVERRIDE TO BE RESPONSIVE */
+.ant-select-selector {
+  display: flex;
+  flex: 1;
+}
