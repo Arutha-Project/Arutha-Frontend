@@ -10,7 +10,7 @@
     "start": "vite",
     "stage": "vite",
     "build": "tsc && vite build",
-    "qa-build": "tsc && dotenv -e .env.qa vite build",
+    "qa-build": "vite build",
     "lint": "eslint src --fix --ext ts,tsx --report-unused-disable-directives",
     "format": "prettier --write .",
     "preview": "preview",
