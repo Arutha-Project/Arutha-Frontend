@@ -1,0 +1,42 @@
+{
+  "name": "arutha-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "repository": {
+    "directory": "Arutha/arutha-frontend",
+    "url": "https://github.com/Arutha-Project/Arutha-Frontend.git"
+  },
+  "scripts": {
+    "start": "vite",
+    "stage": "dotenv -e .env.production vite",
+    "build": "tsc && vite build",
+    "qa-build": "tsc && dotenv -e .env.qa vite build",
+    "lint": "eslint src --fix --ext ts,tsx --report-unused-disable-directives",
+    "format": "prettier --write .",
+    "preview": "dotenv -e .env.production vite preview",
+    "clean": "yarn cache clean && yarn",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "antd": "^5.21.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^9.1.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@types/node": "^22.5.5",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^9.9.0",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "globals": "^15.9.0",
+    "husky": "^9.1.6",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.1",
+    "vite": "^5.4.1"
+  }
+}
