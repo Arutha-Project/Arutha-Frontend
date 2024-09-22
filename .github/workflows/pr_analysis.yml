@@ -1,0 +1,52 @@
+name: Analyze pull request
+on:
+  # Trigger analysis when open edit, synchronize or re-opene a pull request.
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+      - name: Install npm #We run this to identify vulnerabilities not caught under yarn install
+        run: npm install
+
+  production-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ vars.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      - name: Run yarn install
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: install # will run `yarn install` command
+
+      - name: Build QA bundle
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: qa-build # will run `yarn qa-build` command
+#     - name : Test execution
+#       run : |
+#           npm run test
+#           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
+#     - name: SonarQube Scan
+#       uses: sonarsource/sonarqube-scan-action@master
+#       env:
+#         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
