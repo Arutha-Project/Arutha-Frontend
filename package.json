@@ -6,8 +6,12 @@
   "scripts": {
     "start": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "qa-build": "tsc && dotenv vite build",
+    "lint": "eslint src --fix --ext ts,tsx --report-unused-disable-directives",
+    "format": "prettier --write .",
+    "preview": "dotenv vite preview",
+    "clean": "yarn cache clean && yarn",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
