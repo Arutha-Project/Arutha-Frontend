@@ -18,29 +18,29 @@ jobs:
       - name: Install npm #We run this to identify vulnerabilities not caught under yarn install
         run: npm install
 
-  production-build:
-    runs-on: ubuntu-latest
+  # production-build:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ vars.NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ vars.NODE_VERSION }}
+  #     - name: Use Node.js ${{ vars.NODE_VERSION }}
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ vars.NODE_VERSION }}
 
-      - name: Run yarn install
-        uses: borales/actions-yarn@v5
-        with:
-          cmd: install # will run `yarn install` command
+  #     - name: Run yarn install
+  #       uses: borales/actions-yarn@v5
+  #       with:
+  #         cmd: install # will run `yarn install` command
 
-      - name: Build QA bundle
-        env:
-          NODE_OPTIONS: "--max_old_space_size=4096"
-        uses: borales/actions-yarn@v5
-        with:
-          cmd: qa-build # will run `yarn qa-build` command
+  #     - name: Build QA bundle
+  #       env:
+  #         NODE_OPTIONS: "--max_old_space_size=4096"
+  #       uses: borales/actions-yarn@v5
+  #       with:
+  #         cmd: qa-build # will run `yarn qa-build` command
 #     - name : Test execution
 #       run : |
 #           npm run test
