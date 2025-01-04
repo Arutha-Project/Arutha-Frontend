@@ -10,8 +10,7 @@
     "lint": "eslint src --fix --ext ts,tsx --report-unused-disable-directives",
     "format": "prettier --write .",
     "preview": "dotenv vite preview",
-    "clean": "yarn cache clean && yarn",
-    "prepare": "husky install"
+    "clean": "yarn cache clean && yarn"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
