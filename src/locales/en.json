@@ -1,0 +1,10 @@
+{
+  "welcome": "Welcome to Arutha Educational Platform",
+  "email_placeholder": "Enter your Email",
+  "password_placeholder": "Enter your Password",
+  "email_required": "Please enter Email",
+  "password_required": "Please enter Password",
+  "signin": "Sign in",
+  "homePageWelcome": "Welcome to the Home Page",
+  "homePageDescription": "This is the home page of the application."
+}
