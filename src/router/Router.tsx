@@ -11,7 +11,7 @@ function Router() {
       <Routes>
         <Route path={"/"} Component={LoginPage} />
         <Route path={"/home"} Component={HomePage} />
-        <Route path={"/objectIdentifierPage"} Component={objectIdentifierPage} />
+        <Route path={"/object-identifier"} Component={objectIdentifierPage} />
       </Routes>
     </BrowserRouter>
   );
