@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { uploadVideo } from '../../../services';
 
 const ObjectIdentifierPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -58,32 +59,49 @@ const ObjectIdentifierPage: React.FC = () => {
   };
 
   const submitVideo = async () => {
-    if (recordedChunks.length === 0) return;
-
-    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-    const formData = new FormData();
-    formData.append('file', blob, 'recording.webm');
-
     setLoading(true); // Show loading animation
-
-    try {
-      const response = await fetch('http://127.0.0.1:2220/predict/', {
-        method: 'POST',
-        body: formData,
+  
+    uploadVideo(recordedChunks)
+      .then(prediction => {
+        setPrediction(prediction); // Set prediction result
+      })
+      .catch(error => {
+        console.error('Error uploading video:', error);
+      })
+      .finally(() => {
+        setLoading(false); // Hide loading animation
       });
-
-      if (response.ok) {
-        const result = await response.json();
-        setPrediction(result.predicted_sign); // Set prediction result
-      } else {
-        alert('Failed to upload video');
-      }
-    } catch (error) {
-      console.error('Error uploading video:', error);
-    } finally {
-      setLoading(false); // Hide loading animation when response is received
-    }
   };
+
+  // const submitVideo = async () => {
+  //   if (recordedChunks.length === 0) return;
+
+  //   const blob = new Blob(recordedChunks, { type: 'video/webm' });
+  //   const formData = new FormData();
+  //   formData.append('file', blob, 'recording.webm');
+
+  //   setLoading(true); // Show loading animation
+
+  //   try {
+
+  //     const response = await fetch('http://127.0.0.1:2220/predict/', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+
+  //     if (response.ok) {
+  //       const result = await response.json();
+  //       setPrediction(result.predicted_sign); // Set prediction result
+  //     } else {
+  //       alert('Failed to upload video');
+  //     }
+      
+  //   } catch (error) {
+  //     console.error('Error uploading video:', error);
+  //   } finally {
+  //     setLoading(false); // Hide loading animation when response is received
+  //   }
+  // };
 
   return (
     <div>
