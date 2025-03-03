@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { 
   LoginPage,
-  HomePage
-
+  HomePage,
+  objectIdentifierPage
  } from "../component/pages";
 
 function Router() {
@@ -11,6 +11,7 @@ function Router() {
       <Routes>
         <Route path={"/"} Component={LoginPage} />
         <Route path={"/home"} Component={HomePage} />
+        <Route path={"/object-identifier"} Component={objectIdentifierPage} />
       </Routes>
     </BrowserRouter>
   );
