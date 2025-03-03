@@ -21,3 +21,4 @@ export const uploadVideo = async (recordedChunks: BlobPart[]) => {
       return Promise.reject(error);
     }
   };
+  
