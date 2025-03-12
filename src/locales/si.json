@@ -6,5 +6,14 @@
   "password_required": "කරුණාකර මුරපදය ඇතුළත් කරන්න",
   "signin": "පිවිසෙන්න",
   "homePageWelcome": "මුල් පිටුවට සාදරයෙන් පිළිගනිමු",
-  "homePageDescription": "මෙය යෙදුමේ මුල් පිටුවයි."
+  "homePageDescription": "මෙය යෙදුමේ මුල් පිටුවයි.",
+  "pen": "පෑන",
+  "eraser": "මකනය",
+  "undo": "අහෝසි කරන්න",
+  "redo": "නැවත කරන්න",
+  "clear": "සියල්ල මකන්න",
+  "save": "සුරකින්න",
+  "correctDrawing": "නිවැරදි චිත්‍රයකි!",
+  "wrongDrawing": "වැරදි චිත්‍රයකි!",
+  "nextDrawing": "නව චිත්‍රයකි ඇදීම සදහා"
 }
