@@ -6,5 +6,11 @@
   "password_required": "Please enter Password",
   "signin": "Sign in",
   "homePageWelcome": "Welcome to the Home Page",
-  "homePageDescription": "This is the home page of the application."
+  "homePageDescription": "This is the home page of the application.",
+  "homePage": "Home Page",
+  "SignLetters": "Sign Letters",
+  "SignNumbers": "Sign Numbers",
+  "ObjectIdentification": "Object Identification",
+  "Drawing": "Drawing",
+  "logOut": "Log Out"
 }
