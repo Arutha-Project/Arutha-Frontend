@@ -10,6 +10,7 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { SideMenuContainer, Logo, DateTime } from "./SideMenuStyle";
+import { useTranslation } from "react-i18next";
 
 const { Sider } = Layout;
 
@@ -17,6 +18,7 @@ const SideMenu: React.FC = () => {
   const navigate = useNavigate();
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
   const [collapsed, setCollapsed] = useState(false);
+  const {t} = useTranslation();
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -57,11 +59,11 @@ const SideMenu: React.FC = () => {
         defaultSelectedKeys={["1"]}
         onClick={({ key }) => navigate(key)}
       >
-        <Menu.Item key="/home" icon={<HomeOutlined />}> Home </Menu.Item>
-        <Menu.Item key="/sign-letters" icon={<FontSizeOutlined />}> Sign Letters </Menu.Item>
-        <Menu.Item key="/numbers-Identify-Page" icon={<FieldBinaryOutlined />}> Sign Numbers </Menu.Item>
-        <Menu.Item key="/object-identifier" icon={<PictureOutlined />}> Object Identification </Menu.Item>
-        <Menu.Item key="/drawing" icon={<HighlightOutlined />}> Drawing </Menu.Item>
+        <Menu.Item key="/home" icon={<HomeOutlined />}> {t("homePage")} </Menu.Item>
+        <Menu.Item key="/sign-letters" icon={<FontSizeOutlined />}> {t("SignLetters")} </Menu.Item>
+        <Menu.Item key="/numbers-Identify-Page" icon={<FieldBinaryOutlined />}> {t("SignNumbers")} </Menu.Item>
+        <Menu.Item key="/object-identifier" icon={<PictureOutlined />}> {t("ObjectIdentification")} </Menu.Item>
+        <Menu.Item key="/drawing" icon={<HighlightOutlined />}> {t("Drawing")} </Menu.Item>
       </Menu>
 
 
@@ -71,7 +73,7 @@ const SideMenu: React.FC = () => {
         style={{ marginTop: "auto", borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}
       >
         <Menu.Item key="/login" icon={<LogoutOutlined />} onClick={() => navigate("/login")}>
-          Log Out
+          {t("logOut")}
         </Menu.Item>
       </Menu>
     </Sider>

@@ -2,8 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { 
   LoginPage,
   HomePage,
-  // NumbersPage,
-  // NumbersActivityPage,
+  NumbersPage,
+  NumbersActivityPage,
   NumbersIdentifyPage,
   SideMenu 
  } from "../component/pages";
@@ -25,15 +25,15 @@ function Router() {
           element={<MainLayout><ObjectIdentifierPage/></MainLayout>} 
         />
 
-        {/* <Route 
+        <Route 
           path="/numbers_Page" 
           element={<MainLayout><NumbersPage/></MainLayout>} 
-        /> */}
+        />
 
-        {/* <Route 
+        <Route 
           path="/numbers-Activity-Page" 
           element={<MainLayout><NumbersActivityPage/></MainLayout>} 
-        /> */}
+        />
 
         <Route
           path="/numbers-Identify-Page"
