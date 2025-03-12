@@ -28,7 +28,7 @@ const DrawingView = () => {
       <div style={canvasContainer}>
         <ReactSketchCanvas
           ref={canvasRef}
-          strokeWidth={4}
+          strokeWidth={20}
           strokeColor={color}
           canvasColor="black"
           style={canvasStyle}
