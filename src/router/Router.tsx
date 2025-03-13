@@ -9,6 +9,7 @@ import {
  } from "../component/pages";
 import { MainLayout } from "../component/templates";
 import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
+import { LettersIdentifyPage } from "../component/pages/lettersIdentifyPage";
 
 function Router() {
   return (
@@ -39,6 +40,12 @@ function Router() {
           path="/numbers-Identify-Page"
           element={<MainLayout><NumbersIdentifyPage /></MainLayout>}
         />
+
+         <Route 
+          path="/sign-letters" 
+          element={<MainLayout><LettersIdentifyPage/></MainLayout>} 
+        />
+
         <Route path={"/sideMenu"} Component={SideMenu} />
       </Routes>
     </BrowserRouter>
