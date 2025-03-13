@@ -2,16 +2,44 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { 
   LoginPage,
   HomePage,
-  objectIdentifierPage
+  NumbersPage,
+  NumbersActivityPage,
+  NumbersIdentifyPage,
+  SideMenu 
  } from "../component/pages";
+import { MainLayout } from "../component/templates";
+import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
 
 function Router() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={"/"} Component={LoginPage} />
-        <Route path={"/home"} Component={HomePage} />
-        <Route path={"/object-identifier"} Component={objectIdentifierPage} />
+        <Route 
+          path="/home" 
+          element={<MainLayout><HomePage/></MainLayout>} 
+        />
+
+        <Route 
+          path="/object-identifier" 
+          element={<MainLayout><ObjectIdentifierPage/></MainLayout>} 
+        />
+
+        <Route 
+          path="/numbers_Page" 
+          element={<MainLayout><NumbersPage/></MainLayout>} 
+        />
+
+        <Route 
+          path="/numbers-Activity-Page" 
+          element={<MainLayout><NumbersActivityPage/></MainLayout>} 
+        />
+
+        <Route
+          path="/numbers-Identify-Page"
+          element={<MainLayout><NumbersIdentifyPage /></MainLayout>}
+        />
+        <Route path={"/sideMenu"} Component={SideMenu} />
       </Routes>
     </BrowserRouter>
   );
