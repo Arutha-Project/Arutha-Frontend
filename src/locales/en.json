@@ -6,5 +6,26 @@
   "password_required": "Please enter Password",
   "signin": "Sign in",
   "homePageWelcome": "Welcome to the Home Page",
-  "homePageDescription": "This is the home page of the application."
+  "homePageDescription": "This is the home page of the application.",
+  "startRecoding": "Start Recording",
+  "StopRecording":"Stop Recording",
+  "WelcomeToTheObjectIdentifierPage":"Welcome To The Object Identifier Page",
+  "StartTime":"Start Time",
+  "EndTime":"End Time",
+  "Duration":"Duration",
+  "seconds":"seconds",
+  "Processing":"Processing... Please wait...",
+  "PredictedSign":"Predicted Sign",
+  "Press":"Press",
+  "Space":"Space button",
+  "Start/StopRecording":"to Start/Stop Recording",
+  "Start":"Start",
+  "RandomName":"Random Name",
+  "Correct":"✅ Correct",
+  "Incorrect":"❌ Incorrect",
+  "Next":"Next",
+  "CIRCLE":"circle",
+  "elephant":"elephant",
+  "No hand landmarks detected":"No hand landmarks detected"
+
 }
