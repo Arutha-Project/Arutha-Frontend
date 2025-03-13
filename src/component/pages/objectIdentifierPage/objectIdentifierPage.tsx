@@ -3,7 +3,7 @@ import { uploadVideo } from '../../../services';
 import { t } from 'i18next';
 import { Layout, Select } from 'antd';
 import { LanguageContext } from '../../../context/LanguageContext';
-import { nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
+import { nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle, startRecordingButtonStyle, startRecordingButtonDisabledStyle, stopButtonStyle, stopButtonDisabledStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
 
 const ObjectIdentifierPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -190,15 +190,7 @@ const ObjectIdentifierPage: React.FC = () => {
               <button
                 onClick={startRecording}
                 disabled={!recordingEnabled || isRecording}
-                style={{
-                  marginRight: '10px',
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  color: 'white',
-                  border: 'none',
-                  background: !recordingEnabled ? '#ccc' : isRecording ? '#ccc' : '#28a745',
-                  cursor: !recordingEnabled ? 'not-allowed' : isRecording ? 'not-allowed' : 'pointer',
-                }}
+                style={!recordingEnabled || isRecording ? startRecordingButtonDisabledStyle : startRecordingButtonStyle}
               >
                 {t("startRecoding")}
               </button>
@@ -206,14 +198,7 @@ const ObjectIdentifierPage: React.FC = () => {
               <button
                 onClick={stopRecording}
                 disabled={!recordingEnabled || !isRecording}
-                style={{
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  color: 'white',
-                  border: 'none',
-                  background: !recordingEnabled || !isRecording ? '#ccc' : '#dc3545',
-                  cursor: !recordingEnabled || !isRecording ? 'not-allowed' : 'pointer',
-                }}
+                style={!recordingEnabled || !isRecording ? stopButtonDisabledStyle : stopButtonStyle}
               >
                 {t("StopRecording")}
               </button>

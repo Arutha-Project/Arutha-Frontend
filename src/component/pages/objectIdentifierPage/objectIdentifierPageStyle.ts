@@ -74,3 +74,34 @@ export const processingGif: React.CSSProperties = {
     fontWeight: 'bold', 
     color: 'blue'
   };
+
+export const stopButtonStyle: React.CSSProperties = {
+    padding: '8px 12px',
+    borderRadius: '8px',
+    color: 'white',
+    border: 'none',
+    background: '#dc3545', // Default background color
+    cursor: 'pointer',
+};
+
+export const stopButtonDisabledStyle: React.CSSProperties = {
+    ...stopButtonStyle,  // Inherit base styles
+    background: '#ccc',  // Disabled background color
+    cursor: 'not-allowed',
+};
+
+export const startRecordingButtonStyle: React.CSSProperties = {
+  marginRight: '10px',
+  padding: '8px 12px',
+  borderRadius: '8px',
+  color: 'white',
+  border: 'none',
+  background: '#28a745', // Default active color
+  cursor: 'pointer',
+};
+
+export const startRecordingButtonDisabledStyle: React.CSSProperties = {
+  ...startRecordingButtonStyle,  // Inherit base styles
+  background: '#ccc',  // Disabled color
+  cursor: 'not-allowed',
+};
