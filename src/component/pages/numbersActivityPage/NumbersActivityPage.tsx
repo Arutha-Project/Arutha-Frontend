@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Button, Layout } from 'antd';
+import { contentContainer, mainLayoutContainer } from './NumbersActivityPageStyle';
 
 const NumbersActivityPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -88,22 +89,26 @@ const NumbersActivityPage: React.FC = () => {
   };
 
   return (
-    <Layout style={{ padding: '20px', textAlign: 'center' }}>
-      <h1>Maths Sign Language Activity</h1>
-      <Button type="primary" onClick={generateEquation}>Generate Equation</Button>
-      {equation && <h2>{equation} = ?</h2>}
-      
-      <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px' }}></video>
+    <Layout style={mainLayoutContainer}>
+      <div style={contentContainer}>
 
-      <div>
-        <button onClick={openCamera}>Open Camera</button>
-        <button onClick={startRecording}>Start Recording</button>
-        <button onClick={stopRecording}>Stop Recording</button>
-        <button onClick={submitVideo}>Submit Answer</button>
+        <h1>Maths Sign Language Activity</h1>
+        <Button type="primary" onClick={generateEquation}>Generate Equation</Button>
+        {equation && <h2>{equation} = ?</h2>}
+        
+        <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px' }}></video>
+
+        <div style={{ marginTop: "10px" }}>
+          <Button type="primary" onClick={openCamera}>Open Camera</Button>
+          <Button type="default" onClick={startRecording}>Start Recording</Button>
+          <Button type="dashed" onClick={stopRecording}>Stop Recording</Button>
+          <Button type="primary" danger onClick={submitVideo}>Submit</Button>
+        </div>
+
+        {loading && <p>⏳ Processing... Please wait...</p>}
+        {prediction && !loading && <p>Your Answer: {prediction}</p>}
+        {resultMessage && <h2>{resultMessage}</h2>}
       </div>
-
-      {loading && <p>⏳ Processing... Please wait...</p>}
-      {resultMessage && <h2>{resultMessage}</h2>}
     </Layout>
   );
 };
