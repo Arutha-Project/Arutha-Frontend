@@ -1,12 +1,9 @@
 import React, { useRef, useState } from "react";
-import { Layout, Tabs, Button } from "antd";
-import { VideoCameraOutlined, PlayCircleOutlined, ExperimentOutlined } from "@ant-design/icons";
-import { mainLayoutContainer, contentContainer, titleStyle, tabContainer, tabContent, videoContainer } from "./LettersIdentifyPageStyle";
+import { Layout, Button } from "antd";
+import { mainLayoutContainer, contentContainer } from "./EnglishLettersIdentifyPageStyle";
 
-const { Content } = Layout;
-const { TabPane } = Tabs;
 
-const LettersIdentifyPage: React.FC = () => {
+const EnglishLettersIdentifyPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
@@ -34,9 +31,20 @@ const LettersIdentifyPage: React.FC = () => {
 
   return (
     <Layout style={mainLayoutContainer}>
-      
+      <div style={contentContainer}>
+          <h1>Enlish Letters Signing Practice</h1>
+
+          <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "600px" }}></video>
+          
+          <div style={{ marginTop: "10px" }}>
+            <Button type="primary" onClick={openCamera}>Open Camera</Button>
+            <Button type="primary" danger onClick={closeCamera}>Submit</Button>
+          </div>
+          
+        </div>
+
     </Layout>
   );
 };
 
-export default LettersIdentifyPage;
+export default EnglishLettersIdentifyPage;

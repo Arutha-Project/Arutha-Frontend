@@ -1,3 +1,3 @@
-import LettersIdentifyPage from "./LettersIdentifyPage";
+import EnglishLettersIdentifyPage from "./EnglishLettersIdentifyPage";
 
-export { LettersIdentifyPage };
+export { EnglishLettersIdentifyPage };
