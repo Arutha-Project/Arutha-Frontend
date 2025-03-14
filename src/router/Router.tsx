@@ -11,6 +11,7 @@ import { MainLayout } from "../component/templates";
 import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
 import { LettersIdentifyPage } from "../component/pages/lettersIdentifyPage";
 import { EnglishLettersIdentifyPage } from "../component/pages/englishLettersIdentifyPage";
+import { SinhalaLettersIdentifyPage } from "../component/pages/sinhalaLettersIdentifyPage";
 
 function Router() {
   return (
@@ -50,6 +51,11 @@ function Router() {
          <Route 
           path="/english-signing" 
           element={<MainLayout><EnglishLettersIdentifyPage/></MainLayout>} 
+        />
+
+         <Route 
+          path="/sinhala-signing" 
+          element={<MainLayout><SinhalaLettersIdentifyPage/></MainLayout>} 
         />
 
         <Route path={"/sideMenu"} Component={SideMenu} />
