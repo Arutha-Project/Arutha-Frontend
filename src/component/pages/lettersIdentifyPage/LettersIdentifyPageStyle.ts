@@ -17,7 +17,6 @@ export const cardContainer: React.CSSProperties = {
   gap: "40px", 
 };
 
-// ✅ Overlay container for each card
 export const overlayContainer: React.CSSProperties = {
   position: "absolute",
   top: 0,
@@ -28,7 +27,6 @@ export const overlayContainer: React.CSSProperties = {
   zIndex: 1,
 };
 
-// ✅ Base card style to avoid repetition
 const baseCardStyle: React.CSSProperties = {
   width: "300px",
   height: "350px",

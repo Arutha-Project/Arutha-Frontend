@@ -19,7 +19,6 @@ import activitiesImg from "/src/assets/images/activities.png";
 import bgLettersImg from "/src/assets/images/bg_letters.png"; 
 import arutheImg from "/src/assets/images/arutha.png"; 
 
-// Function to split text into individual letters
 const splitText = (text: string) => {
   return text.split("").map((char, index) => (
     <motion.span
@@ -27,14 +26,14 @@ const splitText = (text: string) => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        delay: index * 0.1, // Delay for each letter
+        delay: index * 0.1,
         type: "spring",
         stiffness: 120,
         damping: 25,
       }}
       style={{ display: "inline-block" }}
     >
-      {char === " " ? "\u00A0" : char} {/* Using non-breaking space for visual gap */}
+      {char === " " ? "\u00A0" : char} 
     </motion.span>
   ));
 };
@@ -46,28 +45,28 @@ const LettersIdentifyPage: React.FC = () => {
     <Layout style={mainLayoutContainer}>
       <div
         style={{
-          display: "flex", // Use flexbox to align items horizontally
-          alignItems: "center", // Vertically center the items
-          justifyContent: "center", // Center the content horizontally
+          display: "flex",
+          alignItems: "center", 
+          justifyContent: "center", 
           marginBottom: "50px",
         }}
       >
-        {/* Image to be placed in front of h1 */}
+       
         <motion.img
-          src={arutheImg} // Path to the image (use your image here)
+          src={arutheImg} 
           alt="Arutha Icon"
-          style={{ marginRight: "15px", width: "200px", height: "200px" }} // Adjust size as needed
-          initial={{ opacity: 0, scale: 0.8 }} // Start smaller and transparent
-          animate={{ opacity: 1, scale: 1 }} // Fade in and scale to normal size
-          transition={{ duration: 1.5, ease: "easeOut" }} // Smooth transition
-          whileHover={{ scale: 1.1, rotate: 5 }} // Slight scale and rotation on hover
-          whileTap={{ scale: 0.95 }} // Slightly reduce size when tapped
+          style={{ marginRight: "15px", width: "200px", height: "200px" }} 
+          initial={{ opacity: 0, scale: 0.8 }} 
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }} 
+          whileHover={{ scale: 1.1, rotate: 5 }} 
+          whileTap={{ scale: 0.95 }}
         />
         <h1 style={{ fontSize: "35px" , color:"#164673"}}>{splitText("Letters Signing Practice")}</h1>
       </div>
 
       <div style={cardContainer}>
-        {/* English Signing Card Wrapper with Black Background */}
+       
         <div style={{ backgroundColor: "black", borderRadius: "15px", padding: "20px" }}>
           <motion.div
             style={englishCard}
@@ -81,7 +80,7 @@ const LettersIdentifyPage: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Sinhala Signing Card Wrapper with Black Background */}
+       
         <div style={{ backgroundColor: "black", borderRadius: "15px", padding: "20px" }}>
           <motion.div
             style={sinhalaCard}
@@ -118,8 +117,8 @@ const LettersIdentifyPage: React.FC = () => {
           backgroundRepeat: "repeat-x", 
           backgroundPosition: "bottom",
         }}
-        whileHover={{ scale: 1.05 }}  // Zoom in on hover
-        whileTap={{ scale: 1 }} // Zoom effect resets when clicked
+        whileHover={{ scale: 1.05 }} 
+        whileTap={{ scale: 1 }} 
         transition={{ duration: 0.3 }}
       ></motion.div>
     </Layout>
