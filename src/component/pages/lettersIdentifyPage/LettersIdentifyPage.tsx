@@ -48,7 +48,8 @@ const LettersIdentifyPage: React.FC = () => {
           display: "flex",
           alignItems: "center", 
           justifyContent: "center", 
-          marginBottom: "50px",
+          marginBottom: "10px",
+          marginTop:"70px",
         }}
       >
        
@@ -108,7 +109,7 @@ const LettersIdentifyPage: React.FC = () => {
         </div>
       </div>
 
-      <motion.div
+      {/* <motion.div
         style={{
           width: "100%",
           marginTop: "30px",
@@ -120,7 +121,7 @@ const LettersIdentifyPage: React.FC = () => {
         whileHover={{ scale: 1.05 }} 
         whileTap={{ scale: 1 }} 
         transition={{ duration: 0.3 }}
-      ></motion.div>
+      ></motion.div> */}
     </Layout>
   );
 };

@@ -1,13 +1,12 @@
 export const mainLayoutContainer: React.CSSProperties = {
   minHeight: "100vh",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",  // Ensures the image covers the entire area
+  backgroundPosition: "center",  // Centers the image
+  backgroundRepeat: "no-repeat",  // Prevents repetition
   display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundImage: 'url(src/assets/images/function_page.jpg)',
+  backgroundImage: `url("/src/assets/images/letters_bg.jpg")`, // Ensure correct path
 };
+
  
 export const cardContainer: React.CSSProperties = {
   display: "flex",
