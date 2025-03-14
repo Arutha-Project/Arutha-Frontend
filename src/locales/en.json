@@ -12,5 +12,26 @@
   "SignNumbers": "Sign Numbers",
   "ObjectIdentification": "Object Identification",
   "Drawing": "Drawing",
-  "logOut": "Log Out"
+  "logOut": "Log Out",
+  "startRecoding": "Start Recording",
+  "StopRecording":"Stop Recording",
+  "WelcomeToTheObjectIdentifierPage":"Welcome To The Object Identifier Page",
+  "StartTime":"Start Time",
+  "EndTime":"End Time",
+  "Duration":"Duration",
+  "seconds":"seconds",
+  "Processing":"Processing... Please wait...",
+  "PredictedSign":"Predicted Sign",
+  "Press":"Press",
+  "Space":"Space button",
+  "Start/StopRecording":"to Start/Stop Recording",
+  "Start":"Start",
+  "RandomName":"Random Name",
+  "Correct":"✅ Correct",
+  "Incorrect":"❌ Incorrect",
+  "Next":"Next",
+  "CIRCLE":"circle",
+  "elephant":"elephant",
+  "No hand landmarks detected":"No hand landmarks detected"
+
 }
