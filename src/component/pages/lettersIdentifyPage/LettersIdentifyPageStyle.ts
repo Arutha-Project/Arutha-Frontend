@@ -8,7 +8,7 @@ export const mainLayoutContainer: React.CSSProperties = {
   justifyContent: "center",
   backgroundImage: 'url(src/assets/images/function_page.jpg)',
 };
-
+ 
 export const cardContainer: React.CSSProperties = {
   display: "flex",
   flexDirection: "row",
