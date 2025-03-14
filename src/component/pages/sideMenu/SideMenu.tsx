@@ -8,6 +8,7 @@ import {
   PictureOutlined,
   HighlightOutlined,
   LogoutOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { SideMenuContainer, Logo, DateTime } from "./SideMenuStyle";
 import { useTranslation } from "react-i18next";
@@ -60,6 +61,7 @@ const SideMenu: React.FC = () => {
         onClick={({ key }) => navigate(key)}
       >
         <Menu.Item key="/home" icon={<HomeOutlined />}> {t("homePage")} </Menu.Item>
+        <Menu.Item key="/about-us" icon={<TeamOutlined />}> {t("aboutUs")} </Menu.Item>
         <Menu.Item key="/sign-letters" icon={<FontSizeOutlined />}> {t("SignLetters")} </Menu.Item>
         <Menu.Item key="/numbers-Identify-Page" icon={<FieldBinaryOutlined />}> {t("SignNumbers")} </Menu.Item>
         <Menu.Item key="/object-identifier" icon={<PictureOutlined />}> {t("ObjectIdentification")} </Menu.Item>

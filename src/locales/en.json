@@ -12,5 +12,9 @@
   "SignNumbers": "Sign Numbers",
   "ObjectIdentification": "Object Identification",
   "Drawing": "Drawing",
-  "logOut": "Log Out"
+  "logOut": "Log Out",
+  "aboutUs": "About Us",
+  "aboutUsContent": "Our innovative Sign Language Learning Application is designed to facilitate the learning and recognition of sign language through engaging and interactive activities. Tailored to support both Sinhala and English, this application aims to enhancecommunication skills for users, particularly focusing on individuals with hearing and deaf impairments students.",
+  "aboutUsContent2" : "Developed by ARUTHA Team, this application is designed to be user-friendly and accessible to all users. The application is designed to be used by individuals of all.",
+  "aboutUsContent3" : "Developed by ARUTHA Team"
 }
