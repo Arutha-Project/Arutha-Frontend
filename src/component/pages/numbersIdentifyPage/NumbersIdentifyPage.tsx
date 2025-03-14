@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Layout , Button } from "antd";
-import {  contentContainer, mainLayoutContainer } from './NumbersIdentifyPageStyle';
+import { Layout, Button } from "antd";
+import { contentContainer, mainLayoutContainer } from './NumbersIdentifyPageStyle';
 import { Link } from "react-router-dom";
+import { MainLayout } from "../../templates";
 
 const NumbersIdentifyPage: React.FC = () => {
   const [currentNumber, setCurrentNumber] = useState(0); // Start from 0
@@ -87,28 +88,29 @@ const NumbersIdentifyPage: React.FC = () => {
   };
 
   return (
-    <Layout style={mainLayoutContainer}>
-      <div>
-        <Link to="/numbers_Page">
-          <Button type="primary">Go to Self Study</Button>
-        </Link>
-        <Link to="/numbers-Activity-Page">
-          <Button type="primary">Go to Numbers Activity</Button>
-        </Link>
-      </div>
-      <div style={contentContainer}>
+    <MainLayout>
+      <Layout style={mainLayoutContainer}>
+        <div>
+          <Link to="/numbers_Page">
+            <Button type="primary">Go to Self Study</Button>
+          </Link>
+          <Link to="/numbers-Activity-Page">
+            <Button type="primary">Go to Numbers Activity</Button>
+          </Link>
+        </div>
+        <div style={contentContainer}>
           <h1>Number Signing Practice</h1>
           <h2>🔢 Sign this number: {currentNumber}</h2>
 
           <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "600px" }}></video>
-          
+
           <div style={{ marginTop: "10px" }}>
             <Button type="primary" onClick={openCamera}>Open Camera</Button>
             <Button type="default" onClick={startRecording}>Start Recording</Button>
             <Button type="dashed" onClick={stopRecording}>Stop Recording</Button>
             <Button type="primary" danger onClick={submitVideo}>Submit</Button>
           </div>
-          
+
           <Button type="primary" onClick={nextNumber} disabled={currentNumber >= 50}> Next ➡ </Button>
         </div>
 
@@ -117,8 +119,8 @@ const NumbersIdentifyPage: React.FC = () => {
           {prediction && !loading && <p>Your Answer: {prediction}</p>}
           {result && <p style={{ fontSize: "18px", fontWeight: "bold", color: result.includes("Correct") ? "green" : "red" }}>{result}</p>}
         </div>
-    </Layout>
-
+      </Layout>
+    </MainLayout>
   );
 };
 

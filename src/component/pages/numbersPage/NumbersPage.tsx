@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 
 import { Button, Layout} from 'antd';
 import {  contentContainer, mainLayoutContainer } from './NumbersPageStyle';
+import { MainLayout } from '../../templates';
 
 const NumbersPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -90,6 +91,7 @@ const NumbersPage: React.FC = () => {
 
 
   return (
+    <MainLayout>
     <Layout style={mainLayoutContainer}>
       <div style={contentContainer}>
         <h1>Numbers Identification Activity</h1>
@@ -124,6 +126,7 @@ const NumbersPage: React.FC = () => {
         )}
       </div>
     </Layout>
+    </MainLayout>
   );
 };
 

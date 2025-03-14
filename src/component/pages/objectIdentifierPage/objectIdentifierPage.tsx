@@ -4,6 +4,7 @@ import { t } from 'i18next';
 import { Layout, Select } from 'antd';
 import { LanguageContext } from '../../../context/LanguageContext';
 import { nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle, startRecordingButtonStyle, startRecordingButtonDisabledStyle, stopButtonStyle, stopButtonDisabledStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
+import { MainLayout } from '../../templates';
 
 const ObjectIdentifierPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -172,6 +173,7 @@ const ObjectIdentifierPage: React.FC = () => {
 
   return (
     <div>
+      <MainLayout>
       <Layout style={mainLayoutContainerOI}>
         <Select value={language} onChange={changeLanguage} style={{ width: 120, marginBottom: 10 }}>
           <Select.Option value="en">English</Select.Option>
@@ -270,6 +272,7 @@ const ObjectIdentifierPage: React.FC = () => {
           </div>
         </div>
       </Layout>
+      </MainLayout>
     </div>
   );
 };

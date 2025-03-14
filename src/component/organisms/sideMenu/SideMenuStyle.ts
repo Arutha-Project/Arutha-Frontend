@@ -4,15 +4,16 @@ export const SideMenuContainer: React.CSSProperties = {
   transition: "width 0.3s ease",
 };
 
-export const Logo: React.CSSProperties = {
-  width: "120px",
-  height: "120px",
+export const Logo = (isCollapsed: boolean): React.CSSProperties => ({
+  width: isCollapsed ? "60px" : "120px",
+  height: isCollapsed ? "60px" : "120px",
   backgroundImage: `url("src/assets/images/arutha.png")`,
   backgroundSize: "contain",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center",
   margin: "20px auto",
-};
+});
+
 
 export const DateTime: React.CSSProperties = {
   color: "#ffffff",

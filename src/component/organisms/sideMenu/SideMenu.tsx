@@ -50,7 +50,7 @@ const SideMenu: React.FC = () => {
       onCollapse={setCollapsed}
       style={SideMenuContainer}
     >
-      <div style={Logo}></div>
+      <div style={Logo(collapsed)}></div>
       {!collapsed && <div style={DateTime}>{currentDateTime}</div>}
 
       <Menu
