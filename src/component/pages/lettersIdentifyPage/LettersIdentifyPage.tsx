@@ -1,60 +1,128 @@
-import React, { useRef, useState } from "react";
-import { Layout , Button } from "antd";
-import {  contentContainer, mainLayoutContainer } from './LettersIdentifyPageStyle';
+import React from "react";
+import { Layout } from "antd";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  mainLayoutContainer,
+  cardContainer,
+  englishCard,
+  sinhalaCard,
+  activitiesCard,
+  cardText,
+  cardImage,
+  overlayContainer,
+} from "./LettersIdentifyPageStyle";
+
+import englishImg from "/src/assets/images/english_sign.png";
+import sinhalaImg from "/src/assets/images/sinhala_sign.png";
+import activitiesImg from "/src/assets/images/activities.png";
+import bgLettersImg from "/src/assets/images/bg_letters.png"; 
+import arutheImg from "/src/assets/images/arutha.png"; 
+
+// Function to split text into individual letters
+const splitText = (text: string) => {
+  return text.split("").map((char, index) => (
+    <motion.span
+      key={index}
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: index * 0.1, // Delay for each letter
+        type: "spring",
+        stiffness: 120,
+        damping: 25,
+      }}
+      style={{ display: "inline-block" }}
+    >
+      {char === " " ? "\u00A0" : char} {/* Using non-breaking space for visual gap */}
+    </motion.span>
+  ));
+};
 
 const LettersIdentifyPage: React.FC = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [prediction, setPrediction] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<string | null>(null);
-
-  const openCamera = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
-    } catch (error) {
-      console.error("Error accessing camera:", error);
-    }
-  };
-
-  const closeCamera = async () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-      setStream(null);
-    }
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-  };
-
+  const navigate = useNavigate();
 
   return (
     <Layout style={mainLayoutContainer}>
-      <div style={contentContainer}>
-          <h1>English Letters Signing Practice</h1>
+      <div
+        style={{
+          display: "flex", // Use flexbox to align items horizontally
+          alignItems: "center", // Vertically center the items
+          justifyContent: "center", // Center the content horizontally
+          marginBottom: "50px",
+        }}
+      >
+        {/* Image to be placed in front of h1 */}
+        <motion.img
+          src={arutheImg} // Path to the image (use your image here)
+          alt="Arutha Icon"
+          style={{ marginRight: "15px", width: "200px", height: "200px" }} // Adjust size as needed
+          initial={{ opacity: 0, scale: 0.8 }} // Start smaller and transparent
+          animate={{ opacity: 1, scale: 1 }} // Fade in and scale to normal size
+          transition={{ duration: 1.5, ease: "easeOut" }} // Smooth transition
+          whileHover={{ scale: 1.1, rotate: 5 }} // Slight scale and rotation on hover
+          whileTap={{ scale: 0.95 }} // Slightly reduce size when tapped
+        />
+        <h1 style={{ fontSize: "35px" , color:"#164673"}}>{splitText("Letters Signing Practice")}</h1>
+      </div>
 
-          <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "600px" }}></video>
-          
-          <div style={{ marginTop: "10px", display: "flex", gap: "10px", justifyContent: "center" }}>
-            <Button type="primary" onClick={openCamera}>Open Camera</Button>
-            <Button type="primary" danger onClick={closeCamera}>Close Camera</Button>
-          </div>
-          
+      <div style={cardContainer}>
+        {/* English Signing Card Wrapper with Black Background */}
+        <div style={{ backgroundColor: "black", borderRadius: "15px", padding: "20px" }}>
+          <motion.div
+            style={englishCard}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate("/english-signing")}
+          >
+            <div style={overlayContainer}></div>
+            <img src={englishImg} alt="English Signing" style={cardImage} />
+            <p style={cardText}>English Signing Practice</p>
+          </motion.div>
         </div>
 
-        <div>
-          {loading && <p>⏳ Processing... Please wait...</p>}
-          {prediction && !loading && <p>Your Answer: {prediction}</p>}
-          {result && <p style={{ fontSize: "18px", fontWeight: "bold", color: result.includes("Correct") ? "green" : "red" }}>{result}</p>}
+        {/* Sinhala Signing Card Wrapper with Black Background */}
+        <div style={{ backgroundColor: "black", borderRadius: "15px", padding: "20px" }}>
+          <motion.div
+            style={sinhalaCard}
+            whileHover={{ scale: 1.1, rotate: -5 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate("/sinhala-signing")}
+          >
+            <div style={overlayContainer}></div>
+            <img src={sinhalaImg} alt="Sinhala Signing" style={cardImage} />
+            <p style={cardText}>Sinhala Signing Practice</p>
+          </motion.div>
         </div>
+
+        <div style={{ backgroundColor: "black", borderRadius: "15px", padding: "30px" }}>
+          <motion.div
+            style={activitiesCard}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate("/activities")}
+          >
+            <div style={overlayContainer}></div>
+            <img src={activitiesImg} alt="Activities" style={cardImage} />
+            <p style={cardText}>Activities</p>
+          </motion.div>
+        </div>
+      </div>
+
+      <motion.div
+        style={{
+          width: "100%",
+          marginTop: "30px",
+          height: "200px",
+          backgroundImage: `url(${bgLettersImg})`,
+          backgroundRepeat: "repeat-x", 
+          backgroundPosition: "bottom",
+        }}
+        whileHover={{ scale: 1.05 }}  // Zoom in on hover
+        whileTap={{ scale: 1 }} // Zoom effect resets when clicked
+        transition={{ duration: 0.3 }}
+      ></motion.div>
     </Layout>
-
   );
 };
 

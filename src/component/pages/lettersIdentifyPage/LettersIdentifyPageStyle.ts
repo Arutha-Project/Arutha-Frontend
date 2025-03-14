@@ -1,35 +1,75 @@
-export const languageSelector: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  minHeight: 700,
-};
-
-export const selectorDiv: React.CSSProperties = {
-  width: 120,
-  marginBottom: 10,
-  marginRight: 10
-}
-
 export const mainLayoutContainer: React.CSSProperties = {
-  display: 'flex',
-  backgroundImage: `url("/src/assets/images/background_4.jpg")`, 
+  minHeight: "100vh",
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',  
-  width: 'flex',   
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "linear-gradient(135deg, #FFB6C1, #ADD8E6)",
 };
 
-export const contentContainer: React.CSSProperties = {
-backgroundColor: "rgba(255, 255, 255, 0.72)",
-padding: "20px",
-borderRadius: "10px",
-boxShadow: "0px 4px 10px rgba(0, 0, 0, 0)",
-textAlign: "center",
-maxWidth: "800px",
-width: "100%",
-margin: "20px auto",
+export const cardContainer: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "40px", 
+};
+
+// ✅ Overlay container for each card
+export const overlayContainer: React.CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  borderRadius: "15px", 
+  zIndex: 1,
+};
+
+// ✅ Base card style to avoid repetition
+const baseCardStyle: React.CSSProperties = {
+  width: "300px",
+  height: "350px",
+  borderRadius: "15px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)",
+  cursor: "pointer",
+  fontSize: "20px",
+  fontWeight: "bold",
+  textAlign: "center",
+  padding: "10px",
+  position: "relative",
+  transition: "transform 0.2s ease-in-out",
+};
+
+export const englishCard: React.CSSProperties = {
+  ...baseCardStyle,
+  background: "linear-gradient(135deg, #4A90E2, #00BFFF)",
+};
+
+export const sinhalaCard: React.CSSProperties = {
+  ...baseCardStyle,
+  background: "linear-gradient(135deg, #34C759, #00A86B)",
+};
+
+export const activitiesCard: React.CSSProperties = {
+  ...baseCardStyle,
+  background: "linear-gradient(135deg, #FF9500, #FF3B30)", 
+};
+
+export const cardText: React.CSSProperties = {
+  color: "#fff",
+  fontSize: "20px",
+  marginTop: "10px",
+  fontWeight: "bold",
+};
+
+export const cardImage: React.CSSProperties = {
+  width: "200px",
+  height: "250px",
 };
