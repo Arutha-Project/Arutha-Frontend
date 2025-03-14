@@ -6,7 +6,7 @@ export const mainLayoutContainer: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  background: "linear-gradient(135deg, #FFB6C1, #ADD8E6)",
+  backgroundImage: 'url(src/assets/images/function_page.jpg)',
 };
 
 export const cardContainer: React.CSSProperties = {

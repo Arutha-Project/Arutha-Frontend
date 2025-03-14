@@ -62,7 +62,7 @@ const LettersIdentifyPage: React.FC = () => {
           whileHover={{ scale: 1.1, rotate: 5 }} 
           whileTap={{ scale: 0.95 }}
         />
-        <h1 style={{ fontSize: "35px" , color:"#164673"}}>{splitText("Letters Signing Practice")}</h1>
+        <h1 style={{ fontSize: "45px" , color:"#164673"}}>{splitText("Letters Signing Practice")}</h1>
       </div>
 
       <div style={cardContainer}>
