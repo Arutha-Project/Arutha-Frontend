@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Layout , Button } from "antd";
 import {  contentContainer, mainLayoutContainer } from './NumbersIdentifyPageStyle';
+import { Link } from "react-router-dom";
 
 const NumbersIdentifyPage: React.FC = () => {
   const [currentNumber, setCurrentNumber] = useState(0); // Start from 0
@@ -87,6 +88,14 @@ const NumbersIdentifyPage: React.FC = () => {
 
   return (
     <Layout style={mainLayoutContainer}>
+      <div>
+        <Link to="/numbers_Page">
+          <Button type="primary">Go to Self Study</Button>
+        </Link>
+        <Link to="/numbers-Activity-Page">
+          <Button type="primary">Go to Numbers Activity</Button>
+        </Link>
+      </div>
       <div style={contentContainer}>
           <h1>Number Signing Practice</h1>
           <h2>🔢 Sign this number: {currentNumber}</h2>
