@@ -23,7 +23,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       className={className}
       style={style}
       {...rest}
-    ></AntColorPicker>
+    />
   );
 };
 
