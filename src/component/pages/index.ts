@@ -5,6 +5,7 @@ import { NumbersPage } from "./numbersPage";
 import { NumbersActivityPage } from "./numbersActivityPage";
 import { NumbersIdentifyPage } from "./numbersIdentifyPage";
 import { SideMenu } from "./sideMenu";
+import { AboutUs } from "./aboutUs";
 
 export { 
   LoginPage,
@@ -13,6 +14,7 @@ export {
   NumbersPage,
   NumbersActivityPage,
   NumbersIdentifyPage,
-  SideMenu
+  SideMenu,
+  AboutUs
  };
  

@@ -5,7 +5,8 @@ import {
   NumbersPage,
   NumbersActivityPage,
   NumbersIdentifyPage,
-  SideMenu 
+  SideMenu, 
+  AboutUs
  } from "../component/pages";
 import { MainLayout } from "../component/templates";
 import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
@@ -18,6 +19,11 @@ function Router() {
         <Route 
           path="/home" 
           element={<MainLayout><HomePage/></MainLayout>} 
+        />
+
+        <Route 
+          path="/about-us" 
+          element={<MainLayout><AboutUs/></MainLayout>} 
         />
 
         <Route 
