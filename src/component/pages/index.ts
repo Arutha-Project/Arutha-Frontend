@@ -1,16 +1,20 @@
 import { LoginPage } from "./loginPage";
 import { HomePage } from "./homePage";
+import { DrawingPage } from "./drawingPage";
 import {ObjectIdentifierPage} from "./objectIdentifierPage";
 import { NumbersPage } from "./numbersPage";
 import { NumbersActivityPage } from "./numbersActivityPage";
 import { NumbersIdentifyPage } from "./numbersIdentifyPage";
+import { AboutUs } from "./aboutUs";
 
 export { 
   LoginPage,
   HomePage,
+  DrawingPage,
   ObjectIdentifierPage,
   NumbersPage,
   NumbersActivityPage,
   NumbersIdentifyPage,
+  AboutUs
  };
  

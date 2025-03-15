@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Layout, Button } from "antd";
-import { contentContainer, mainLayoutContainer } from './NumbersIdentifyPageStyle';
+import { Layout , Button } from "antd";
+import {  contentContainer, mainLayoutContainer } from './NumbersIdentifyPageStyle';
 import { Link } from "react-router-dom";
 import { MainLayout } from "../../templates";
 

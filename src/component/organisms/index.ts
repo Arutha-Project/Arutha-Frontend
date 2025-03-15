@@ -1,7 +1,7 @@
 import { LoginView } from "./LoginView";
-import { SideMenu } from "./sideMenu";
+import { DrawingView } from "./DrawingView";
 
 export {
   LoginView,
-  SideMenu
+  DrawingView,
 }

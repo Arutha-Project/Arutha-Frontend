@@ -5,8 +5,10 @@ import {
   NumbersPage,
   NumbersActivityPage,
   NumbersIdentifyPage,
-  ObjectIdentifierPage,
+  AboutUs,
+  DrawingPage
 } from "../component/pages";
+import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
 
 function Router() {
   return (
@@ -16,6 +18,11 @@ function Router() {
         <Route
           path="/home"
           Component={HomePage}
+        />
+
+        <Route
+          path="/about-us"
+          Component={AboutUs}
         />
 
         <Route
@@ -36,6 +43,14 @@ function Router() {
         <Route
           path="/numbers-Identify-Page"
           Component={NumbersIdentifyPage}
+        />
+        <Route
+          path={"/home"}
+          Component={HomePage}
+        />
+        <Route
+          path={"/drawing"}
+          Component={DrawingPage}
         />
       </Routes>
     </BrowserRouter>
