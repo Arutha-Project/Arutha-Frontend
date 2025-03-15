@@ -108,19 +108,7 @@ const LettersIdentifyPage: React.FC = () => {
         </div>
       </div>
 
-      {/* <motion.div
-        style={{
-          width: "100%",
-          marginTop: "30px",
-          height: "200px",
-          backgroundImage: `url(${bgLettersImg})`,
-          backgroundRepeat: "repeat-x", 
-          backgroundPosition: "bottom",
-        }}
-        whileHover={{ scale: 1.05 }} 
-        whileTap={{ scale: 1 }} 
-        transition={{ duration: 0.3 }}
-      ></motion.div> */}
+     
     </Layout>
   );
 };

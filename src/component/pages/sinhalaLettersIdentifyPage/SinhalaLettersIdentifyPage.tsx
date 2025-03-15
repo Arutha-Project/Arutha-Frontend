@@ -10,11 +10,16 @@ import {
   sidePanel,
   contentInnerContainer, 
   videoContainer, 
-  videoStyle, 
+  videoStyle,
+  titleContainer,
+  titleStyle,
   contentRightPanel 
 } from "./SinhalaLettersIdentifyPageStyle";
 
-const EnglishLettersIdentifyPage: React.FC = () => {
+import sinhalaLetters from "/src/assets/images/sinhala_letters.png"; 
+
+
+const SinhalaLettersIdentifyPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const navigate = useNavigate(); 
@@ -52,6 +57,7 @@ const EnglishLettersIdentifyPage: React.FC = () => {
       closeCamera(); // Cleanup: close camera when component unmounts
     };
   }, []);
+  
 
   return (
     <Layout style={mainLayoutContainer}>
@@ -70,8 +76,15 @@ const EnglishLettersIdentifyPage: React.FC = () => {
 
       {/* Two-Column Layout */}
       <div style={pageContainer}>
+
+        
         {/* Left Side: Content with Video and Right Panel Inside */}
         <div style={contentContainer}>
+          
+           <div style={titleContainer}>
+          <h1 style={titleStyle}>Sinhala Letters Signing Practice</h1>
+        </div>
+        
           {/* Two-Column Layout Inside Content Container */}
           <div style={contentInnerContainer}>
             {/* Left: Video */}
@@ -95,12 +108,11 @@ const EnglishLettersIdentifyPage: React.FC = () => {
 
         {/* Right Side: Side Panel */}
         <div style={sidePanel}>
-          <h2>Additional Information</h2>
-          <p>This section can contain more details, tips, or resources.</p>
+        <img src={sinhalaLetters} style={{ height: "850px", width: "100%" }} alt="Sinhala_Letters" />
         </div>
       </div>
     </Layout>
   );
 };
 
-export default EnglishLettersIdentifyPage;
+export default SinhalaLettersIdentifyPage;

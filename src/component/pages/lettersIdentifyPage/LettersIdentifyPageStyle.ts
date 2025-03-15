@@ -1,19 +1,22 @@
 export const mainLayoutContainer: React.CSSProperties = {
   minHeight: "100vh",
-  backgroundSize: "cover",  // Ensures the image covers the entire area
-  backgroundPosition: "center",  // Centers the image
-  backgroundRepeat: "no-repeat",  // Prevents repetition
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
   display: "flex",
-  backgroundImage: `url("/src/assets/images/letters_bg.jpg")`, // Ensure correct path
+  backgroundImage: `url("/src/assets/images/letters_bg.jpg")`,
+  flexDirection: "column",
+  // justifyContent: "center",  // Center content vertically
 };
 
- 
 export const cardContainer: React.CSSProperties = {
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "center",
-  gap: "40px", 
+  gap: "40px",
+  flexWrap: "wrap",  // Allow the cards to wrap on smaller screens
+  // marginTop: "20px",
 };
 
 export const overlayContainer: React.CSSProperties = {
@@ -22,7 +25,7 @@ export const overlayContainer: React.CSSProperties = {
   left: 0,
   right: 0,
   bottom: 0,
-  borderRadius: "15px", 
+  borderRadius: "15px",
   zIndex: 1,
 };
 
@@ -56,7 +59,7 @@ export const sinhalaCard: React.CSSProperties = {
 
 export const activitiesCard: React.CSSProperties = {
   ...baseCardStyle,
-  background: "linear-gradient(135deg, #FF9500, #FF3B30)", 
+  background: "linear-gradient(135deg, #FF9500, #FF3B30)",
 };
 
 export const cardText: React.CSSProperties = {
@@ -69,4 +72,97 @@ export const cardText: React.CSSProperties = {
 export const cardImage: React.CSSProperties = {
   width: "200px",
   height: "250px",
+};
+
+// Media Queries for Responsiveness
+export const responsiveStyles = {
+  // Small screens (mobile devices)
+  "@media (max-width: 768px)": {
+    cardContainer: {
+      flexDirection: "column",  // Stack cards vertically
+      gap: "20px",
+    },
+    englishCard: {
+      width: "80%",
+      height: "300px",  // Smaller card size for mobile
+    },
+    sinhalaCard: {
+      width: "80%",
+      height: "300px",
+    },
+    activitiesCard: {
+      width: "80%",
+      height: "300px",
+    },
+    cardText: {
+      fontSize: "16px",  // Smaller text size for mobile
+    },
+    cardImage: {
+      width: "150px",  // Smaller image for mobile
+      height: "180px",
+    },
+    titleContainer: {
+      fontSize: "30px",  // Smaller title size for mobile
+    },
+  },
+
+  // Medium screens (tablets)
+  "@media (max-width: 1024px)": {
+    cardContainer: {
+      flexDirection: "row",  // Cards in a row but wrap if needed
+      gap: "30px",
+    },
+    englishCard: {
+      width: "45%",
+      height: "320px",  // Adjust card size for tablets
+    },
+    sinhalaCard: {
+      width: "45%",
+      height: "320px",
+    },
+    activitiesCard: {
+      width: "45%",
+      height: "320px",
+    },
+    cardText: {
+      fontSize: "18px",  // Adjust text size for tablets
+    },
+    cardImage: {
+      width: "180px",  // Adjust image size for tablets
+      height: "220px",
+    },
+    titleContainer: {
+      fontSize: "36px",  // Medium size title for tablets
+    },
+  },
+
+  // Large screens (desktop)
+  "@media (min-width: 1025px)": {
+    cardContainer: {
+      flexDirection: "row",
+      gap: "40px",  // Adjust gap between cards for desktop
+    },
+    englishCard: {
+      width: "300px",
+      height: "350px",  // Default desktop size for card
+    },
+    sinhalaCard: {
+      width: "300px",
+      height: "350px",
+    },
+    activitiesCard: {
+      width: "300px",
+      height: "350px",
+    },
+    cardText: {
+      fontSize: "20px",  // Default text size for desktop
+    },
+    cardImage: {
+      width: "200px",  // Default image size for desktop
+      height: "250px",
+    },
+    titleContainer: {
+      fontSize: "45px",  // Default title size for desktop
+    },
+  },
 };

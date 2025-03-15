@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Layout, Button } from "antd";
 import { useNavigate } from "react-router-dom"; 
-import styled from "styled-components";
 import { 
   mainLayoutContainer, 
   contentContainer, 
