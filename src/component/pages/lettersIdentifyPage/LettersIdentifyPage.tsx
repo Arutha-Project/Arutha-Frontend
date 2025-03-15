@@ -99,7 +99,7 @@ const LettersIdentifyPage: React.FC = () => {
             style={activitiesCard}
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => navigate("/activities")}
+            onClick={() => navigate("/letter-identify-activities")}
           >
             <div style={overlayContainer}></div>
             <img src={activitiesImg} alt="Activities" style={cardImage} />
