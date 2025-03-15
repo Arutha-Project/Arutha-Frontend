@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Spin } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { SideMenu } from "../../pages";
+import { SideMenu } from "../../organisms";
 
 interface MainLayoutProps {
   children: React.ReactNode;

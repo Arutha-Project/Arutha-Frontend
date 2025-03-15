@@ -1,15 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { 
+import {
   LoginPage,
   HomePage,
   NumbersPage,
   NumbersActivityPage,
   NumbersIdentifyPage,
-  SideMenu, 
   AboutUs,
   DrawingPage
- } from "../component/pages";
-import { MainLayout } from "../component/templates";
+} from "../component/pages";
 import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
 
 function Router() {
@@ -17,38 +15,43 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path={"/"} Component={LoginPage} />
-        <Route 
-          path="/home" 
-          element={<MainLayout><HomePage/></MainLayout>} 
+        <Route
+          path="/home"
+          Component={HomePage}
         />
 
-        <Route 
-          path="/about-us" 
-          element={<MainLayout><AboutUs/></MainLayout>} 
+        <Route
+          path="/about-us"
+          Component={AboutUs}
         />
 
-        <Route 
-          path="/object-identifier" 
-          element={<MainLayout><ObjectIdentifierPage/></MainLayout>} 
+        <Route
+          path="/object-identifier"
+          Component={ObjectIdentifierPage}
         />
 
-        <Route 
-          path="/numbers_Page" 
-          element={<MainLayout><NumbersPage/></MainLayout>} 
+        <Route
+          path="/numbers-Page"
+          Component={NumbersPage}
         />
 
-        <Route 
-          path="/numbers-Activity-Page" 
-          element={<MainLayout><NumbersActivityPage/></MainLayout>} 
+        <Route
+          path="/numbers-Activity-Page"
+          Component={NumbersActivityPage}
         />
 
         <Route
           path="/numbers-Identify-Page"
-          element={<MainLayout><NumbersIdentifyPage /></MainLayout>}
+          Component={NumbersIdentifyPage}
         />
-        <Route path={"/sideMenu"} Component={SideMenu} />
-        <Route path={"/home"} Component={HomePage} />
-        <Route path={"/drawing"} Component={DrawingPage} />
+        <Route
+          path={"/home"}
+          Component={HomePage}
+        />
+        <Route
+          path={"/drawing"}
+          Component={DrawingPage}
+        />
       </Routes>
     </BrowserRouter>
   );

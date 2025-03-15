@@ -1,3 +1,3 @@
-import objectIdentifierPage from "./objectIdentifierPage";
+import ObjectIdentifierPage from "./objectIdentifierPage";
 
-export { objectIdentifierPage };
+export { ObjectIdentifierPage };

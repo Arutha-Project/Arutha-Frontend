@@ -1,22 +1,20 @@
 import { LoginPage } from "./loginPage";
 import { HomePage } from "./homePage";
 import { DrawingPage } from "./drawingPage";
-import {objectIdentifierPage} from "./objectIdentifierPage";
+import {ObjectIdentifierPage} from "./objectIdentifierPage";
 import { NumbersPage } from "./numbersPage";
 import { NumbersActivityPage } from "./numbersActivityPage";
 import { NumbersIdentifyPage } from "./numbersIdentifyPage";
-import { SideMenu } from "./sideMenu";
 import { AboutUs } from "./aboutUs";
 
 export { 
   LoginPage,
   HomePage,
   DrawingPage,
-  objectIdentifierPage,
+  ObjectIdentifierPage,
   NumbersPage,
   NumbersActivityPage,
   NumbersIdentifyPage,
-  SideMenu,
   AboutUs
  };
  
