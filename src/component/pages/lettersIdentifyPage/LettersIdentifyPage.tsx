@@ -16,7 +16,6 @@ import {
 import englishImg from "/src/assets/images/english_sign.png";
 import sinhalaImg from "/src/assets/images/sinhala_sign.png";
 import activitiesImg from "/src/assets/images/activities.png";
-import bgLettersImg from "/src/assets/images/bg_letters.png"; 
 import arutheImg from "/src/assets/images/arutha.png"; 
 
 const splitText = (text: string) => {
@@ -63,7 +62,7 @@ const LettersIdentifyPage: React.FC = () => {
           whileHover={{ scale: 1.1, rotate: 5 }} 
           whileTap={{ scale: 0.95 }}
         />
-        <h1 style={{ fontSize: "45px" , color:"#164673"}}>{splitText("Letters Signing Practice")}</h1>
+        <h1 style={{ fontSize: "45px" , color:"#164673", fontFamily: "'Comic Sans MS', cursive, sans-serif"}}>{splitText("Letters Signing Practice")}</h1>
       </div>
 
       <div style={cardContainer}>
