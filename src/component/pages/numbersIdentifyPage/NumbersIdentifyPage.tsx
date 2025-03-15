@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Layout , Button } from "antd";
+import { Layout , Button, Space } from "antd";
 import {  contentContainer, mainLayoutContainer } from './NumbersIdentifyPageStyle';
 import { Link } from "react-router-dom";
 
@@ -88,14 +88,14 @@ const NumbersIdentifyPage: React.FC = () => {
 
   return (
     <Layout style={mainLayoutContainer}>
-      <div>
+      <Space size="middle">
         <Link to="/numbers_Page">
           <Button type="primary">Go to Self Study</Button>
         </Link>
         <Link to="/numbers-Activity-Page">
           <Button type="primary">Go to Numbers Activity</Button>
         </Link>
-      </div>
+      </Space>
       <div style={contentContainer}>
           <h1>Number Signing Practice</h1>
           <h2>🔢 Sign this number: {currentNumber}</h2>
