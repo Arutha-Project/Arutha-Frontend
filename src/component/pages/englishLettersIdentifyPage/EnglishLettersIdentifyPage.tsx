@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Layout, Button } from "antd";
 import { useNavigate } from "react-router-dom"; 
+import styled from "styled-components";
 import { 
   mainLayoutContainer, 
   contentContainer, 
@@ -10,9 +11,14 @@ import {
   sidePanel,
   contentInnerContainer, 
   videoContainer, 
-  videoStyle, 
+  videoStyle,
+  titleContainer,
+  titleStyle,
   contentRightPanel 
 } from "./EnglishLettersIdentifyPageStyle";
+
+import englishLetters from "/src/assets/images/english_letters.png"; 
+
 
 const EnglishLettersIdentifyPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -52,6 +58,7 @@ const EnglishLettersIdentifyPage: React.FC = () => {
       closeCamera(); // Cleanup: close camera when component unmounts
     };
   }, []);
+  
 
   return (
     <Layout style={mainLayoutContainer}>
@@ -70,8 +77,15 @@ const EnglishLettersIdentifyPage: React.FC = () => {
 
       {/* Two-Column Layout */}
       <div style={pageContainer}>
+
+        
         {/* Left Side: Content with Video and Right Panel Inside */}
         <div style={contentContainer}>
+          
+           <div style={titleContainer}>
+          <h1 style={titleStyle}>English Letters Signing Practice</h1>
+        </div>
+        
           {/* Two-Column Layout Inside Content Container */}
           <div style={contentInnerContainer}>
             {/* Left: Video */}
@@ -95,8 +109,7 @@ const EnglishLettersIdentifyPage: React.FC = () => {
 
         {/* Right Side: Side Panel */}
         <div style={sidePanel}>
-          <h2>Additional Information</h2>
-          <p>This section can contain more details, tips, or resources.</p>
+        <img src={englishLetters} style={{ height: "850px", width: "100%" }} alt="English_Letters" />
         </div>
       </div>
     </Layout>
