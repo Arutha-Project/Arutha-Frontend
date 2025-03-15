@@ -36,5 +36,14 @@
   "Next":"Next",
   "CIRCLE":"circle",
   "elephant":"elephant",
-  "No hand landmarks detected":"No hand landmarks detected"
+  "No hand landmarks detected":"No hand landmarks detected",
+  "pen": "Pen",
+  "eraser": "Eraser",
+  "undo": "Undo",
+  "redo": "Redo",
+  "clear": "Clear",
+  "save": "Save",
+  "correctDrawing": "Correct Drawing!",
+  "wrongDrawing": "Wrong Drawing!",
+  "nextDrawing": "Next Drawing"
 }

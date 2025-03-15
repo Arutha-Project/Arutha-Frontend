@@ -6,7 +6,8 @@ import {
   NumbersActivityPage,
   NumbersIdentifyPage,
   SideMenu, 
-  AboutUs
+  AboutUs,
+  DrawingPage
  } from "../component/pages";
 import { MainLayout } from "../component/templates";
 import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
@@ -46,6 +47,8 @@ function Router() {
           element={<MainLayout><NumbersIdentifyPage /></MainLayout>}
         />
         <Route path={"/sideMenu"} Component={SideMenu} />
+        <Route path={"/home"} Component={HomePage} />
+        <Route path={"/drawing"} Component={DrawingPage} />
       </Routes>
     </BrowserRouter>
   );

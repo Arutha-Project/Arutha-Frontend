@@ -1,5 +1,6 @@
 import { LoginPage } from "./loginPage";
 import { HomePage } from "./homePage";
+import { DrawingPage } from "./drawingPage";
 import {objectIdentifierPage} from "./objectIdentifierPage";
 import { NumbersPage } from "./numbersPage";
 import { NumbersActivityPage } from "./numbersActivityPage";
@@ -10,6 +11,7 @@ import { AboutUs } from "./aboutUs";
 export { 
   LoginPage,
   HomePage,
+  DrawingPage,
   objectIdentifierPage,
   NumbersPage,
   NumbersActivityPage,
