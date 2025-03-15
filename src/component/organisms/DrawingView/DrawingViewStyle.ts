@@ -5,7 +5,7 @@ export const mainLayoutContainer: React.CSSProperties = {
 
 export const canvasContainer: React.CSSProperties = {
   height: "500px",
-  marginLeft: "20px",
+  marginLeft: "5px",
   border: "1px solid #ddd"
 };
 
@@ -23,7 +23,7 @@ export const buttonContainer: React.CSSProperties = {
 export const cardLayerStyle: React.CSSProperties = {
   textAlign: "center",
   paddingLeft: "10px",
-  width: "800px",
+  width: "770px",
   height: "500px",
 };
 
@@ -76,7 +76,7 @@ export const predictionsTitle = (answer: string): React.CSSProperties => {
 
 export const nextButtonStyle: React.CSSProperties = {
   margin: "10px",
-  width: "100%",
+  width: "50wh",
   height: "40px",
   fontSize: "20px"
 }

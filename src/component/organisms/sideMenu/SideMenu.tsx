@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   HomeOutlined,
   FontSizeOutlined,
-  FieldBinaryOutlined ,
+  FieldBinaryOutlined,
   PictureOutlined,
   HighlightOutlined,
   LogoutOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { SideMenuContainer, Logo, DateTime } from "./SideMenuStyle";
+import { SideMenuContainer, Logo, DateTime, LogoutContainer, MenuContainerStyle } from "./SideMenuStyle";
 import { useTranslation } from "react-i18next";
 
 const { Sider } = Layout;
@@ -19,7 +19,7 @@ const SideMenu: React.FC = () => {
   const navigate = useNavigate();
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
   const [collapsed, setCollapsed] = useState(false);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -72,9 +72,10 @@ const SideMenu: React.FC = () => {
       <Menu
         theme="dark"
         mode="inline"
-        style={{ marginTop: "auto", borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}
+        style={MenuContainerStyle}
       >
-        <Menu.Item key="/login" icon={<LogoutOutlined />} onClick={() => navigate("/login")}>
+
+        <Menu.Item style={LogoutContainer} key="/login" icon={<LogoutOutlined />} onClick={() => navigate("/login")}>
           {t("logOut")}
         </Menu.Item>
       </Menu>

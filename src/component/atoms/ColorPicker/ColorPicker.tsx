@@ -18,6 +18,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 }) => {
   return (
     <AntColorPicker
+      showText
       defaultValue={defaultValue}
       onChange={(value, css) => onChange?.(value, css)}
       className={className}

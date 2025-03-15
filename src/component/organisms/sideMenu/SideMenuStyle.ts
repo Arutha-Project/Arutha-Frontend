@@ -23,3 +23,20 @@ export const DateTime: React.CSSProperties = {
   marginBottom: "20px",
   whiteSpace: "pre-line",
 };
+
+export const LogoutContainer: React.CSSProperties = {
+  position: 'absolute',
+  bottom: 0,
+  marginBottom: 100,
+};
+
+export const LanguageContainer: React.CSSProperties = {
+  width: 120, 
+  marginBottom: 10,
+  marginLeft: 20,
+};
+
+export const MenuContainerStyle: React.CSSProperties = {
+  marginTop: "auto", 
+  borderTop: "1px solid rgba(255, 255, 255, 0.1)" 
+};

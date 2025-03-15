@@ -7,11 +7,12 @@ export const defaultPageContainer: React.CSSProperties = {
 
 export const mainLayoutContainer: React.CSSProperties = {
   display: 'flex',
-  backgroundImage: 'url(src/assets/images/LoginPageBackground.jpg)',
+  backgroundImage: `url("/src/assets/images/background_4.jpg")`, 
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
   justifyContent: 'center',
   alignItems: 'center',
-  height: '100vh',
+  height: '100vh',  
+  width: 'flex',   
 };
