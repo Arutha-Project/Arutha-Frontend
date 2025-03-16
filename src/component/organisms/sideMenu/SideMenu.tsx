@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
-<<<<<<< HEAD:src/component/pages/sideMenu/SideMenu.tsx
 import { Layout, Menu } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
-=======
-import { Layout, Menu, Select } from "antd";
-import { useNavigate } from "react-router-dom";
->>>>>>> develop:src/component/organisms/sideMenu/SideMenu.tsx
 import {
   HomeOutlined,
   FontSizeOutlined,
@@ -64,10 +59,6 @@ const SideMenu: React.FC = () => {
   };
 
   return (
-<<<<<<< HEAD:src/component/pages/sideMenu/SideMenu.tsx
-    <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} style={SideMenuContainer}>
-      <div style={Logo}></div>
-=======
     <Sider
       collapsible
       collapsed={collapsed}
@@ -75,7 +66,6 @@ const SideMenu: React.FC = () => {
       style={SideMenuContainer}
     >
       <div style={Logo(collapsed)}></div>
->>>>>>> develop:src/component/organisms/sideMenu/SideMenu.tsx
       {!collapsed && <div style={DateTime}>{currentDateTime}</div>}
 
       <Menu

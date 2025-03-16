@@ -1,29 +1,30 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Layout, Button } from "antd";
-import { useNavigate } from "react-router-dom"; 
-import { 
-  mainLayoutContainer, 
-  contentContainer, 
-  backButton, 
-  backButtonHover, 
-  pageContainer, 
+import { useNavigate } from "react-router-dom";
+import {
+  mainLayoutContainer,
+  contentContainer,
+  backButton,
+  backButtonHover,
+  pageContainer,
   sidePanel,
-  contentInnerContainer, 
-  videoContainer, 
+  contentInnerContainer,
+  videoContainer,
   videoStyle,
   titleContainer,
   titleStyle,
-  contentRightPanel 
+  contentRightPanel
 } from "./SinhalaLettersIdentifyPageStyle";
 
-import sinhalaLetters from "/src/assets/images/sinhala_letters.png"; 
+import sinhalaLetters from "/src/assets/images/sinhala_letters.png";
+import { MainLayout } from "../../templates";
 
 
 const SinhalaLettersIdentifyPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
-  const navigate = useNavigate(); 
-  const [isHovered, setIsHovered] = useState(false); 
+  const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
 
   // Function to open the camera
   const openCamera = async () => {
@@ -57,7 +58,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
       closeCamera(); // Cleanup: close camera when component unmounts
     };
   }, []);
-  
+
 
   return (
     <Layout style={mainLayoutContainer}>
@@ -77,14 +78,14 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
       {/* Two-Column Layout */}
       <div style={pageContainer}>
 
-        
+
         {/* Left Side: Content with Video and Right Panel Inside */}
         <div style={contentContainer}>
-          
-           <div style={titleContainer}>
-          <h1 style={titleStyle}>Sinhala Letters Signing Practice</h1>
-        </div>
-        
+
+          <div style={titleContainer}>
+            <h1 style={titleStyle}>Sinhala Letters Signing Practice</h1>
+          </div>
+
           {/* Two-Column Layout Inside Content Container */}
           <div style={contentInnerContainer}>
             {/* Left: Video */}
@@ -108,7 +109,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
 
         {/* Right Side: Side Panel */}
         <div style={sidePanel}>
-        <img src={sinhalaLetters} style={{ height: "850px", width: "100%" }} alt="Sinhala_Letters" />
+          <img src={sinhalaLetters} style={{ height: "850px", width: "100%" }} alt="Sinhala_Letters" />
         </div>
       </div>
     </Layout>
