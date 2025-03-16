@@ -166,3 +166,19 @@ export const responsiveStyles = {
     },
   },
 };
+
+
+export const languageSelector: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "right",
+  alignItems: "center",
+
+};
+
+export const selectorDiv: React.CSSProperties = {
+  width: 120,
+  marginBottom: 10,
+  marginTop: 20,
+  marginRight: 20
+}
+
