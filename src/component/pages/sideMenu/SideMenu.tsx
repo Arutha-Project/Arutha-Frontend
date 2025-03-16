@@ -44,20 +44,28 @@ const SideMenu: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // ✅ Determine active key based on route
+  const getActiveKey = () => {
+    if (
+      location.pathname.startsWith("/sign-letters") ||
+      location.pathname.startsWith("/english-signing") ||
+      location.pathname.startsWith("/sinhala-signing") ||
+      location.pathname.startsWith("/letter-identify-activities")
+    ) {
+      return "/sign-letters"; // Group under "Sign Letters"
+    }
+    return location.pathname; // Default to exact match
+  };
+
   return (
-    <Sider
-      collapsible
-      collapsed={collapsed}
-      onCollapse={setCollapsed}
-      style={SideMenuContainer}
-    >
+    <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} style={SideMenuContainer}>
       <div style={Logo}></div>
       {!collapsed && <div style={DateTime}>{currentDateTime}</div>}
 
       <Menu
         theme="dark"
         mode="inline"
-        selectedKeys={[location.pathname]} // ✅ Keeps menu item active after refresh
+        selectedKeys={[getActiveKey()]} 
         onClick={({ key }) => navigate(key)}
       >
         <Menu.Item key="/home" icon={<HomeOutlined />}> {t("homePage")} </Menu.Item>
