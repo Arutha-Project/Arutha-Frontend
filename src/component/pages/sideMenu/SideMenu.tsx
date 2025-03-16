@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Layout, Menu } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   HomeOutlined,
   FontSizeOutlined,
-  FieldBinaryOutlined ,
+  FieldBinaryOutlined,
   PictureOutlined,
   HighlightOutlined,
   LogoutOutlined,
@@ -16,9 +16,10 @@ const { Sider } = Layout;
 
 const SideMenu: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Get current route
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
   const [collapsed, setCollapsed] = useState(false);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -56,7 +57,7 @@ const SideMenu: React.FC = () => {
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["1"]}
+        selectedKeys={[location.pathname]} // ✅ Keeps menu item active after refresh
         onClick={({ key }) => navigate(key)}
       >
         <Menu.Item key="/home" icon={<HomeOutlined />}> {t("homePage")} </Menu.Item>
@@ -65,7 +66,6 @@ const SideMenu: React.FC = () => {
         <Menu.Item key="/object-identifier" icon={<PictureOutlined />}> {t("ObjectIdentification")} </Menu.Item>
         <Menu.Item key="/drawing" icon={<HighlightOutlined />}> {t("Drawing")} </Menu.Item>
       </Menu>
-
 
       <Menu
         theme="dark"
