@@ -34,20 +34,24 @@ export const videoStyle: React.CSSProperties = {
   };
 
 export const startButtonDevTagStyle: React.CSSProperties = {
-    display: 'flex', 
-    flexDirection: 'column', 
-    alignItems: 'center', 
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '15px', 
     marginBottom: '20px'
   };
-
+  
 export const startButtonStyle: React.CSSProperties = {
-    padding: '10px 16px',
-    borderRadius: '8px',
-    background: '#007bff',
-    color: 'white',
+    backgroundColor: '#007bff',
+    color: '#fff',
     border: 'none',
-    cursor: 'pointer',
+    padding: '12px 20px',
     fontSize: '16px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: '0.3s',
+    width: '200px', 
+    textAlign: 'center'
   };
 
 export const nextButtonStyle: React.CSSProperties = {
