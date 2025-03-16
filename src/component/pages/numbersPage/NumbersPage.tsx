@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 
 import { Button, Layout} from 'antd';
-import {  mainLayoutContainer } from './NumbersPageStyle';
-import { Link } from "react-router-dom";
+import {  contentContainer, mainLayoutContainer } from './NumbersPageStyle';
+import { MainLayout } from '../../templates';
 
 const NumbersPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -91,20 +91,18 @@ const NumbersPage: React.FC = () => {
 
 
   return (
+    <MainLayout>
     <Layout style={mainLayoutContainer}>
-      <div>
+      <div style={contentContainer}>
         <h1>Numbers Identification Activity</h1>
-        <Link to="/numbersActivityPage">
-          <Button type="primary">Go to Numbers Activity</Button>
-        </Link>
         
         <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px' }}></video>
         
-        <div>
-          <button onClick={openCamera}>Open Camera</button>
-          <button onClick={startRecording}>Start Recording</button>
-          <button onClick={stopRecording}>Stop Recording</button>
-          <button onClick={submitVideo}>Submit</button>
+        <div style={{ marginTop: "10px" }}>
+          <Button type="primary" onClick={openCamera}>Open Camera</Button>
+          <Button type="default" onClick={startRecording}>Start Recording</Button>
+          <Button type="dashed" onClick={stopRecording}>Stop Recording</Button>
+          <Button type="primary" danger onClick={submitVideo}>Submit</Button>
         </div>
 
         <div style={{ marginTop: '20px' }}>
@@ -128,6 +126,7 @@ const NumbersPage: React.FC = () => {
         )}
       </div>
     </Layout>
+    </MainLayout>
   );
 };
 

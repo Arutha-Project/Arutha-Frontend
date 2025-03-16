@@ -1,13 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { 
+import {
   LoginPage,
   HomePage,
   NumbersPage,
   NumbersActivityPage,
   NumbersIdentifyPage,
-  SideMenu 
- } from "../component/pages";
-import { MainLayout } from "../component/templates";
+  AboutUs,
+  DrawingPage
+} from "../component/pages";
 import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
 import { LettersIdentifyPage } from "../component/pages/lettersIdentifyPage";
 import { EnglishLettersIdentifyPage } from "../component/pages/englishLettersIdentifyPage";
@@ -20,52 +20,47 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path={"/"} Component={LoginPage} />
-        <Route 
-          path="/home" 
-          element={<MainLayout><HomePage/></MainLayout>} 
+        <Route
+          path="/home"
+          Component={HomePage}
         />
 
-        <Route 
-          path="/object-identifier" 
-          element={<MainLayout><ObjectIdentifierPage/></MainLayout>} 
+        <Route
+          path="/about-us"
+          Component={AboutUs}
         />
 
-        <Route 
-          path="/numbers_Page" 
-          element={<MainLayout><NumbersPage/></MainLayout>} 
+        <Route
+          path="/object-identifier"
+          Component={ObjectIdentifierPage}
         />
 
-        <Route 
-          path="/numbers-Activity-Page" 
-          element={<MainLayout><NumbersActivityPage/></MainLayout>} 
+        <Route
+          path="/numbers-Page"
+          Component={NumbersPage}
+        />
+
+        <Route
+          path="/numbers-Activity-Page"
+          Component={NumbersActivityPage}
         />
 
         <Route
           path="/numbers-Identify-Page"
-          element={<MainLayout><NumbersIdentifyPage /></MainLayout>}
+          Component={NumbersIdentifyPage}
         />
-
-         <Route 
-          path="/sign-letters" 
-          element={<MainLayout><LettersIdentifyPage/></MainLayout>} 
+        <Route
+          path={"/home"}
+          Component={HomePage}
         />
-
-         <Route 
-          path="/english-signing" 
-          element={<MainLayout><EnglishLettersIdentifyPage/></MainLayout>} 
+        <Route
+          path={"/drawing"}
+          Component={DrawingPage}
         />
-
-         <Route 
-          path="/sinhala-signing" 
-          element={<MainLayout><SinhalaLettersIdentifyPage/></MainLayout>} 
-        />
-
-         <Route 
+          <Route 
           path="/letter-identify-activities" 
-          element={<MainLayout><ActivityLetterIdentifyPage/></MainLayout>} 
+          Component={ActivityLetterIdentifyPage} 
         />
-
-        <Route path={"/sideMenu"} Component={SideMenu} />
       </Routes>
     </BrowserRouter>
   );

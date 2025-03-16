@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Card, Col, Form, Input, Row, Typography } from 'antd';
+import { Card, Col, Form, Input, Row, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { cardStyle, inputFieldStyle, submitButtonStyle } from './LoginViewStyle';
+import Button from '../../atoms/Button';
 
 interface LoginViewProps {
   onFinish: (values: any) => void;
@@ -13,7 +14,7 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
 
   return (
     <Card style={cardStyle}>
-      
+
       <Typography.Title
         level={4}
         style={{ textAlign: "center", marginBottom: 20, marginTop: 10 }}
@@ -35,9 +36,7 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
           </Col>
           <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
             <Form.Item>
-              <Button type="primary" htmlType="submit" style={submitButtonStyle}>
-                {t("signin")}
-              </Button>
+              <Button type="primary" text={t("signin")} style={submitButtonStyle} />
             </Form.Item>
           </Col>
         </Row>

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD:src/component/pages/sideMenu/SideMenu.tsx
 import { Layout, Menu } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
+=======
+import { Layout, Menu, Select } from "antd";
+import { useNavigate } from "react-router-dom";
+>>>>>>> develop:src/component/organisms/sideMenu/SideMenu.tsx
 import {
   HomeOutlined,
   FontSizeOutlined,
@@ -8,8 +13,9 @@ import {
   PictureOutlined,
   HighlightOutlined,
   LogoutOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
-import { SideMenuContainer, Logo, DateTime } from "./SideMenuStyle";
+import { SideMenuContainer, Logo, DateTime, LogoutContainer, MenuContainerStyle } from "./SideMenuStyle";
 import { useTranslation } from "react-i18next";
 
 const { Sider } = Layout;
@@ -58,8 +64,18 @@ const SideMenu: React.FC = () => {
   };
 
   return (
+<<<<<<< HEAD:src/component/pages/sideMenu/SideMenu.tsx
     <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} style={SideMenuContainer}>
       <div style={Logo}></div>
+=======
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={setCollapsed}
+      style={SideMenuContainer}
+    >
+      <div style={Logo(collapsed)}></div>
+>>>>>>> develop:src/component/organisms/sideMenu/SideMenu.tsx
       {!collapsed && <div style={DateTime}>{currentDateTime}</div>}
 
       <Menu
@@ -69,6 +85,7 @@ const SideMenu: React.FC = () => {
         onClick={({ key }) => navigate(key)}
       >
         <Menu.Item key="/home" icon={<HomeOutlined />}> {t("homePage")} </Menu.Item>
+        <Menu.Item key="/about-us" icon={<TeamOutlined />}> {t("aboutUs")} </Menu.Item>
         <Menu.Item key="/sign-letters" icon={<FontSizeOutlined />}> {t("SignLetters")} </Menu.Item>
         <Menu.Item key="/numbers-Identify-Page" icon={<FieldBinaryOutlined />}> {t("SignNumbers")} </Menu.Item>
         <Menu.Item key="/object-identifier" icon={<PictureOutlined />}> {t("ObjectIdentification")} </Menu.Item>
@@ -78,9 +95,10 @@ const SideMenu: React.FC = () => {
       <Menu
         theme="dark"
         mode="inline"
-        style={{ marginTop: "auto", borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}
+        style={MenuContainerStyle}
       >
-        <Menu.Item key="/login" icon={<LogoutOutlined />} onClick={() => navigate("/login")}>
+
+        <Menu.Item style={LogoutContainer} key="/login" icon={<LogoutOutlined />} onClick={() => navigate("/login")}>
           {t("logOut")}
         </Menu.Item>
       </Menu>

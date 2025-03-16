@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Button, Layout } from 'antd';
+import { contentContainer, mainLayoutContainer } from './NumbersActivityPageStyle';
+import { MainLayout } from '../../templates';
 
 const NumbersActivityPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -16,7 +18,7 @@ const NumbersActivityPage: React.FC = () => {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
     const isAddition = Math.random() > 0.5;
-    
+
     const equationText = isAddition ? `${num1} + ${num2}` : `${num1} - ${num2}`;
     setEquation(equationText);
     setCorrectAnswer(isAddition ? num1 + num2 : num1 - num2);
@@ -88,23 +90,29 @@ const NumbersActivityPage: React.FC = () => {
   };
 
   return (
-    <Layout style={{ padding: '20px', textAlign: 'center' }}>
-      <h1>Maths Sign Language Activity</h1>
-      <Button type="primary" onClick={generateEquation}>Generate Equation</Button>
-      {equation && <h2>{equation} = ?</h2>}
-      
-      <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px' }}></video>
+    <MainLayout>
+      <Layout style={mainLayoutContainer}>
+        <div style={contentContainer}>
 
-      <div>
-        <button onClick={openCamera}>Open Camera</button>
-        <button onClick={startRecording}>Start Recording</button>
-        <button onClick={stopRecording}>Stop Recording</button>
-        <button onClick={submitVideo}>Submit Answer</button>
-      </div>
+          <h1>Maths Sign Language Activity</h1>
+          <Button type="primary" onClick={generateEquation}>Generate Equation</Button>
+          {equation && <h2>{equation} = ?</h2>}
 
-      {loading && <p>⏳ Processing... Please wait...</p>}
-      {resultMessage && <h2>{resultMessage}</h2>}
-    </Layout>
+          <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px' }}></video>
+
+          <div style={{ marginTop: "10px" }}>
+            <Button type="primary" onClick={openCamera}>Open Camera</Button>
+            <Button type="default" onClick={startRecording}>Start Recording</Button>
+            <Button type="dashed" onClick={stopRecording}>Stop Recording</Button>
+            <Button type="primary" danger onClick={submitVideo}>Submit</Button>
+          </div>
+
+          {loading && <p>⏳ Processing... Please wait...</p>}
+          {prediction && !loading && <p>Your Answer: {prediction}</p>}
+          {resultMessage && <h2>{resultMessage}</h2>}
+        </div>
+      </Layout>
+    </MainLayout>
   );
 };
 
