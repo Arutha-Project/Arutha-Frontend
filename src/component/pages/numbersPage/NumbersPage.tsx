@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 
-import { Button, Layout } from 'antd';
-import { contentContainer, mainLayoutContainer } from './NumbersPageStyle';
+import { Button, Layout} from 'antd';
+import {  contentContainer, mainLayoutContainer } from './NumbersPageStyle';
 import { MainLayout } from '../../templates';
 
 const NumbersPage: React.FC = () => {
@@ -29,17 +29,17 @@ const NumbersPage: React.FC = () => {
 
   const startRecording = () => {
     if (!stream) return;
-
+    
     const mediaRecorder = new MediaRecorder(stream);
     mediaRecorderRef.current = mediaRecorder;
-
+    
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         setRecordedChunks((prev) => [...prev, event.data]);
       }
     };
-
-    setStartTime(new Date());
+    
+    setStartTime(new Date()); 
     setEndTime(null);
     setDuration(null);
     setPrediction(null);
@@ -92,40 +92,40 @@ const NumbersPage: React.FC = () => {
 
   return (
     <MainLayout>
-      <Layout style={mainLayoutContainer}>
-        <div style={contentContainer}>
-          <h1>Numbers Identification Activity</h1>
-
-          <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px' }}></video>
-
-          <div style={{ marginTop: "10px" }}>
-            <Button type="primary" onClick={openCamera}>Open Camera</Button>
-            <Button type="default" onClick={startRecording}>Start Recording</Button>
-            <Button type="dashed" onClick={stopRecording}>Stop Recording</Button>
-            <Button type="primary" danger onClick={submitVideo}>Submit</Button>
-          </div>
-
-          <div style={{ marginTop: '20px' }}>
-            {startTime && <p>📍 Start Time: {startTime.toLocaleTimeString()}</p>}
-            {endTime && <p>🛑 End Time: {endTime.toLocaleTimeString()}</p>}
-            {duration !== null && <p>⏳ Duration: {duration.toFixed(2)} seconds</p>}
-          </div>
-
-          {/* Show Loading Animation */}
-          {loading && (
-            <div style={{ marginTop: '20px', fontSize: '18px', fontWeight: 'bold', color: 'blue' }}>
-              ⏳ Processing... Please wait...
-            </div>
-          )}
-
-          {/* Show Prediction Result */}
-          {prediction && !loading && (
-            <p style={{ fontSize: '18px', fontWeight: 'bold', color: 'green' }}>
-              🔍 Predicted Sign: {prediction}
-            </p>
-          )}
+    <Layout style={mainLayoutContainer}>
+      <div style={contentContainer}>
+        <h1>Numbers Identification Activity</h1>
+        
+        <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px' }}></video>
+        
+        <div style={{ marginTop: "10px" }}>
+          <Button type="primary" onClick={openCamera}>Open Camera</Button>
+          <Button type="default" onClick={startRecording}>Start Recording</Button>
+          <Button type="dashed" onClick={stopRecording}>Stop Recording</Button>
+          <Button type="primary" danger onClick={submitVideo}>Submit</Button>
         </div>
-      </Layout>
+
+        <div style={{ marginTop: '20px' }}>
+          {startTime && <p>📍 Start Time: {startTime.toLocaleTimeString()}</p>}
+          {endTime && <p>🛑 End Time: {endTime.toLocaleTimeString()}</p>}
+          {duration !== null && <p>⏳ Duration: {duration.toFixed(2)} seconds</p>}
+        </div>
+
+        {/* Show Loading Animation */}
+        {loading && (
+          <div style={{ marginTop: '20px', fontSize: '18px', fontWeight: 'bold', color: 'blue' }}>
+            ⏳ Processing... Please wait...
+          </div>
+        )}
+
+        {/* Show Prediction Result */}
+        {prediction && !loading && (
+          <p style={{ fontSize: '18px', fontWeight: 'bold', color: 'green' }}>
+            🔍 Predicted Sign: {prediction}
+          </p>
+        )}
+      </div>
+    </Layout>
     </MainLayout>
   );
 };

@@ -6,7 +6,6 @@ import { NumbersPage } from "./numbersPage";
 import { NumbersActivityPage } from "./numbersActivityPage";
 import { NumbersIdentifyPage } from "./numbersIdentifyPage";
 import { AboutUs } from "./aboutUs";
-import { ActivityLetterIdentifyPage } from "./activityLetterIdentifyPage";
 
 export { 
   LoginPage,
@@ -16,7 +15,6 @@ export {
   NumbersPage,
   NumbersActivityPage,
   NumbersIdentifyPage,
-  AboutUs,
-  ActivityLetterIdentifyPage
+  AboutUs
  };
  
