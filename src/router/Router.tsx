@@ -6,9 +6,11 @@ import {
   NumbersActivityPage,
   NumbersIdentifyPage,
   AboutUs,
-  DrawingPage
+  DrawingPage,
+  ObjectIdentifierPage,
+  ActivityLetterIdentifyPage
 } from "../component/pages";
-import ObjectIdentifierPage from "../component/pages/objectIdentifierPage/objectIdentifierPage";
+
 
 function Router() {
   return (
@@ -51,6 +53,10 @@ function Router() {
         <Route
           path={"/drawing"}
           Component={DrawingPage}
+        />
+        <Route
+          path="/sign-letters"
+          Component={ActivityLetterIdentifyPage}
         />
       </Routes>
     </BrowserRouter>
