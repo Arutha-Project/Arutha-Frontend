@@ -94,3 +94,17 @@ export const backButtonHover: React.CSSProperties = {
   borderColor: "#999",
   transform: "scale(1.05)",
 };
+
+export const languageSelector: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "right",
+  alignItems: "center",
+
+};
+
+export const selectorDiv: React.CSSProperties = {
+  width: 120,
+  marginBottom: 10,
+  marginTop: 20,
+  marginRight: 20
+}
