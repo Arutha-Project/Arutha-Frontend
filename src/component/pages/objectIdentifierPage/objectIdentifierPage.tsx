@@ -23,32 +23,41 @@ const ObjectIdentifierPage: React.FC = () => {
   const [result, setResult] = useState<string | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const intervalRef = useRef<number | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
 
   const { language, changeLanguage } = React.useContext(LanguageContext);
 
-  // const nameList = [
-  //   "apple", "banana1", "banana2", "mango", "pineapple", "pomegranate", "butterfly", "cat1",
-  //   "cat2", "dog1", "dog2", "parrot", "elephant", "circle", "rectangle", "square", "triangle"
-  // ];
-
-  // const nameList2 = [
-  //   "ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි", "දෙළුම්", "සමනලයා", "පූසා1",
-  //   "පූසා2", "බල්ලා1", "බල්ලා2", "ගිරවා", "අලියා", "වෘත්තය", "සෘජුකෝණාස්‍රය", "සමචතුරස්‍රය", "ත්‍රිකෝණය"
-  // ];
-
-  const nameList = [
-    "elephant", "circle", "elephant", "circle"
-  ];
-
-  const nameList2 = [
-    "වෘත්තය", "අලියා", "වෘත්තය", "අලියා"
-  ];
-
-  const selectedNameList = language === 'si' ? nameList2 : nameList;
+  const [categories, setCategories] = useState<{
+    shapes: string[];
+    animals: string[];
+    fruits: string[];
+  }>({
+    shapes: [],
+    animals: [],
+    fruits: [],
+  });
 
   useEffect(() => {
-    setRandomName(selectedNameList[Math.floor(Math.random() * selectedNameList.length)]);
+    setCategories({
+      shapes: language === 'si' ? ["වෘත්තය", "සෘජුකෝණාස්‍රය", "සමචතුරස්‍රය", "ත්‍රිකෝණය"] : ["circle", "rectangle", "square", "triangle"],
+        
+      animals: language === 'si' ? ["අලියා", "පූසා1", "පූසා2", "බල්ලා1", "බල්ලා2", "ගිරවා",  "සමනලයා"] : ["elephant", "cat1", "cat2", "dog1", "dog2", "Parrot", "butterfly"],
+  
+      fruits: language === 'si' ? ["ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි"] : ["apple", "banana1", "banana2", "Mango", "Pineapple"]
+    });
   }, [language]);
+
+  type CategoryType = keyof typeof categories;
+
+
+  const selectCategory = (selectedCategory: CategoryType) => {
+    setCategory(selectedCategory);
+    setShowRecordingDetails(true);
+    setRecordingEnabled(true);
+    
+    const items = categories[selectedCategory];
+    setRandomName(items[Math.floor(Math.random() * items.length)]);
+  };
 
   const openCamera = async () => {
     try {
@@ -161,7 +170,10 @@ const ObjectIdentifierPage: React.FC = () => {
     setDuration(null);
     setPrediction(null);
     setResult(null);
-    setRandomName(selectedNameList[Math.floor(Math.random() * selectedNameList.length)]);
+    if (category) {
+      const selectedItems = categories[category as keyof typeof categories];
+      setRandomName(selectedItems[Math.floor(Math.random() * selectedItems.length)]);
+    }
   };
 
   useEffect(() => {
@@ -210,19 +222,15 @@ const ObjectIdentifierPage: React.FC = () => {
           <div style={{ flex: 1, textAlign: 'left' }}>
             {!showRecordingDetails ? (
               <div style={startButtonDevTagStyle}>
-                <button
-                  onClick={() => {
-                    setShowRecordingDetails(true);
-                    setRecordingEnabled(true);
-                    setRandomName(selectedNameList[Math.floor(Math.random() * selectedNameList.length)]);
-                  }}
-                  style={startButtonStyle}
-                >
-                  🚀 {t("Start")}
-                </button>
+
+                <button onClick={() => selectCategory('shapes')} style={startButtonStyle}>{t("Shapes")}</button>
+                <button onClick={() => selectCategory('animals')} style={startButtonStyle}>{t("Animals")}</button>
+                <button onClick={() => selectCategory('fruits')} style={startButtonStyle}>{t("Fruits")}</button>
+
                 <p style={{ marginTop: '20px', fontSize: '16px' }}>
                   🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}
                 </p>
+
               </div>
             ) : (
               <>
