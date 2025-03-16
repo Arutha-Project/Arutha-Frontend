@@ -61,6 +61,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
 
 
   return (
+    <MainLayout>
     <Layout style={mainLayoutContainer}>
       {/* Back Button */}
       <div style={{ padding: "10px", top: "20px", left: "20px" }}>
@@ -113,6 +114,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
         </div>
       </div>
     </Layout>
+    </MainLayout>
   );
 };
 
