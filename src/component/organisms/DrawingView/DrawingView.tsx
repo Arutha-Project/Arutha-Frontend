@@ -105,7 +105,7 @@ const DrawingView: React.FC = () => {
         </Col>
         <Col span={12}>
           <Card style={cardLayerStyle}>
-            <Title level={1} style={randomSelector}>{objectName}</Title>
+            <Title level={1} style={randomSelector}>{t(objectName)}</Title>
             {answer === QuickDraw.correct ? (
               <>
                 <CheckCircleOutlined style={predictionsContainer(answer)} />
