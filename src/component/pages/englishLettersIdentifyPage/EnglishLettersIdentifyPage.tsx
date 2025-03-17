@@ -32,7 +32,6 @@ const EnglishLettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
   const { language, changeLanguage } = useContext(LanguageContext);
   const videoRef = useRef<HTMLVideoElement>(null);
-;
   const [stream, setStream] = useState<MediaStream | null>(null);
   const navigate = useNavigate(); 
   const [isHovered, setIsHovered] = useState(false); 
@@ -142,7 +141,8 @@ const EnglishLettersIdentifyPage: React.FC = () => {
           <div style={contentInnerContainer}>
             {/* Left: Video */}
             <div style={videoContainer}>
-              <video ref={videoRef} autoPlay playsInline style={videoStyle}></video>
+              <video ref={videoRef} autoPlay muted />
+              <canvas ref={canvasRef} style={{ display: "none" }} />
             </div>
 
             {/* Right: White Background Panel */}
