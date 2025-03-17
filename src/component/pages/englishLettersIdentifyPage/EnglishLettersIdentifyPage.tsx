@@ -14,7 +14,6 @@ import {
   titleContainer,
   titleStyle,
   contentRightPanel,
-  languageSelector,
   selectorDiv
 } from "./EnglishLettersIdentifyPageStyle";
 

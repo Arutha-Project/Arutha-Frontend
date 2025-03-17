@@ -5,14 +5,17 @@ import { ArrowForward, Back, Brush2, BrushBig, Trash } from "iconsax-react";
 import ColorPicker from "../../atoms/ColorPicker";
 import {
   buttonContainer,
+  buttonDivStyle,
   canvasContainer,
   canvasStyle,
   cardLayerStyle,
+  colorPickerContainer,
   mainLayoutContainer,
   nextButtonStyle,
   predictionsContainer,
   predictionsTitle,
   randomSelector,
+  submitButtonStyle,
 } from "./DrawingViewStyle";
 import { t } from "i18next";
 import { Card, Col, Row, Typography } from "antd";
@@ -47,6 +50,7 @@ const DrawingView: React.FC = () => {
         }
       }
     } catch (error) {
+      setAnswer(QuickDraw.noResult);
       console.error("Error exporting image:", error);
     }
   };
@@ -69,38 +73,6 @@ const DrawingView: React.FC = () => {
               canvasColor="black"
               style={canvasStyle}
             />
-            <div style={{ display: "flex", justifyContent: "center", marginTop: 16 }}>
-              <Button
-                handleOnClick={() => canvasRef.current?.eraseMode(false)}
-                style={buttonContainer} text={t("pen")}
-                icon={<Brush2 size="32" />}
-              />
-              <ColorPicker
-                defaultValue={color}
-                style={buttonContainer}
-                onChange={(colorObj) => setColor(colorObj.toHexString())}
-              />
-              <Button
-                handleOnClick={() => canvasRef.current?.eraseMode(true)}
-                style={buttonContainer} text={t("eraser")}
-                icon={<BrushBig size="32" />}
-              />
-              <Button
-                handleOnClick={() => canvasRef.current?.resetCanvas()}
-                style={buttonContainer}
-                text={t("clear")}
-                icon={<Trash size={32} />}
-              />
-              <Button
-                handleOnClick={() => canvasRef.current?.undo()}
-                style={buttonContainer} text={t("undo")}
-                icon={<Back size="32" />}
-              />
-              <Button
-                handleOnClick={() => canvasRef.current?.redo()}
-                style={buttonContainer} text={t("redo")}
-                icon={<ArrowForward size="32" />} />
-            </div>
           </div>
         </Col>
         <Col span={12}>
@@ -127,9 +99,9 @@ const DrawingView: React.FC = () => {
                 <Title level={3} style={predictionsTitle(answer)}>{t('loading')}</Title>
               </>
             )}
-            <Row style={{ marginTop: 20 }}>
+            <Row style={{ marginTop: 40 }}>
               <Col span={12}>
-                <Button type="primary" handleOnClick={onFinish} style={nextButtonStyle} text={t('submit')} />
+                <Button type="primary" handleOnClick={onFinish} style={submitButtonStyle} text={t('submit')} />
               </Col>
               <Col span={12}>
                 <Button type="primary" style={nextButtonStyle} handleOnClick={handleNext} text={t('nextDrawing')} />
@@ -137,6 +109,40 @@ const DrawingView: React.FC = () => {
             </Row>
           </Card>
         </Col>
+      </Row>
+      <Row style={buttonDivStyle}>
+        <div>
+          <Button
+            handleOnClick={() => canvasRef.current?.eraseMode(false)}
+            style={buttonContainer} text={t("pen")}
+            icon={<Brush2 size="32" />}
+          />
+          <ColorPicker
+            defaultValue={color}
+            style={colorPickerContainer}
+            onChange={(colorObj) => setColor(colorObj.toHexString())}
+          />
+          <Button
+            handleOnClick={() => canvasRef.current?.eraseMode(true)}
+            style={buttonContainer} text={t("eraser")}
+            icon={<BrushBig size="32" />}
+          />
+          <Button
+            handleOnClick={() => canvasRef.current?.resetCanvas()}
+            style={buttonContainer}
+            text={t("clear")}
+            icon={<Trash size={32} />}
+          />
+          <Button
+            handleOnClick={() => canvasRef.current?.undo()}
+            style={buttonContainer} text={t("undo")}
+            icon={<Back size="32" />}
+          />
+          <Button
+            handleOnClick={() => canvasRef.current?.redo()}
+            style={buttonContainer} text={t("redo")}
+            icon={<ArrowForward size="32" />} />
+        </div>
       </Row>
     </div>
   );
