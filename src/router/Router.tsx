@@ -8,8 +8,11 @@ import {
   AboutUs,
   DrawingPage,
   ObjectIdentifierPage,
-  ActivityLetterIdentifyPage
+  ActivityLetterIdentifyPage,
 } from "../component/pages";
+import { LettersIdentifyPage } from "../component/pages/lettersIdentifyPage";
+import { EnglishLettersIdentifyPage } from "../component/pages/englishLettersIdentifyPage";
+import { SinhalaLettersIdentifyPage } from "../component/pages/sinhalaLettersIdentifyPage";
 
 
 function Router() {
@@ -56,8 +59,23 @@ function Router() {
         />
         <Route
           path="/sign-letters"
+          Component={LettersIdentifyPage}
+        />
+        <Route
+          path="/english-signing"
+          Component={EnglishLettersIdentifyPage}
+        />
+
+         <Route
+          path="/sinhala-signing"
+          Component={SinhalaLettersIdentifyPage}
+        />
+
+        <Route
+          path="/letter-identify-activities"
           Component={ActivityLetterIdentifyPage}
         />
+        
       </Routes>
     </BrowserRouter>
   );

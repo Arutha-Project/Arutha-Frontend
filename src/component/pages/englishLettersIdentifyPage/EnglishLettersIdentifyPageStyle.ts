@@ -1,14 +1,15 @@
 export const languageSelector: React.CSSProperties = {
   display: "flex",
-  justifyContent: "center",
+  justifyContent: "right",
   alignItems: "center",
-  minHeight: 700,
+
 };
 
 export const selectorDiv: React.CSSProperties = {
   width: 120,
   marginBottom: 10,
-  marginRight: 10
+  marginTop: 20,
+  marginRight: 20
 }
 
 export const mainLayoutContainer: React.CSSProperties = {

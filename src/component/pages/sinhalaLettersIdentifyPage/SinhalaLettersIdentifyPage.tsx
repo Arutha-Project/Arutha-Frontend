@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Layout, Button } from "antd";
+import React, { useRef, useState, useEffect, useContext } from "react";
+import { Layout, Button, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   mainLayoutContainer,
@@ -13,14 +13,18 @@ import {
   videoStyle,
   titleContainer,
   titleStyle,
-  contentRightPanel
+  contentRightPanel,
+  selectorDiv
 } from "./SinhalaLettersIdentifyPageStyle";
 
 import sinhalaLetters from "/src/assets/images/sinhala_letters.png";
 import { MainLayout } from "../../templates";
-
+import { LanguageContext } from "../../../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const SinhalaLettersIdentifyPage: React.FC = () => {
+  const { t } = useTranslation();
+  const { language, changeLanguage } = useContext(LanguageContext);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const navigate = useNavigate();
@@ -49,31 +53,38 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
       videoRef.current.srcObject = null;
     }
   };
-
-  // Automatically open camera when component mounts
   useEffect(() => {
-    openCamera(); // Open camera when component mounts
+    openCamera();
 
     return () => {
-      closeCamera(); // Cleanup: close camera when component unmounts
+      closeCamera();
     };
   }, []);
 
 
   return (
+    <MainLayout>
     <Layout style={mainLayoutContainer}>
-      {/* Back Button */}
-      <div style={{ padding: "10px", top: "20px", left: "20px" }}>
-        <Button
-          type="default"
-          onClick={() => navigate("/sign-letters")}
-          style={isHovered ? { ...backButton, ...backButtonHover } : backButton}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          ← Back
-        </Button>
-      </div>
+    
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", padding: "10px 20px" }}>
+
+  <Button
+    type="default"
+    onClick={() => navigate("/sign-letters")}
+    style={isHovered ? { ...backButton, ...backButtonHover } : backButton}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+  >
+    ← {t("Back")}
+  </Button>
+
+  {/* Language Selector */}
+  <Select value={language} onChange={changeLanguage} style={selectorDiv}>
+    <Select.Option value="en">English</Select.Option>
+    <Select.Option value="si">සිංහල</Select.Option>
+  </Select>
+
+</div>
 
       {/* Two-Column Layout */}
       <div style={pageContainer}>
@@ -83,7 +94,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
         <div style={contentContainer}>
 
           <div style={titleContainer}>
-            <h1 style={titleStyle}>Sinhala Letters Signing Practice</h1>
+            <h1 style={titleStyle}>{t("SinhalaLettersSigningPractice")}</h1>
           </div>
 
           {/* Two-Column Layout Inside Content Container */}
@@ -102,8 +113,8 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
 
           {/* Camera Controls */}
           <div style={{ marginTop: "10px", display: "flex", gap: "10px", justifyContent: "center" }}>
-            <Button type="primary" onClick={openCamera}>Open Camera</Button>
-            <Button type="primary" danger onClick={closeCamera}>Close Camera</Button>
+            <Button type="primary" onClick={openCamera}>{t("OpenCamera")}</Button>
+            <Button type="primary" danger onClick={closeCamera}>{t("CloseCamera")}</Button>
           </div>
         </div>
 
@@ -113,6 +124,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
         </div>
       </div>
     </Layout>
+    </MainLayout>
   );
 };
 
