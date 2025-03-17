@@ -108,3 +108,15 @@ export const selectorDiv: React.CSSProperties = {
   marginTop: 20,
   marginRight: 20
 }
+
+export const videoContainer: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+export const videoStyle: React.CSSProperties = {
+  maxWidth: "800px",
+  minHeight: "700px",
+  borderRadius: "10px",
+};1

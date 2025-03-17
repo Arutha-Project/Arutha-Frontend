@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Layout, Button, Tabs, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,7 +11,9 @@ import {
   leftSideSinhala,
   rightSideEnglish,
   rightSideSinhala,
-  selectorDiv
+  selectorDiv,
+  videoContainer,
+  videoStyle
 } from "./ActivityLetterIdentifyPageStyle";
 import { MainLayout } from "../../templates";
 import { LanguageContext } from "../../../context/LanguageContext";
@@ -23,7 +25,27 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
   const { language, changeLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
   const [isHovered, setIsHovered] = React.useState(false);
+
+  const openCamera = async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setStream(mediaStream);
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream;
+      }
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+    }
+  };
+  
+  useEffect(() => {
+    openCamera(); 
+
+
+  }, []);
 
   return (
     <MainLayout>
@@ -57,7 +79,9 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                 </div>
 
                 <div style={rightSideEnglish}>
-
+                <div style={videoContainer}>
+                      <video ref={videoRef} autoPlay playsInline style={videoStyle}></video>
+                     </div>
                 </div>
               </div>
             </TabPane>
@@ -67,12 +91,14 @@ const ActivityLetterIdentifyPage: React.FC = () => {
               <div style={activitySection}>
                 {/* Left Side Content */}
                 <div style={leftSideSinhala}>
-
+                   
                 </div>
 
                 {/* Right Side Content */}
                 <div style={rightSideSinhala}>
-
+                <div style={videoContainer}>
+                      <video ref={videoRef} autoPlay playsInline style={videoStyle}></video>
+                  </div>
                 </div>
               </div>
             </TabPane>
