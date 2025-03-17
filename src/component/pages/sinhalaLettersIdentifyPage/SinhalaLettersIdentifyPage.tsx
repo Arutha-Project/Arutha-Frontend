@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import { Layout, Button, Select } from "antd";
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+import  io  from "socket.io-client";
 import {
   mainLayoutContainer,
   contentContainer,
@@ -142,14 +142,14 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
 
             {/* Right: White Background Panel */}
             <div style={contentRightPanel}>
-              <h2>Instructions</h2>
+            <h2>{t("Instructions")}</h2>
               <p>
-                * Follow the signing instructions carefully and practice along.
+                * {t("InstructionSteps")}.
               </p>
               <p
                 style={{ fontSize: "36px", fontWeight: "bold", color: "green" }}
               >
-                Predicted Letter:{" "}
+                {t("PredictedLetter")}:{" "}
                 <span style={{ fontSize: "48px", color: "red" }}>
                   {predictedLetter}
                 </span>
@@ -161,8 +161,8 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
           <div style={{ marginTop: "10px", display: "flex", gap: "10px", justifyContent: "center" }}>
             {/* <Button type="primary" onClick={openCamera}>{t("OpenCamera")}</Button>
             <Button type="primary" danger onClick={closeCamera}>{t("CloseCamera")}</Button> */}
-             <Button type="default" onClick={captureFrame}>
-              Capture Frame
+             <Button type="default" style={{backgroundColor:"#1677ff" , color:"white"}} onClick={captureFrame}>
+             {t("CaptureFrame")}
             </Button>
           </div>
         </div>
