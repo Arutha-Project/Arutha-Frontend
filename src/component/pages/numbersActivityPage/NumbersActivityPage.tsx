@@ -4,11 +4,15 @@ import { contentContainer, mainLayoutContainer } from './NumbersActivityPageStyl
 import { MainLayout } from '../../templates';
 import { useTranslation } from "react-i18next";
 
+const TOTAL_QUESTIONS = 10;
+
 const NumbersActivityPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
   const [equation, setEquation] = useState<string>('');
   const [correctAnswer, setCorrectAnswer] = useState<number | null>(null);
   const [prediction, setPrediction] = useState<number | null>(null);
@@ -20,6 +24,8 @@ const NumbersActivityPage: React.FC = () => {
   const { t } = useTranslation();
 
   const generateEquation = () => {
+    if (currentQuestion >= TOTAL_QUESTIONS) return;
+
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
     const isAddition = Math.random() > 0.5;
@@ -64,7 +70,7 @@ const NumbersActivityPage: React.FC = () => {
     setStartTime(new Date());
     setEndTime(null);
     setDuration(null);
-
+    
     const stream = videoRef.current.srcObject as MediaStream;
     const mediaRecorder = new MediaRecorder(stream);
     mediaRecorderRef.current = mediaRecorder;
@@ -115,7 +121,11 @@ const NumbersActivityPage: React.FC = () => {
       if (response.ok) {
         const result = await response.json();
         setPrediction(result.predicted_number);
+        console.log("Current Question:", currentQuestion , "Total Questions:", TOTAL_QUESTIONS, "Score:", score);
         if (result.is_correct) {
+          if (currentQuestion < TOTAL_QUESTIONS - 1){
+            setScore(score + 1);
+          }
           setResultMessage(`✅ Correct! answer is ${correctAnswer}`);
         } else {
           setResultMessage(`❌ Wrong! The correct answer is ${correctAnswer}`);
@@ -127,34 +137,42 @@ const NumbersActivityPage: React.FC = () => {
       console.error('Error uploading video:', error);
     } finally {
       setLoading(false);
+      setTimeout(() => {
+        if (currentQuestion < TOTAL_QUESTIONS - 1) {
+          setCurrentQuestion(currentQuestion + 1);
+          generateEquation();
+        }
+      }, 1000);
     }
   };
 
-    useEffect(() => {
-      const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.code === "Space") {
-          event.preventDefault();
-          toggleRecording();
-        }
-      };
-      window.addEventListener("keydown", handleKeyDown);
-      return () => {
-        window.removeEventListener("keydown", handleKeyDown);
-      };
-    }, [isRecording]);
+  useEffect(() => {
+    generateEquation();
+  }, [currentQuestion]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        toggleRecording();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isRecording]);
 
   return (
     <MainLayout>
       <Layout style={mainLayoutContainer}>
         <div style={contentContainer}>
-
           <h1>{t("MathsActivity")}</h1>
-            <Button type="primary" onClick={generateEquation}>Generate Equation</Button>
-            {equation && <h2>{equation} = ?</h2>}
+          <h2>Question {currentQuestion + 1} / {TOTAL_QUESTIONS}</h2>
+          <h2>{equation} = ?</h2>
           <Row gutter={16}>
             <Col span={12}>
-              {/* Left Side - Camera */}
-              <div style={{ flex: 1, textAlign: "center" }}>
+              <div style={{ textAlign: "center" }}>
                 <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "500px" }}></video>
                 <p>🎥 Press <b>Space</b> to Start/Stop Recording</p>
               </div>
@@ -169,10 +187,14 @@ const NumbersActivityPage: React.FC = () => {
                   {duration !== null && <p><b>Duration:</b> {duration.toFixed(1)} seconds</p>}
                 </div>
 
-                {loading && <p>⏳ {t("Processing")}</p>}
-                {prediction && !loading && <p>Your Answer: {prediction}</p>}
-                {resultMessage && <h2>{resultMessage}</h2>}
+                <div style={contentContainer}>
+                  {loading && <p>⏳ {t("Processing")}</p>}
+                  {prediction !== null && !loading && <p>Your Answer: {prediction}</p>}
+                  {resultMessage && <p style={{ fontSize: "20px", fontWeight: "bold", color: resultMessage.includes("Correct") ? "green" : "red" }}>{resultMessage}</p>}
+                  <h3>Score: {score} / {TOTAL_QUESTIONS}</h3>
+                </div>
               </div>
+              <Button type="primary" onClick={() => window.location.reload()} style={{ marginLeft: '10px' }}>Continue</Button>
             </Col>
           </Row>
         </div>
