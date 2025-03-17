@@ -3,7 +3,7 @@ import { uploadVideo } from '../../../services';
 import { t } from 'i18next';
 import { Layout, Select } from 'antd';
 import { LanguageContext } from '../../../context/LanguageContext';
-import { nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle, startRecordingButtonStyle, startRecordingButtonDisabledStyle, stopButtonStyle, stopButtonDisabledStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
+import { pageHeader, nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle, startRecordingButtonStyle, startRecordingButtonDisabledStyle, stopButtonStyle, stopButtonDisabledStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
 import { MainLayout } from '../../templates';
 
 const ObjectIdentifierPage: React.FC = () => {
@@ -40,9 +40,9 @@ const ObjectIdentifierPage: React.FC = () => {
   useEffect(() => {
     setCategories({
       shapes: language === 'si' ? ["වෘත්තය", "සෘජුකෝණාස්‍රය", "සමචතුරස්‍රය", "ත්‍රිකෝණය"] : ["circle", "rectangle", "square", "triangle"],
-        
-      animals: language === 'si' ? ["අලියා", "පූසා1", "පූසා2", "බල්ලා1", "බල්ලා2", "ගිරවා",  "සමනලයා"] : ["elephant", "cat1", "cat2", "dog1", "dog2", "Parrot", "butterfly"],
-  
+
+      animals: language === 'si' ? ["අලියා", "පූසා1", "පූසා2", "බල්ලා1", "බල්ලා2", "ගිරවා", "සමනලයා"] : ["elephant", "cat1", "cat2", "dog1", "dog2", "Parrot", "butterfly"],
+
       fruits: language === 'si' ? ["ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි"] : ["apple", "banana1", "banana2", "Mango", "Pineapple"]
     });
   }, [language]);
@@ -54,7 +54,7 @@ const ObjectIdentifierPage: React.FC = () => {
     setCategory(selectedCategory);
     setShowRecordingDetails(true);
     setRecordingEnabled(true);
-    
+
     const items = categories[selectedCategory];
     setRandomName(items[Math.floor(Math.random() * items.length)]);
   };
@@ -135,7 +135,7 @@ const ObjectIdentifierPage: React.FC = () => {
 
     const recordedVideo = document.createElement("video");
     recordedVideo.src = URL.createObjectURL(new Blob(recordedChunks, { type: "video/webm" }));
-    recordedVideo.style.transform = "scaleX(-1)"; 
+    recordedVideo.style.transform = "scaleX(-1)";
 
     uploadVideo(recordedChunks)
       .then(prediction => {
@@ -186,100 +186,123 @@ const ObjectIdentifierPage: React.FC = () => {
   return (
     <div>
       <MainLayout>
-      <Layout style={mainLayoutContainerOI}>
-        <Select value={language} onChange={changeLanguage} style={{ width: 120, marginBottom: 10 }}>
+        <Layout style={mainLayoutContainerOI}>
+          {/* <Select value={language} onChange={changeLanguage} style={{ width: 120, marginBottom: 10 }}>
           <Select.Option value="en">English</Select.Option>
           <Select.Option value="si">සිංහල</Select.Option>
-        </Select>
+        </Select> */}
 
-        <div style={Container1}>
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              style={videoStyle}></video>
+          <div style={Container1}>
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                style={videoStyle}></video>
 
-            <div style={{ marginTop: '15px' }}>
-              <button
-                onClick={startRecording}
-                disabled={!recordingEnabled || isRecording}
-                style={!recordingEnabled || isRecording ? startRecordingButtonDisabledStyle : startRecordingButtonStyle}
-              >
-                {t("startRecoding")}
-              </button>
+              <div style={{ marginTop: '15px' }}>
+                <button
+                  onClick={startRecording}
+                  disabled={!recordingEnabled || isRecording}
+                  style={!recordingEnabled || isRecording ? startRecordingButtonDisabledStyle : startRecordingButtonStyle}
+                >
+                  {t("startRecoding")}
+                </button>
 
-              <button
-                onClick={stopRecording}
-                disabled={!recordingEnabled || !isRecording}
-                style={!recordingEnabled || !isRecording ? stopButtonDisabledStyle : stopButtonStyle}
-              >
-                {t("StopRecording")}
-              </button>
-            </div>
-          </div>
-
-          <div style={{ flex: 1, textAlign: 'left' }}>
-            {!showRecordingDetails ? (
-              <div style={startButtonDevTagStyle}>
-
-                <button onClick={() => selectCategory('shapes')} style={startButtonStyle}>{t("Shapes")}</button>
-                <button onClick={() => selectCategory('animals')} style={startButtonStyle}>{t("Animals")}</button>
-                <button onClick={() => selectCategory('fruits')} style={startButtonStyle}>{t("Fruits")}</button>
-
-                <p style={{ marginTop: '20px', fontSize: '16px' }}>
-                  🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}
-                </p>
-
+                <button
+                  onClick={stopRecording}
+                  disabled={!recordingEnabled || !isRecording}
+                  style={!recordingEnabled || !isRecording ? stopButtonDisabledStyle : stopButtonStyle}
+                >
+                  {t("StopRecording")}
+                </button>
               </div>
-            ) : (
-              <>
-                <div style={leftShowingData}>
-                  {randomName && (
-                    <p>🌟 <b>{t("RandomName")}:</b> {randomName}</p>
-                  )}
+            </div>
 
-                  {startTime && <p>📍 <b>{t("StartTime")}:</b> {startTime.toLocaleTimeString()}</p>}
+            <div style={{ flex: 1, textAlign: 'left' }}>
+              {!showRecordingDetails ? (
+                <div style={startButtonDevTagStyle}>
 
-                  {endTime && <p>🛑 <b>{t("EndTime")}:</b> {endTime.toLocaleTimeString()}</p>}
+                  <p style={pageHeader}>{t("OBJECT IDENTIFICATION")}</p>
 
-                  {isRecording ? (
-                    <p>⏳ <b>{t("Duration")}:</b> {elapsedTime.toFixed(1)} {t("seconds")}</p>
-                  ) : duration !== null && (
-                    <p>⏳ <b>{t("Duration")}:</b> {duration.toFixed(1)} {t("seconds")}</p>
-                  )}
+                  <button onClick={() => selectCategory('shapes')} style={startButtonStyle}>{t("Shapes")}</button>
+                  <button onClick={() => selectCategory('animals')} style={startButtonStyle}>{t("Animals")}</button>
+                  <button onClick={() => selectCategory('fruits')} style={startButtonStyle}>{t("Fruits")}</button>
 
-                  {loading && (
-                    <div style={processingGif}>
-                      ⏳ {t("Processing")}
-                    </div>
-                  )}
-                </div>
-
-                {prediction && !loading && (
-                  <div style={{ textAlign: "center", marginTop: "20px" }}>
-                    <p style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "10px" }}>
-                      🔍 <b>{t("PredictedSign")}:</b> {t(prediction)}
+                  <div style={{
+                    marginTop: '40px',
+                    marginBottom: '40px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '5px' 
+                  }}>
+                    <p style={{
+                      margin: 0, 
+                      fontSize: '16px',
+                      textAlign: 'center'
+                    }}>
+                      🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}
                     </p>
-                    <p style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "50px", color: t(prediction) == randomName ? "green" : "red" }}>
-                      {result}
+
+                    <p style={{
+                      margin: 0, 
+                      fontSize: '16px',
+                      textAlign: 'center'
+                    }}>
+                      ⏳ {t("For more accurate results, try recording for at least 15 seconds.")}
                     </p>
                   </div>
-                )}
 
-                <div style={{ marginTop: '20px', textAlign: 'center', }}>
-                  <button
-                    onClick={startNewRound}
-                    style={nextButtonStyle}
-                  >
-                    {t("Next")}
-                  </button>
                 </div>
-              </>
-            )}
+              ) : (
+                <>
+                  <div style={leftShowingData}>
+                    {randomName && (
+                      <p>🌟 <b>{t("RandomName")}:</b> {randomName}</p>
+                    )}
+
+                    {startTime && <p>📍 <b>{t("StartTime")}:</b> {startTime.toLocaleTimeString()}</p>}
+
+                    {endTime && <p>🛑 <b>{t("EndTime")}:</b> {endTime.toLocaleTimeString()}</p>}
+
+                    {isRecording ? (
+                      <p>⏳ <b>{t("Duration")}:</b> {elapsedTime.toFixed(1)} {t("seconds")}</p>
+                    ) : duration !== null && (
+                      <p>⏳ <b>{t("Duration")}:</b> {duration.toFixed(1)} {t("seconds")}</p>
+                    )}
+
+                    {loading && (
+                      <div style={processingGif}>
+                        ⏳ {t("Processing")}
+                      </div>
+                    )}
+                  </div>
+
+                  {prediction && !loading && (
+                    <div style={{ textAlign: "center", marginTop: "20px" }}>
+                      <p style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "10px" }}>
+                        🔍 <b>{t("PredictedSign")}:</b> {t(prediction)}
+                      </p>
+                      <p style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "50px", color: t(prediction) == randomName ? "green" : "red" }}>
+                        {result}
+                      </p>
+                    </div>
+                  )}
+
+                  <div style={{ marginTop: '20px', textAlign: 'center', }}>
+                    <button
+                      onClick={startNewRound}
+                      style={nextButtonStyle}
+                    >
+                      {t("Next")}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      </Layout>
+        </Layout>
       </MainLayout>
     </div>
   );
