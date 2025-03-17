@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu, Select } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Layout, Menu } from "antd";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   HomeOutlined,
   FontSizeOutlined,
@@ -17,6 +17,7 @@ const { Sider } = Layout;
 
 const SideMenu: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Get current route
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
   const [collapsed, setCollapsed] = useState(false);
   const { t } = useTranslation();
@@ -44,6 +45,19 @@ const SideMenu: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // ✅ Determine active key based on route
+  const getActiveKey = () => {
+    if (
+      location.pathname.startsWith("/sign-letters") ||
+      location.pathname.startsWith("/english-signing") ||
+      location.pathname.startsWith("/sinhala-signing") ||
+      location.pathname.startsWith("/letter-identify-activities")
+    ) {
+      return "/sign-letters"; // Group under "Sign Letters"
+    }
+    return location.pathname; // Default to exact match
+  };
+
   return (
     <Sider
       collapsible
@@ -57,7 +71,7 @@ const SideMenu: React.FC = () => {
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["1"]}
+        selectedKeys={[getActiveKey()]} 
         onClick={({ key }) => navigate(key)}
       >
         <Menu.Item key="/home" icon={<HomeOutlined />}> {t("homePage")} </Menu.Item>
@@ -67,7 +81,6 @@ const SideMenu: React.FC = () => {
         <Menu.Item key="/object-identifier" icon={<PictureOutlined />}> {t("ObjectIdentification")} </Menu.Item>
         <Menu.Item key="/drawing" icon={<HighlightOutlined />}> {t("Drawing")} </Menu.Item>
       </Menu>
-
 
       <Menu
         theme="dark"

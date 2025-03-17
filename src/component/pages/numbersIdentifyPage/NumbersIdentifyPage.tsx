@@ -1,69 +1,100 @@
-import React, { useRef, useState } from "react";
-import { Layout , Button, Space } from "antd";
+import React, { useRef, useState, useEffect } from "react";
+import { Layout, Button, Space, Col, Row } from "antd";
 import {  contentContainer, mainLayoutContainer } from './NumbersIdentifyPageStyle';
 import { Link } from "react-router-dom";
 import { MainLayout } from "../../templates";
+import { useTranslation } from "react-i18next";
 
 const NumbersIdentifyPage: React.FC = () => {
   const [currentNumber, setCurrentNumber] = useState(0); // Start from 0
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [isRecording, setIsRecording] = useState<boolean>(false);
   const [prediction, setPrediction] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<string | null>(null); // "Correct" or "Wrong"
+  const [result, setResult] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [endTime, setEndTime] = useState<Date | null>(null);
+  const [duration, setDuration] = useState<number | null>(null);
+  const { t } = useTranslation();
 
-  const openCamera = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
+  useEffect(() => {
+    const openCamera = async () => {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+        }
+      } catch (error) {
+        console.error("Error accessing camera:", error);
       }
-    } catch (error) {
-      console.error("Error accessing camera:", error);
+    };
+    openCamera();
+  }, []);
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
     }
   };
 
   const startRecording = () => {
-    if (!stream) return;
+    if (!videoRef.current || isRecording) return;
     setRecordedChunks([]);
+    setPrediction(null);
+    setResult(null);
+    setStartTime(new Date());
+    setEndTime(null);
+    setDuration(null);
 
+    const stream = videoRef.current.srcObject as MediaStream;
     const mediaRecorder = new MediaRecorder(stream);
     mediaRecorderRef.current = mediaRecorder;
 
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
-        setRecordedChunks((prev) => [...prev, event.data]);
+        setRecordedChunks([event.data]);
       }
     };
 
     mediaRecorder.start();
+    setIsRecording(true);
   };
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current) {
+    if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      const end = new Date();
+      setEndTime(end);
+      if (startTime) {
+        const totalDuration = (end.getTime() - startTime.getTime()) / 1000;
+        setDuration(Number(totalDuration.toFixed(1)));
+      }
     }
   };
 
-  const submitVideo = async () => {
-    if (recordedChunks.length === 0) return;
+  useEffect(() => {
+    if (recordedChunks.length > 0) {
+      submitVideo();
+    }
+  }, [recordedChunks]);
 
+  const submitVideo = async () => {
+    setLoading(true);
     const blob = new Blob(recordedChunks, { type: "video/webm" });
     const formData = new FormData();
     formData.append("file", blob, "recording.webm");
-    formData.append("expected_number", currentNumber.toString()); // Send expected number
-
-    setLoading(true);
+    formData.append("expected_number", currentNumber.toString());
 
     try {
       const response = await fetch("http://127.0.0.1:2220/validate_number/", {
         method: "POST",
         body: formData,
       });
-
       if (response.ok) {
         const result = await response.json();
         setPrediction(result.predicted_number.toString());
@@ -84,13 +115,29 @@ const NumbersIdentifyPage: React.FC = () => {
       setPrediction(null);
       setResult(null);
       setRecordedChunks([]);
+      setStartTime(null);
+      setEndTime(null);
+      setDuration(null);
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        toggleRecording();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isRecording]);
 
   return (
     <MainLayout>
       <Layout style={mainLayoutContainer}>
-        <Space size="middle">
+      <Space size="middle">
           <Link to="/numbers-Page">
             <Button type="primary">Go to Self Study</Button>
           </Link>
@@ -101,23 +148,29 @@ const NumbersIdentifyPage: React.FC = () => {
         <div style={contentContainer}>
           <h1>Number Signing Practice</h1>
           <h2>🔢 Sign this number: {currentNumber}</h2>
-
-          <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "600px" }}></video>
-
-          <div style={{ marginTop: "10px" }}>
-            <Button type="primary" onClick={openCamera}>Open Camera</Button>
-            <Button type="default" onClick={startRecording}>Start Recording</Button>
-            <Button type="dashed" onClick={stopRecording}>Stop Recording</Button>
-            <Button type="primary" danger onClick={submitVideo}>Submit</Button>
-          </div>
-
-          <Button type="primary" onClick={nextNumber} disabled={currentNumber >= 50}> Next ➡ </Button>
-        </div>
-
-        <div>
-          {loading && <p>⏳ Processing... Please wait...</p>}
-          {prediction && !loading && <p>Your Answer: {prediction}</p>}
-          {result && <p style={{ fontSize: "18px", fontWeight: "bold", color: result.includes("Correct") ? "green" : "red" }}>{result}</p>}
+          <Row gutter={16}>
+            <Col span={12}>
+              {/* Left Side - Camera */}
+              <div style={{ flex: 1, textAlign: "center" }}>
+                <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "500px" }}></video>
+                <p>🎥 Press <b>Space</b> to Start/Stop Recording</p>
+              </div>
+            </Col>
+            <Col span={12}>
+              {/* Right Side - Results */}
+              <div style={{ flex: 1, textAlign: "center" }}>
+                <div style={{textAlign: "left" }}>
+                  {startTime && <p><b>Start Time:</b> {startTime.toLocaleTimeString()}</p>}
+                  {endTime && <p><b>End Time:</b> {endTime.toLocaleTimeString()}</p>}
+                  {duration !== null && <p><b>Duration:</b> {duration.toFixed(1)} seconds</p>}
+                </div>                
+                {loading && <p>⏳ {t("Processing")}</p>}
+                {prediction && !loading && <p>Your Answer: {prediction}</p>}
+                {result && <p style={{ fontSize: "18px", fontWeight: "bold", color: result.includes("Correct") ? "green" : "red" }}>{result}</p>}
+                <Button type="primary"  onClick={nextNumber} disabled={currentNumber >= 50}>{t("Next")} ➡</Button>
+              </div>
+            </Col>
+          </Row>
         </div>
       </Layout>
     </MainLayout>
