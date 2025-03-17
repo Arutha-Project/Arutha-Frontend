@@ -26,7 +26,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const { language, changeLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [, setStream] = useState<MediaStream | null>(null);
   const [isHovered, setIsHovered] = React.useState(false);
 
   const openCamera = async () => {
