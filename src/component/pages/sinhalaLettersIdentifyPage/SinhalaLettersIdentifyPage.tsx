@@ -142,50 +142,44 @@ import {
 const socket = io("http://localhost:5000");
 
 const SinhalaLettersIdentifyPage: React.FC = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<any>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [predictedLetter, setPredictedLetter] = useState<string>("");
+  const [predictedLetter, setPredictedLetter] = useState("");
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
-  // Function to open the camera
-  const openCamera = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-      });
-      setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
-    } catch (error) {
-      console.error("Error accessing camera:", error);
-    }
-  };
-
-  // Function to close the camera
-  const closeCamera = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-      setStream(null);
-    }
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-  };
-
-  // Automatically open camera when component mounts
   useEffect(() => {
-    openCamera(); // Open camera when component mounts
+    // Start video capture
+    const startVideo = async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    };
 
-    // Handle incoming predictions from backend
-    socket.on("predicted_letter", (letter: string) => {
+    startVideo();
+
+    // Handle incoming processed frames
+    socket.on("processed_frame", (frameData: BlobPart) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(new Blob([frameData]));
+      img.onload = () => {
+        if (canvasRef.current) {
+          const ctx = canvasRef.current.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0);
+          }
+        }
+      };
+    });
+
+    // Handle incoming predictions
+    socket.on("predicted_letter", (letter: any) => {
       setPredictedLetter(letter);
     });
 
     return () => {
-      closeCamera(); // Cleanup: close camera when component unmounts
+      socket.off("processed_frame");
       socket.off("predicted_letter");
     };
   }, []);
@@ -206,7 +200,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
         if (blob) {
           const reader = new FileReader();
           reader.onloadend = () => {
-            socket.emit("frame", reader.result); // Send the frame data to the backend
+            socket.emit("frame", reader.result);
           };
           reader.readAsArrayBuffer(blob);
         }
@@ -237,21 +231,22 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
 
           <div style={contentInnerContainer}>
             <div style={videoContainer}>
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                style={videoStyle}
-              ></video>
+              <video ref={videoRef} autoPlay muted />
+              <canvas ref={canvasRef} style={{ display: "none" }} />
             </div>
 
             <div style={contentRightPanel}>
               <h2>Instructions</h2>
               <p>
-                Follow the signing instructions carefully and practice along.
+                * Follow the signing instructions carefully and practice along.
               </p>
-              <p>
-                <strong>Predicted Letter: {predictedLetter}</strong>
+              <p
+                style={{ fontSize: "36px", fontWeight: "bold", color: "green" }}
+              >
+                Predicted Letter:{" "}
+                <span style={{ fontSize: "48px", color: "red" }}>
+                  {predictedLetter}
+                </span>
               </p>
             </div>
           </div>
@@ -264,12 +259,12 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
               justifyContent: "center",
             }}
           >
-            <Button type="primary" onClick={openCamera}>
+            {/* <Button type="primary" onClick={openCamera}>
               Open Camera
             </Button>
             <Button type="primary" danger onClick={closeCamera}>
               Close Camera
-            </Button>
+            </Button> */}
             <Button type="default" onClick={captureFrame}>
               Capture Frame
             </Button>
