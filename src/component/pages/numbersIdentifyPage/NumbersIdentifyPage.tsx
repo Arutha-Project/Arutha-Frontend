@@ -4,6 +4,7 @@ import {  contentContainer, mainLayoutContainer } from './NumbersIdentifyPageSty
 import { Link } from "react-router-dom";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 const NumbersIdentifyPage: React.FC = () => {
   const [currentNumber, setCurrentNumber] = useState(0); // Start from 0
@@ -121,6 +122,18 @@ const NumbersIdentifyPage: React.FC = () => {
     }
   };
 
+  const backNumber = () => {
+    if (currentNumber > 0 && currentNumber < 50) {
+      setCurrentNumber((prev) => prev - 1);
+      setPrediction(null);
+      setResult(null);
+      setRecordedChunks([]);
+      setStartTime(null);
+      setEndTime(null);
+      setDuration(null);
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
@@ -166,8 +179,11 @@ const NumbersIdentifyPage: React.FC = () => {
                 </div>                
                 {loading && <p>⏳ {t("Processing")}</p>}
                 {prediction && !loading && <p>Your Answer: {prediction}</p>}
-                {result && <p style={{ fontSize: "18px", fontWeight: "bold", color: result.includes("Correct") ? "green" : "red" }}>{result}</p>}
-                <Button type="primary"  onClick={nextNumber} disabled={currentNumber >= 50}>{t("Next")} ➡</Button>
+                {result && <p style={{ fontSize: "28px", fontWeight: "bold", color: result.includes("Correct") ? "green" : "red" }}>{result}</p>}
+                <Space size="middle">
+                  <Button type="primary"  onClick={backNumber} disabled={currentNumber >= 50}><LeftOutlined />{t("PreviousNumber")}</Button>
+                  <Button type="primary"  onClick={nextNumber} disabled={currentNumber >= 50}>{t("NextNumber")}<RightOutlined /></Button>
+                </Space>
               </div>
             </Col>
           </Row>
