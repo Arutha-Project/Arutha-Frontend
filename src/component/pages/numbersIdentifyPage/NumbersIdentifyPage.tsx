@@ -86,29 +86,43 @@ const NumbersIdentifyPage: React.FC = () => {
 
   const submitVideo = async () => {
     setLoading(true);
+  
     const blob = new Blob(recordedChunks, { type: "video/webm" });
     const formData = new FormData();
     formData.append("file", blob, "recording.webm");
     formData.append("expected_number", currentNumber.toString());
-
+  
+    // Dynamically select model_key based on currentNumber
+    let modelKey = "";
+    if (currentNumber >= 0 && currentNumber <= 10) modelKey = "0-10";
+    else if (currentNumber >= 11 && currentNumber <= 20) modelKey = "11-20";
+    else if (currentNumber >= 21 && currentNumber <= 30) modelKey = "21-30";
+    else if (currentNumber >= 31 && currentNumber <= 40) modelKey = "31-40";
+    else if (currentNumber >= 41 && currentNumber <= 50) modelKey = "41-50";
+  
+    formData.append("model_key", modelKey);
+  
     try {
       const response = await fetch("http://127.0.0.1:2220/validate_number/", {
         method: "POST",
         body: formData,
       });
+  
       if (response.ok) {
         const result = await response.json();
         setPrediction(result.predicted_number.toString());
         setResult(result.correct ? "✅ Correct!" : `❌ Wrong! The correct answer is ${currentNumber}`);
       } else {
-        alert("Failed to upload video");
+        alert("Failed to upload video. Server returned: " + response.status);
       }
     } catch (error) {
       console.error("Error uploading video:", error);
+      alert("Error uploading video. See console for details.");
     } finally {
       setLoading(false);
     }
   };
+  
 
   const nextNumber = () => {
     if (currentNumber < 50) {
@@ -181,8 +195,8 @@ const NumbersIdentifyPage: React.FC = () => {
                 {prediction && !loading && <p>Your Answer: {prediction}</p>}
                 {result && <p style={{ fontSize: "28px", fontWeight: "bold", color: result.includes("Correct") ? "green" : "red" }}>{result}</p>}
                 <Space size="middle">
-                  <Button type="primary"  onClick={backNumber} disabled={currentNumber >= 50}><LeftOutlined />{t("PreviousNumber")}</Button>
-                  <Button type="primary"  onClick={nextNumber} disabled={currentNumber >= 50}>{t("NextNumber")}<RightOutlined /></Button>
+                  <Button color="cyan" variant="solid"  onClick={backNumber} disabled={currentNumber >= 50}><LeftOutlined />{t("PreviousNumber")}</Button>
+                  <Button color="cyan" variant="solid" onClick={nextNumber} disabled={currentNumber >= 50}>{t("NextNumber")}<RightOutlined /></Button>
                 </Space>
               </div>
             </Col>
