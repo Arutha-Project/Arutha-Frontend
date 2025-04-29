@@ -233,3 +233,4 @@ const NumbersActivityPage: React.FC = () => {
 };
 
 export default NumbersActivityPage;
+
