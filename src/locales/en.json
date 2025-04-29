@@ -20,7 +20,7 @@
   "CaptureFrame": "Capture Frame",
   "Instructions": "Instructions",
   "InstructionSteps": "Show the camera the sign corresponding to the provided letters and click 'Capture' to practice signing letters.",
-  "Back": "back",
+  "Back": "Back",
   "EnglishActivity": "English Signing Activity",
   "SinhalaActivity": "Sinhala Signing Activity",
   "PredictedLetter": "Predicted Letter",
@@ -118,5 +118,7 @@
   "MathsActivity": "Maths Sign Language Activity",
   "OBJECT IDENTIFICATION": "OBJECT IDENTIFICATION",
   "For more accurate results, try recording for at least 15 seconds.": "For more accurate results, try recording for at least 15 seconds.",
-  "Self-Study":"Self Study"
+  "Self-Study":"Self Study",
+  "PreviousNumber": "Previous Number",
+  "NextNumber": "Next Number"
 }
