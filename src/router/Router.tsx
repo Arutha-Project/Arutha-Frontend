@@ -9,6 +9,7 @@ import {
   DrawingPage,
   ObjectIdentifierPage,
   ActivityLetterIdentifyPage,
+  TeacherDashboardPage,
 } from "../component/pages";
 import { LettersIdentifyPage } from "../component/pages/lettersIdentifyPage";
 import { EnglishLettersIdentifyPage } from "../component/pages/englishLettersIdentifyPage";
@@ -23,6 +24,11 @@ function Router() {
         <Route
           path="/home"
           Component={HomePage}
+        />
+
+        <Route
+          path="/teacher-dashboard"
+          Component={TeacherDashboardPage}
         />
 
         <Route

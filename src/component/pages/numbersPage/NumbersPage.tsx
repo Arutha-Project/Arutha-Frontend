@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Layout, Row, InputNumber, Select, Button } from 'antd';
+import { Col, Layout, Row, InputNumber, Select } from 'antd';
 import { contentContainer, mainLayoutContainer } from './NumbersPageStyle';
 import { MainLayout } from '../../templates';
 import { useTranslation } from 'react-i18next';

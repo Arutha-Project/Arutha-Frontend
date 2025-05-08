@@ -7,6 +7,7 @@ import { NumbersActivityPage } from "./numbersActivityPage";
 import { NumbersIdentifyPage } from "./numbersIdentifyPage";
 import { AboutUs } from "./aboutUs";
 import { ActivityLetterIdentifyPage } from "./activityLetterIdentifyPage";
+import { TeacherDashboardPage } from "./teacherDashboard";
 
 export { 
   LoginPage,
@@ -17,6 +18,7 @@ export {
   NumbersActivityPage,
   NumbersIdentifyPage,
   AboutUs,
-  ActivityLetterIdentifyPage
+  ActivityLetterIdentifyPage,
+  TeacherDashboardPage
  };
  
