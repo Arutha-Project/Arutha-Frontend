@@ -120,5 +120,7 @@
   "For more accurate results, try recording for at least 15 seconds.": "For more accurate results, try recording for at least 15 seconds.",
   "Self-Study":"Self Study",
   "PreviousNumber": "Previous Number",
-  "NextNumber": "Next Number"
+  "NextNumber": "Next Number",
+  "Question": "Question",
+  "Score": "Score"
 }

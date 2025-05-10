@@ -1,5 +1,5 @@
 export const SideMenuContainer: React.CSSProperties = {
-  height: "100vh",
+  height: "auto",
   backgroundColor: "#1E1E2E",
   transition: "width 0.3s ease",
 };
