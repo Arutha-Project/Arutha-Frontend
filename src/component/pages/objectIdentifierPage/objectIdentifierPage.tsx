@@ -39,11 +39,11 @@ const ObjectIdentifierPage: React.FC = () => {
 
   useEffect(() => {
     setCategories({
+
       shapes: language === 'si' ? ["වෘත්තය", "සෘජුකෝණාස්‍රය", "සමචතුරස්‍රය", "ත්‍රිකෝණය"] : ["circle", "rectangle", "square", "triangle"],
-
       animals: language === 'si' ? ["අලියා", "පූසා1", "පූසා2", "බල්ලා1", "බල්ලා2", "ගිරවා", "සමනලයා"] : ["elephant", "cat1", "cat2", "dog1", "dog2", "Parrot", "butterfly"],
+      fruits: language === 'si' ? ["ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි" , "දෙළුම්"] : ["apple", "banana1", "banana2", "Mango", "Pineapple", "pomegranate"],
 
-      fruits: language === 'si' ? ["ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි"] : ["apple", "banana1", "banana2", "Mango", "Pineapple"]
     });
   }, [language]);
 
@@ -137,7 +137,7 @@ const ObjectIdentifierPage: React.FC = () => {
     recordedVideo.src = URL.createObjectURL(new Blob(recordedChunks, { type: "video/webm" }));
     recordedVideo.style.transform = "scaleX(-1)";
 
-    uploadVideo(recordedChunks)
+    uploadVideo(recordedChunks, randomName || "")
       .then(prediction => {
         setPrediction(prediction);
         if (randomName) {
