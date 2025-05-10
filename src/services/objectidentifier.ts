@@ -1,9 +1,10 @@
-export const uploadVideo = async (recordedChunks: BlobPart[]) => {
+export const uploadVideo = async (recordedChunks: BlobPart[], randomName: string) => {
     if (recordedChunks.length === 0) return Promise.reject('No recorded video');
   
     const blob = new Blob(recordedChunks, { type: 'video/webm' });
     const formData = new FormData();
     formData.append('file', blob, 'recording.webm');
+    formData.append('random_name', randomName);
   
     try {
       const response = await fetch('http://127.0.0.1:2220/predict/', {

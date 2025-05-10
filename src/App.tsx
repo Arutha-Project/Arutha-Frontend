@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./reduxToolkit/store";
 import { LanguageProvider } from "./context/LanguageContext";
 
-// import { io } from "socket.io-client";
+// import io from "socket.io-client";
 // import { useEffect, useRef, useState } from "react";
 // const socket = io("http://localhost:5000"); // Connect to Flask backend
 function App() {
