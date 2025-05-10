@@ -23,7 +23,7 @@ import { MainLayout } from "../../templates";
 import { LanguageContext } from "../../../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 
-const socket = io("http://localhost:5000");
+// const socket = io("http://localhost:5000");
 
 const SinhalaLettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();

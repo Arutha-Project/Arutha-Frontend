@@ -21,6 +21,7 @@ export const buttonContainer: React.CSSProperties = {
   maxHeight: '44px',
   minWidth: '126px',
   marginTop: '10px',
+  marginBottom: '10px',
   marginLeft: '105px',
   background: '#007bff',
   color: "white",

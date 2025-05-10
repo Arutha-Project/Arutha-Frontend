@@ -68,7 +68,7 @@ const DrawingView: React.FC = () => {
           <div style={canvasContainer}>
             <ReactSketchCanvas
               ref={canvasRef}
-              strokeWidth={20}
+              strokeWidth={30}
               strokeColor={color}
               canvasColor="black"
               style={canvasStyle}
@@ -116,11 +116,6 @@ const DrawingView: React.FC = () => {
             handleOnClick={() => canvasRef.current?.eraseMode(false)}
             style={buttonContainer} text={t("pen")}
             icon={<Brush2 size="32" />}
-          />
-          <ColorPicker
-            defaultValue={color}
-            style={colorPickerContainer}
-            onChange={(colorObj) => setColor(colorObj.toHexString())}
           />
           <Button
             handleOnClick={() => canvasRef.current?.eraseMode(true)}

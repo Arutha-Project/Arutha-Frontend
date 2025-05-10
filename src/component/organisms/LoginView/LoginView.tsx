@@ -12,6 +12,16 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
 
+  const onclick = () => {
+    form.validateFields().then((values) => {
+      onFinish(values);
+    }
+    ).catch((errorInfo) => {
+      console.error('Validation failed:', errorInfo);
+    }
+    );
+  };
+
   return (
     <Card style={cardStyle}>
 
@@ -25,7 +35,7 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
       <Form form={form} onFinish={onFinish}>
         <Row>
           <Col span={24}>
-            <Form.Item name="email" rules={[{ required: true, message: t("email_required") }]}>
+            <Form.Item name="email" rules={[{ required: true, type: 'email', message: t("email_required") }]}>
               <Input style={inputFieldStyle} placeholder={t("email_placeholder")} />
             </Form.Item>
           </Col>
@@ -36,7 +46,8 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
           </Col>
           <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
             <Form.Item>
-              <Button type="primary" text={t("signin")} style={submitButtonStyle} />
+              <Button type="primary" text={t("signin")} style={submitButtonStyle}
+                handleOnClick={onclick} />
             </Form.Item>
           </Col>
         </Row>

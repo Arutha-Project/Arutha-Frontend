@@ -25,7 +25,7 @@ import englishLetters from "/src/assets/images/english_letters.png";
 import { LanguageContext } from "../../../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 
-const socket = io("http://localhost:5000");
+// const socket = io("http://localhost:5000");
 
 const EnglishLettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();

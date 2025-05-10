@@ -1,7 +1,5 @@
 import { ConfigProvider, ThemeConfig } from "antd";
 import Router from "./router/Router";
-import { Provider } from "react-redux";
-import { store } from "./reduxToolkit/store";
 import { LanguageProvider } from "./context/LanguageContext";
 
 // import io from "socket.io-client";
@@ -26,13 +24,11 @@ function App() {
   };
 
   return (
-    <Provider store={store}>
       <LanguageProvider>
         <ConfigProvider theme={customTheme}>
           <Router />
         </ConfigProvider>
       </LanguageProvider>
-    </Provider>
   );
 }
 

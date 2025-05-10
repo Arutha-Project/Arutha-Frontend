@@ -1,7 +1,6 @@
 // import { AuthHeaders, BASE_URL, TokenType } from '@constants';
 import axios from 'axios';
 const BASE_URL = import.meta.env.VITE_API_URL;
-import { store } from '../reduxToolkit/store';
 import { AuthHeaders } from '../constants';
 
 const axiosInstance = axios.create({
@@ -12,7 +11,8 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const { accessToken } = store.getState().authTokenReducer;
+  // const { accessToken } = store.getState().authTokenReducer;
+  const accessToken = null;
 
   if (accessToken) {
     config.headers[AuthHeaders.Authorization] = `${AuthHeaders.Bearer} ${accessToken}`;
