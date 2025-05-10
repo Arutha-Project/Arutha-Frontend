@@ -181,7 +181,7 @@ const NumbersActivityPage: React.FC = () => {
       <Layout style={mainLayoutContainer}>
         <div style={contentContainer}>
           <h1>{t("MathsActivity")}</h1>
-          <h2>Question {currentQuestion + 1} / {TOTAL_QUESTIONS}</h2>
+          <h2>{t("Question")} {currentQuestion + 1} / {TOTAL_QUESTIONS}</h2>
           <h2>{equation} = ?</h2>
           <Row gutter={16}>
             <Col span={12}>
@@ -205,7 +205,7 @@ const NumbersActivityPage: React.FC = () => {
                       {resultMessage}
                     </p>
                   )}
-                  <h3>Score: {score} / {TOTAL_QUESTIONS}</h3>
+                  <h3>{t("Score")}: {score} / {TOTAL_QUESTIONS}</h3>
                 </div>
               </div>
             </Col>
