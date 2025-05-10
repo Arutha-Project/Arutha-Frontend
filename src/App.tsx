@@ -1,6 +1,5 @@
 import { ConfigProvider, ThemeConfig } from "antd";
 import Router from "./router/Router";
-import { Provider } from "react-redux";
 import { LanguageProvider } from "./context/LanguageContext";
 
 // import io from "socket.io-client";
