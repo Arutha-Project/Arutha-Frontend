@@ -23,7 +23,14 @@ const ObjectIdentifierPage: React.FC = () => {
   const [result, setResult] = useState<string | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const intervalRef = useRef<number | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
+  const [category, setCategory] = useState<CategoryType | null>(null);
+
+  const [showCompletionPopup, setShowCompletionPopup] = useState<boolean>(false);
+  const [remainingItems, setRemainingItems] = useState<string[]>([]);
+
+  const [score, setScore] = useState<number>(0);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [attempts, setAttempts] = useState<number>(0);
 
   const { language, changeLanguage } = React.useContext(LanguageContext);
 
@@ -42,7 +49,7 @@ const ObjectIdentifierPage: React.FC = () => {
 
       shapes: language === 'si' ? ["වෘත්තය", "සෘජුකෝණාස්‍රය", "සමචතුරස්‍රය", "ත්‍රිකෝණය"] : ["circle", "rectangle", "square", "triangle"],
       animals: language === 'si' ? ["අලියා", "පූසා1", "පූසා2", "බල්ලා1", "බල්ලා2", "ගිරවා", "සමනලයා"] : ["elephant", "cat1", "cat2", "dog1", "dog2", "Parrot", "butterfly"],
-      fruits: language === 'si' ? ["ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි" , "දෙළුම්"] : ["apple", "banana1", "banana2", "Mango", "Pineapple", "pomegranate"],
+      fruits: language === 'si' ? ["ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි", "දෙළුම්"] : ["apple", "banana1", "banana2", "Mango", "Pineapple", "pomegranate"],
 
     });
   }, [language]);
@@ -55,8 +62,20 @@ const ObjectIdentifierPage: React.FC = () => {
     setShowRecordingDetails(true);
     setRecordingEnabled(true);
 
-    const items = categories[selectedCategory];
-    setRandomName(items[Math.floor(Math.random() * items.length)]);
+    // const items = categories[selectedCategory];
+    // setRandomName(items[Math.floor(Math.random() * items.length)]);
+
+    const items = [...categories[selectedCategory]]; // clone the array
+    setRemainingItems(items); // Save for tracking what's left
+
+    const firstItem = items[Math.floor(Math.random() * items.length)];
+    setRandomName(firstItem);
+    setRemainingItems(prev => prev.filter(item => item !== firstItem)); // Remove from remaining
+
+    // Reset score tracking
+    setScore(0);
+    setAttempts(0);
+    setTotalItems(items.length); // set max attempts for the category
   };
 
   const openCamera = async () => {
@@ -140,9 +159,26 @@ const ObjectIdentifierPage: React.FC = () => {
     uploadVideo(recordedChunks, randomName || "")
       .then(prediction => {
         setPrediction(prediction);
+
+        // if (randomName) {
+        //   setResult(t(prediction) === randomName ? t("Correct") : t("Incorrect"));
+        // }
+
+        const isCorrect = t(prediction) === randomName;
         if (randomName) {
-          setResult(t(prediction) === randomName ? t("Correct") : t("Incorrect"));
+          setResult(isCorrect ? t("Correct") : t("Incorrect"));
         }
+
+        // Update score and attempts
+        setAttempts(prev => prev + 1);
+        if (isCorrect) {
+          setScore(prev => prev + 1);
+        }
+
+        if (attempts + 1 >= totalItems) {
+          setShowCompletionPopup(true);
+        }
+
       })
       .catch(error => {
         console.error('Error uploading video:', error);
@@ -161,8 +197,13 @@ const ObjectIdentifierPage: React.FC = () => {
   };
 
   const startNewRound = () => {
-    setShowRecordingDetails(false);
-    setRecordingEnabled(false);
+    if (attempts >= totalItems || remainingItems.length === 0) {
+      alert(t("You have completed all items in this category!"));
+      return;
+    }
+
+    setShowRecordingDetails(true);
+    setRecordingEnabled(true);
     setIsRecording(false);
     setRecordedChunks([]);
     setStartTime(null);
@@ -170,10 +211,42 @@ const ObjectIdentifierPage: React.FC = () => {
     setDuration(null);
     setPrediction(null);
     setResult(null);
-    if (category) {
-      const selectedItems = categories[category as keyof typeof categories];
-      setRandomName(selectedItems[Math.floor(Math.random() * selectedItems.length)]);
-    }
+    setElapsedTime(0);
+
+    // Ensure category is a valid key of categories
+    // if (category && ['shapes', 'animals', 'fruits'].includes(category)) {
+    //   const selectedItems = categories[category as CategoryType];
+    //   const newRandomName = selectedItems[Math.floor(Math.random() * selectedItems.length)];
+    //   setRandomName(newRandomName);
+    // }
+
+    // Choose a new random item from the remaining ones
+    const newIndex = Math.floor(Math.random() * remainingItems.length);
+    const newRandomName = remainingItems[newIndex];
+    setRandomName(newRandomName);
+
+    // Remove it from remainingItems so it doesn't repeat
+    setRemainingItems(prev => prev.filter((_, index) => index !== newIndex));
+  };
+
+  const resetGame = () => {
+    setRecordedChunks([]);
+    setIsRecording(false);
+    setStartTime(null);
+    setEndTime(null);
+    setDuration(null);
+    setElapsedTime(0);
+    setPrediction(null);
+    setResult(null);
+    setScore(0);
+    setAttempts(0);
+    setTotalItems(0);
+    setCategory(null);
+    setRandomName(null);
+    setRecordingEnabled(false);
+    setRemainingItems([]);
+    setShowRecordingDetails(false);
+    setShowCompletionPopup(false);
   };
 
   useEffect(() => {
@@ -235,10 +308,10 @@ const ObjectIdentifierPage: React.FC = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '5px' 
+                    gap: '5px'
                   }}>
                     <p style={{
-                      margin: 0, 
+                      margin: 0,
                       fontSize: '16px',
                       textAlign: 'center'
                     }}>
@@ -246,7 +319,7 @@ const ObjectIdentifierPage: React.FC = () => {
                     </p>
 
                     <p style={{
-                      margin: 0, 
+                      margin: 0,
                       fontSize: '16px',
                       textAlign: 'center'
                     }}>
@@ -287,22 +360,75 @@ const ObjectIdentifierPage: React.FC = () => {
                       <p style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "50px", color: t(prediction) == randomName ? "green" : "red" }}>
                         {result}
                       </p>
+
+                      {attempts > 0 && (
+                        <div style={{ textAlign: "center", marginTop: "10px" }}>
+                          <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            🧮 {t("Score")}: {score} / {totalItems}
+                          </p>
+                        </div>
+                      )}
+
                     </div>
                   )}
 
-                  <div style={{ marginTop: '20px', textAlign: 'center', }}>
-                    <button
-                      onClick={startNewRound}
-                      style={nextButtonStyle}
-                    >
-                      {t("Next")}
-                    </button>
-                  </div>
+                  {!showCompletionPopup && (
+                    <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                      <button
+                        onClick={startNewRound}
+                        style={nextButtonStyle}
+                      >
+                        {t("Next")}
+                      </button>
+                    </div>
+                  )}
+
                 </>
               )}
             </div>
           </div>
         </Layout>
+
+        {showCompletionPopup && (
+          <div style={{
+            position: 'fixed',
+            top: 0, left: 0,
+            width: '100%', height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            zIndex: 1000
+          }}>
+            <div style={{
+              backgroundColor: '#fff',
+              padding: '30px',
+              borderRadius: '10px',
+              textAlign: 'center',
+              width: '300px',
+              boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+            }}>
+              <h3>{t("You've completed all attempts!")}</h3>
+
+              <button
+                style={{ margin: '10px', padding: '10px 20px' }}
+                onClick={resetGame}
+              >
+                {t("Back to Menu")}
+              </button>
+
+              <button
+                style={{ margin: '10px', padding: '10px 20px' }}
+                onClick={() => {
+                  alert(`${t("Your score is")}: ${score} / ${totalItems}`);
+                  setShowCompletionPopup(false);
+                  setShowRecordingDetails(false);
+                }}
+              >
+                {t("Submit")}
+              </button>
+            </div>
+          </div>
+        )}
+
       </MainLayout>
     </div>
   );
