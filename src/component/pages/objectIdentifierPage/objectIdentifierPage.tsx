@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { uploadVideo } from '../../../services';
 import { t } from 'i18next';
-import { Layout, Select } from 'antd';
+import { Layout } from 'antd';
 import { LanguageContext } from '../../../context/LanguageContext';
 import { pageHeader, nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle, startRecordingButtonStyle, startRecordingButtonDisabledStyle, stopButtonStyle, stopButtonDisabledStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
 import { MainLayout } from '../../templates';
@@ -10,7 +10,7 @@ const ObjectIdentifierPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [, setStream] = useState<MediaStream | null>(null);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
@@ -32,7 +32,7 @@ const ObjectIdentifierPage: React.FC = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [attempts, setAttempts] = useState<number>(0);
 
-  const { language, changeLanguage } = React.useContext(LanguageContext);
+  const { language } = React.useContext(LanguageContext);
 
   const [categories, setCategories] = useState<{
     shapes: string[];

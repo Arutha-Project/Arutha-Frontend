@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Col, Layout, Row } from 'antd';
+import { Button, Col, Layout, Modal, Row } from 'antd';
 import { contentContainer, mainLayoutContainer } from './NumbersActivityPageStyle';
 import { MainLayout } from '../../templates';
 import { useTranslation } from "react-i18next";
+
+const TOTAL_QUESTIONS = 10;
 
 const NumbersActivityPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
   const [equation, setEquation] = useState<string>('');
   const [correctAnswer, setCorrectAnswer] = useState<number | null>(null);
   const [prediction, setPrediction] = useState<number | null>(null);
@@ -17,11 +21,14 @@ const NumbersActivityPage: React.FC = () => {
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const { t } = useTranslation();
 
   const generateEquation = () => {
-    const num1 = Math.floor(Math.random() * 10) + 1;
-    const num2 = Math.floor(Math.random() * 10) + 1;
+    if (currentQuestion >= TOTAL_QUESTIONS) return;
+
+    const num1 = Math.floor(Math.random() * 25) + 1;
+    const num2 = Math.floor(Math.random() * 25) + 1;
     const isAddition = Math.random() > 0.5;
   
     if (!isAddition && num1 < num2) {
@@ -64,7 +71,7 @@ const NumbersActivityPage: React.FC = () => {
     setStartTime(new Date());
     setEndTime(null);
     setDuration(null);
-
+    
     const stream = videoRef.current.srcObject as MediaStream;
     const mediaRecorder = new MediaRecorder(stream);
     mediaRecorderRef.current = mediaRecorder;
@@ -101,22 +108,36 @@ const NumbersActivityPage: React.FC = () => {
   const submitVideo = async () => {
     setLoading(true);
     if (recordedChunks.length === 0 || correctAnswer === null) return;
+  
     const blob = new Blob(recordedChunks, { type: "video/webm" });
     const formData = new FormData();
     formData.append("file", blob, "recording.webm");
-    formData.append("correct_answer", correctAnswer.toString());
-
+    formData.append("expected_number", correctAnswer.toString());
+  
+    let modelKey = "";
+    if (correctAnswer >= 0 && correctAnswer <= 10) modelKey = "0-10";
+    else if (correctAnswer >= 11 && correctAnswer <= 20) modelKey = "11-20";
+    else if (correctAnswer >= 21 && correctAnswer <= 30) modelKey = "21-30";
+    else if (correctAnswer >= 31 && correctAnswer <= 40) modelKey = "31-40";
+    else if (correctAnswer >= 41 && correctAnswer <= 50) modelKey = "41-50";
+  
+    formData.append("model_key", modelKey);
+  
     try {
-      const response = await fetch('http://127.0.0.1:2220/predict_answer/', {
+      const response = await fetch('http://127.0.0.1:2220/validate_number/', {
         method: 'POST',
         body: formData,
       });
-
+  
       if (response.ok) {
         const result = await response.json();
         setPrediction(result.predicted_number);
-        if (result.is_correct) {
-          setResultMessage(`✅ Correct! answer is ${correctAnswer}`);
+  
+        if (result.correct) {
+          if (currentQuestion < TOTAL_QUESTIONS - 1) {
+            setScore(score + 1);
+          }
+          setResultMessage(`✅ Correct! Answer is ${correctAnswer}`);
         } else {
           setResultMessage(`❌ Wrong! The correct answer is ${correctAnswer}`);
         }
@@ -127,58 +148,89 @@ const NumbersActivityPage: React.FC = () => {
       console.error('Error uploading video:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-    useEffect(() => {
-      const handleKeyDown = (event: KeyboardEvent) => {
-        if (event.code === "Space") {
-          event.preventDefault();
-          toggleRecording();
+      setTimeout(() => {
+        if (currentQuestion < TOTAL_QUESTIONS - 1) {
+          setCurrentQuestion(currentQuestion + 1);
+          generateEquation();
+        } else {
+          setIsModalVisible(true); // Show modal when finished
         }
-      };
-      window.addEventListener("keydown", handleKeyDown);
-      return () => {
-        window.removeEventListener("keydown", handleKeyDown);
-      };
-    }, [isRecording]);
+      }, 1000);
+    }
+  };  
+
+  useEffect(() => {
+    generateEquation();
+  }, [currentQuestion]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        toggleRecording();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isRecording]);
 
   return (
     <MainLayout>
       <Layout style={mainLayoutContainer}>
         <div style={contentContainer}>
-
           <h1>{t("MathsActivity")}</h1>
-            <Button type="primary" onClick={generateEquation}>Generate Equation</Button>
-            {equation && <h2>{equation} = ?</h2>}
+          <h2>{t("Question")} {currentQuestion + 1} / {TOTAL_QUESTIONS}</h2>
+          <h2>{equation} = ?</h2>
           <Row gutter={16}>
             <Col span={12}>
-              {/* Left Side - Camera */}
-              <div style={{ flex: 1, textAlign: "center" }}>
+              <div style={{ textAlign: "center" }}>
                 <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "500px" }}></video>
                 <p>🎥 Press <b>Space</b> to Start/Stop Recording</p>
               </div>
             </Col>
-
             <Col span={12}>
-              {/* Right Side - Results */}
               <div style={{ flex: 1, textAlign: "center" }}>
-                <div style={{textAlign: "left" }}>
+                <div style={{ textAlign: "left" }}>
                   {startTime && <p><b>Start Time:</b> {startTime.toLocaleTimeString()}</p>}
                   {endTime && <p><b>End Time:</b> {endTime.toLocaleTimeString()}</p>}
                   {duration !== null && <p><b>Duration:</b> {duration.toFixed(1)} seconds</p>}
                 </div>
-
-                {loading && <p>⏳ {t("Processing")}</p>}
-                {prediction && !loading && <p>Your Answer: {prediction}</p>}
-                {resultMessage && <h2>{resultMessage}</h2>}
+                <div style={contentContainer}>
+                  {loading && <p>⏳ {t("Processing")}</p>}
+                  {prediction !== null && !loading && <p>Your Answer: {prediction}</p>}
+                  {resultMessage && (
+                    <p style={{ fontSize: "20px", fontWeight: "bold", color: resultMessage.includes("Correct") ? "green" : "red" }}>
+                      {resultMessage}
+                    </p>
+                  )}
+                  <h3>{t("Score")}: {score} / {TOTAL_QUESTIONS}</h3>
+                </div>
               </div>
             </Col>
           </Row>
         </div>
+
+        {/* Final Score Modal */}
+        <Modal
+          title="Activity Completed"
+          visible={isModalVisible}
+          footer={[
+            <Button key="continue" type="primary" onClick={() => window.location.reload()}>
+              Continue
+            </Button>
+          ]}
+          closable={false}
+          centered
+        >
+          <p>Your final score is:</p>
+          <h2>{score} / {TOTAL_QUESTIONS}</h2>
+        </Modal>
       </Layout>
     </MainLayout>
   );
 };
 
 export default NumbersActivityPage;
+
