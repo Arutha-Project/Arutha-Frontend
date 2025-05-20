@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { uploadVideo } from '../../../services';
+import { uploadVideo, saveObjectIdentifierScore } from '../../../services';
 import { t } from 'i18next';
-import { Layout } from 'antd';
+import { Layout, Select, message } from 'antd';
 import { LanguageContext } from '../../../context/LanguageContext';
 import { pageHeader, nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle, startRecordingButtonStyle, startRecordingButtonDisabledStyle, stopButtonStyle, stopButtonDisabledStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
 import { MainLayout } from '../../templates';
@@ -10,7 +10,7 @@ const ObjectIdentifierPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
-  const [, setStream] = useState<MediaStream | null>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
@@ -32,7 +32,11 @@ const ObjectIdentifierPage: React.FC = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [attempts, setAttempts] = useState<number>(0);
 
-  const { language } = React.useContext(LanguageContext);
+  const { language, changeLanguage } = React.useContext(LanguageContext);
+
+  // For saving score state
+  const [isSavingScore, setIsSavingScore] = useState<boolean>(false);
+  const [scoreSubmitted, setScoreSubmitted] = useState<boolean>(false);
 
   const [categories, setCategories] = useState<{
     shapes: string[];
@@ -46,27 +50,21 @@ const ObjectIdentifierPage: React.FC = () => {
 
   useEffect(() => {
     setCategories({
-
       shapes: language === 'si' ? ["වෘත්තය", "සෘජුකෝණාස්‍රය", "සමචතුරස්‍රය", "ත්‍රිකෝණය"] : ["circle", "rectangle", "square", "triangle"],
       animals: language === 'si' ? ["අලියා", "පූසා1", "පූසා2", "බල්ලා1", "බල්ලා2", "ගිරවා", "සමනලයා"] : ["elephant", "cat1", "cat2", "dog1", "dog2", "Parrot", "butterfly"],
       fruits: language === 'si' ? ["ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි", "දෙළුම්"] : ["apple", "banana1", "banana2", "Mango", "Pineapple", "pomegranate"],
-
     });
   }, [language]);
 
   type CategoryType = keyof typeof categories;
-
 
   const selectCategory = (selectedCategory: CategoryType) => {
     setCategory(selectedCategory);
     setShowRecordingDetails(true);
     setRecordingEnabled(true);
 
-    // const items = categories[selectedCategory];
-    // setRandomName(items[Math.floor(Math.random() * items.length)]);
-
     const items = [...categories[selectedCategory]]; // clone the array
-    setRemainingItems(items); // Save for tracking what's left
+    setRemainingItems(items); 
 
     const firstItem = items[Math.floor(Math.random() * items.length)];
     setRandomName(firstItem);
@@ -76,6 +74,7 @@ const ObjectIdentifierPage: React.FC = () => {
     setScore(0);
     setAttempts(0);
     setTotalItems(items.length); // set max attempts for the category
+    setScoreSubmitted(false);
   };
 
   const openCamera = async () => {
@@ -101,13 +100,21 @@ const ObjectIdentifierPage: React.FC = () => {
 
   useEffect(() => {
     openCamera();
+
+    // Cleanup function
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
   }, []);
 
   const startRecording = () => {
     if (!mediaRecorderRef.current || isRecording || !recordingEnabled) return;
 
     setRecordedChunks([]);
-    setStartTime(new Date());
+    const newStartTime = new Date();
+    setStartTime(newStartTime);
     setEndTime(null);
     setDuration(null);
     setElapsedTime(0);
@@ -117,9 +124,10 @@ const ObjectIdentifierPage: React.FC = () => {
     mediaRecorderRef.current.start();
     setIsRecording(true);
 
-    // Start stopwatch
     intervalRef.current = window.setInterval(() => {
-      setElapsedTime((prev) => Number((prev + 0.1).toFixed(1)));
+      const now = new Date();
+      const elapsed = (now.getTime() - newStartTime.getTime()) / 1000;
+      setElapsedTime(Number(elapsed.toFixed(1)));
     }, 100);
   };
 
@@ -160,10 +168,6 @@ const ObjectIdentifierPage: React.FC = () => {
       .then(prediction => {
         setPrediction(prediction);
 
-        // if (randomName) {
-        //   setResult(t(prediction) === randomName ? t("Correct") : t("Incorrect"));
-        // }
-
         const isCorrect = t(prediction) === randomName;
         if (randomName) {
           setResult(isCorrect ? t("Correct") : t("Incorrect"));
@@ -178,7 +182,6 @@ const ObjectIdentifierPage: React.FC = () => {
         if (attempts + 1 >= totalItems) {
           setShowCompletionPopup(true);
         }
-
       })
       .catch(error => {
         console.error('Error uploading video:', error);
@@ -198,7 +201,7 @@ const ObjectIdentifierPage: React.FC = () => {
 
   const startNewRound = () => {
     if (attempts >= totalItems || remainingItems.length === 0) {
-      alert(t("You have completed all items in this category!"));
+      message.info(t("You have completed all items in this category!"));
       return;
     }
 
@@ -212,13 +215,6 @@ const ObjectIdentifierPage: React.FC = () => {
     setPrediction(null);
     setResult(null);
     setElapsedTime(0);
-
-    // Ensure category is a valid key of categories
-    // if (category && ['shapes', 'animals', 'fruits'].includes(category)) {
-    //   const selectedItems = categories[category as CategoryType];
-    //   const newRandomName = selectedItems[Math.floor(Math.random() * selectedItems.length)];
-    //   setRandomName(newRandomName);
-    // }
 
     // Choose a new random item from the remaining ones
     const newIndex = Math.floor(Math.random() * remainingItems.length);
@@ -247,12 +243,63 @@ const ObjectIdentifierPage: React.FC = () => {
     setRemainingItems([]);
     setShowRecordingDetails(false);
     setShowCompletionPopup(false);
+    setScoreSubmitted(false);
+  };
+
+  // Function to submit score to backend
+  const handleSubmitScore = async () => {
+
+    const currentUser = localStorage.getItem('userDetails');
+    console.log('User data:', currentUser);
+
+    if (!currentUser || !currentUser) {
+      message.error(t("Please log in to save your score"));
+      return;
+    }
+
+    // Prevent duplicate submissions
+    if (scoreSubmitted) {
+      message.info(t("Score already submitted"));
+      return;
+    }
+
+    // Check if category is selected
+    if (!category) {
+      message.error(t("Category information is missing"));
+      return;
+    }
+
+    setIsSavingScore(true);
+
+    try {
+      await saveObjectIdentifierScore({
+        userId: 1,
+        category: category,
+        score: score,
+        totalItems: totalItems
+      });
+
+      message.success(t("Score saved successfully!"));
+      setScoreSubmitted(true);
+      setShowCompletionPopup(false);
+      setShowRecordingDetails(false);
+    } catch (error) {
+      console.error('Error saving score:', error);
+      message.error(t("Failed to save score. Please try again."));
+    } finally {
+      setIsSavingScore(false);
+    }
   };
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+
+      // Clear any interval on unmount
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
     };
   }, [isRecording, recordingEnabled]);
 
@@ -260,11 +307,6 @@ const ObjectIdentifierPage: React.FC = () => {
     <div>
       <MainLayout>
         <Layout style={mainLayoutContainerOI}>
-          {/* <Select value={language} onChange={changeLanguage} style={{ width: 120, marginBottom: 10 }}>
-          <Select.Option value="en">English</Select.Option>
-          <Select.Option value="si">සිංහල</Select.Option>
-        </Select> */}
-
           <div style={Container1}>
             <div style={{ flex: 1, textAlign: 'center' }}>
               <video
@@ -407,24 +449,45 @@ const ObjectIdentifierPage: React.FC = () => {
               boxShadow: '0 0 10px rgba(0,0,0,0.3)'
             }}>
               <h3>{t("You've completed all attempts!")}</h3>
+              <p style={{ fontSize: "18px", fontWeight: "bold", margin: "20px 0" }}>
+                {t("Your score is")}: {score} / {totalItems}
+              </p>
 
               <button
-                style={{ margin: '10px', padding: '10px 20px' }}
+                style={{
+                  margin: '10px',
+                  padding: '10px 20px',
+                  backgroundColor: '#f0f0f0',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
                 onClick={resetGame}
               >
                 {t("Back to Menu")}
               </button>
 
               <button
-                style={{ margin: '10px', padding: '10px 20px' }}
-                onClick={() => {
-                  alert(`${t("Your score is")}: ${score} / ${totalItems}`);
-                  setShowCompletionPopup(false);
-                  setShowRecordingDetails(false);
+                style={{
+                  margin: '10px',
+                  padding: '10px 20px',
+                  backgroundColor: scoreSubmitted ? '#d9d9d9' : '#4caf50',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: scoreSubmitted ? 'not-allowed' : 'pointer'
                 }}
+                onClick={handleSubmitScore}
+                disabled={isSavingScore || scoreSubmitted || !1}
               >
-                {t("Submit")}
+                {isSavingScore ? t("Saving...") : scoreSubmitted ? t("Submitted") : t("Submit")}
               </button>
+
+              {!1 && (
+                <p style={{ color: 'red', fontSize: '14px', marginTop: '10px' }}>
+                  {t("Please log in to save your score")}
+                </p>
+              )}
             </div>
           </div>
         )}
