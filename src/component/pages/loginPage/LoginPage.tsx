@@ -18,8 +18,7 @@ const LoginPage: React.FC = () => {
     await validateUserAndValidate(values)
       .then(jwtTokenAndUserDetails => {
         localStorage.setItem('accessToken', jwtTokenAndUserDetails.jwtToken);
-        localStorage.setItem('userDetails', JSON.stringify(jwtTokenAndUserDetails.userDetails));
-        console.log('User Details:', jwtTokenAndUserDetails.currentUser);
+        localStorage.setItem('userDetails', jwtTokenAndUserDetails.currentUser);
         if(jwtTokenAndUserDetails.currentUser.roleName === RoleNames.TEACHER) {
         navigate('/teacher-dashboard');
         } else if (jwtTokenAndUserDetails.currentUser.roleName === RoleNames.CHILD) {
