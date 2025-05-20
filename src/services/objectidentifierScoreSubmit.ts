@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../services/axiosInstance';
 
 // Define interfaces for API interactions
 export interface ObjectIdentifierScoreRequest {
