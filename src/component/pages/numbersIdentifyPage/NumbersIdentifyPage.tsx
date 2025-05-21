@@ -103,7 +103,8 @@ const NumbersIdentifyPage: React.FC = () => {
     formData.append("model_key", modelKey);
   
     try {
-      const response = await fetch("http://127.0.0.1:2220/validate_number/", {
+      const response = await fetch('http://127.0.0.1:2220/numbers/validate_number/', {
+      // const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/",  {
         method: "POST",
         body: formData,
       });
@@ -166,33 +167,33 @@ const NumbersIdentifyPage: React.FC = () => {
       <Layout style={mainLayoutContainer}>
       <Space size="middle">
           <Link to="/numbers-Page">
-            <Button type="primary">Go to Self Study</Button>
+            <Button type="primary">{t("GoToSelfStudy")}</Button>
           </Link>
           <Link to="/numbers-Activity-Page">
-            <Button type="primary">Go to Numbers Activity</Button>
+            <Button type="primary">{t("GoToNumbersActivity")}</Button>
           </Link>
         </Space>
         <div style={contentContainer}>
-          <h1>Number Signing Practice</h1>
-          <h2>🔢 Sign this number: {currentNumber}</h2>
+          <h1>{t("NumberSigningPractice")}</h1>
+          <h2>🔢 {t("SignThisNumber")} : {currentNumber}</h2>
           <Row gutter={16}>
             <Col span={12}>
               {/* Left Side - Camera */}
               <div style={{ flex: 1, textAlign: "center" }}>
                 <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "500px" }}></video>
-                <p>🎥 Press <b>Space</b> to Start/Stop Recording</p>
+                <p>🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}</p>
               </div>
             </Col>
             <Col span={12}>
               {/* Right Side - Results */}
               <div style={{ flex: 1, textAlign: "center" }}>
                 <div style={{textAlign: "left" }}>
-                  {startTime && <p><b>Start Time:</b> {startTime.toLocaleTimeString()}</p>}
-                  {endTime && <p><b>End Time:</b> {endTime.toLocaleTimeString()}</p>}
-                  {duration !== null && <p><b>Duration:</b> {duration.toFixed(1)} seconds</p>}
+                  {startTime && <p><b>{t("StartTime")} :</b> {startTime.toLocaleTimeString()}</p>}
+                  {endTime && <p><b>{t("EndTime")} :</b> {endTime.toLocaleTimeString()}</p>}
+                  {duration !== null && <p><b>{t("Duration")} :</b> {duration.toFixed(1)} seconds</p>}
                 </div>                
                 {loading && <p>⏳ {t("Processing")}</p>}
-                {prediction && !loading && <p>Your Answer: {prediction}</p>}
+                {prediction && !loading && <p>{t("YourAnswer")} : {prediction}</p>}
                 {result && <p style={{ fontSize: "28px", fontWeight: "bold", color: result.includes("Correct") ? "green" : "red" }}>{result}</p>}
                 <Space size="middle">
                   <Button color="cyan" variant="solid"  onClick={backNumber} disabled={currentNumber >= 50}><LeftOutlined />{t("PreviousNumber")}</Button>

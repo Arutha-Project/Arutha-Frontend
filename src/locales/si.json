@@ -53,7 +53,7 @@
   "Processing":"සකසමින්... කරුණාකර රැඳී සිටින්න...",
   "PredictedSign":"පරිවර්තනය කළ ලකුණ",
   "Press":"ඔබන්න",
-  "Space":"Space button",
+  "Space":"අවකාශය බොත්තම",
   "Start/StopRecording":"පටිගත කිරීම ආරම්භ කිරීමට/නැවැත්වීමට",
   "Start":"ආරම්භ කරන්න",
   "RandomName":"අහඹු නම",
@@ -122,5 +122,15 @@
   "PreviousNumber": "පෙර අංකය",
   "NextNumber": "ඊළඟ අංකය",
   "Question": "ගැටලුව",
-  "Score": "ලකුණු"
+  "Score": "ලකුණු",
+  "GoToSelfStudy": "ස්වයං අධ්‍යාපනයට යන්න",
+  "GoToNumbersActivity": "අංක ක්‍රියාකාරකම් වෙත යන්න",
+  "NumberSigningPractice": "සංඥා අංක පුහුණු",
+  "SignThisNumber": "අංකය සංඥා භාෂාවෙන් පෙන්වන්න",
+  "YourAnswer": "ඔබේ පිළිතුර",
+  "ExpectedNumber": "අනාවැකිය කළ අංකය",
+  "SelectNumbersRange": "අංක පරාසය තෝරන්න",
+  "ActivityCompleted": "ක්‍රියාකාරකම සම්පූර්ණයි.",
+  "Continue": "නැවත ආරම්භ කරන්න.",
+  "YourFinalScoreIs" : "ඔබේ අවසන් ලකුණ වන්නේ"
 }

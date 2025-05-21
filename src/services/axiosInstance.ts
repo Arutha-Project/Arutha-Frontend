@@ -11,8 +11,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  // const { accessToken } = store.getState().authTokenReducer;
-  const accessToken = null;
+  const accessToken = localStorage.getItem('accessToken');
 
   if (accessToken) {
     config.headers[AuthHeaders.Authorization] = `${AuthHeaders.Bearer} ${accessToken}`;
