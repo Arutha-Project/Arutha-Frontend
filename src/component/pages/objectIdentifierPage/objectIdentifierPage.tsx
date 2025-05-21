@@ -64,7 +64,7 @@ const ObjectIdentifierPage: React.FC = () => {
     setRecordingEnabled(true);
 
     const items = [...categories[selectedCategory]]; // clone the array
-    setRemainingItems(items); 
+    setRemainingItems(items);
 
     const firstItem = items[Math.floor(Math.random() * items.length)];
     setRandomName(firstItem);
@@ -93,6 +93,18 @@ const ObjectIdentifierPage: React.FC = () => {
           setRecordedChunks((prev) => [...prev, event.data]);
         }
       };
+
+      mediaRecorder.onstop = async () => {
+        const end = new Date();
+        setEndTime(end);
+        if (startTime) {
+          const totalDuration = (end.getTime() - startTime.getTime()) / 1000;
+          setDuration(Number(totalDuration.toFixed(1)));
+          setElapsedTime(Number(totalDuration.toFixed(1)));
+        }
+      };
+
+
     } catch (error) {
       console.error('Error accessing camera:', error);
     }
@@ -123,6 +135,10 @@ const ObjectIdentifierPage: React.FC = () => {
 
     mediaRecorderRef.current.start();
     setIsRecording(true);
+
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+    }
 
     intervalRef.current = window.setInterval(() => {
       const now = new Date();
@@ -382,7 +398,7 @@ const ObjectIdentifierPage: React.FC = () => {
                     {endTime && <p>🛑 <b>{t("EndTime")}:</b> {endTime.toLocaleTimeString()}</p>}
 
                     {isRecording ? (
-                      <p>⏳ <b>{t("Duration")}:</b> {elapsedTime.toFixed(1)} {t("seconds")}</p>
+                      <p>⏳ </p>
                     ) : duration !== null && (
                       <p>⏳ <b>{t("Duration")}:</b> {duration.toFixed(1)} {t("seconds")}</p>
                     )}
