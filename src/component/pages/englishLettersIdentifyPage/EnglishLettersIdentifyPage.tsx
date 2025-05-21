@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Layout, Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client"; // Socket.IO for real-time communication
+import io from "socket.io-client"; // Socket.IO for real-time communication
 import {
   mainLayoutContainer,
   contentContainer,
