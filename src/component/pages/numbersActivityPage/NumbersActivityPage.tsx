@@ -3,10 +3,11 @@ import { Button, Col, Layout, Modal, Row } from 'antd';
 import { contentContainer, mainLayoutContainer } from './NumbersActivityPageStyle';
 import { MainLayout } from '../../templates';
 import { useTranslation } from "react-i18next";
+import axios from '../../../services/axiosInstance'; 
 
 const TOTAL_QUESTIONS = 10;
 
-const NumbersActivityPage: React.FC = () => {
+  const NumbersActivityPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
@@ -22,6 +23,8 @@ const NumbersActivityPage: React.FC = () => {
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isSavingScore, setIsSavingScore] = useState<boolean>(false);
+  const [saveScoreError, setSaveScoreError] = useState<string | null>(null);
   const { t } = useTranslation();
 
   const generateEquation = () => {
@@ -30,6 +33,7 @@ const NumbersActivityPage: React.FC = () => {
     const num1 = Math.floor(Math.random() * 25) + 1;
     const num2 = Math.floor(Math.random() * 25) + 1;
     const isAddition = Math.random() > 0.5;
+    const currnetUser = localStorage.getItem('userDetails');
   
     if (!isAddition && num1 < num2) {
       generateEquation();
@@ -124,7 +128,8 @@ const NumbersActivityPage: React.FC = () => {
     formData.append("model_key", modelKey);
   
     try {
-      const response = await fetch('http://127.0.0.1:2220/validate_number/', {
+      const response = await fetch('http://127.0.0.1:2220/numbers/validate_number/',  {
+      // const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/",  {
         method: 'POST',
         body: formData,
       });
@@ -153,11 +158,51 @@ const NumbersActivityPage: React.FC = () => {
           setCurrentQuestion(currentQuestion + 1);
           generateEquation();
         } else {
-          setIsModalVisible(true); // Show modal when finished
+          setIsModalVisible(true); 
         }
       }, 1000);
     }
   };  
+
+  // save the user's score to the database
+  const saveUserScore = async () => {
+    try {
+      setIsSavingScore(true);
+      setSaveScoreError(null);
+      
+      const userDetailsStr = localStorage.getItem('userDetails');
+      // console.log("User details from localStorage:", userDetailsStr);
+      
+      let userId = null; 
+      if (userDetailsStr) {
+        try {
+          const userDetails = JSON.parse(userDetailsStr);
+          userId = userDetails.id || userDetails.userId;
+        } catch (e) {
+          console.error("Failed to parse user details:", e);
+        }
+      }
+
+      const response = await axios.post('/scores/save', {
+        userId: userId,
+        score: score
+      });
+      
+      console.log("Score saved successfully:", response.data);
+    } catch (error) {
+      console.error("Error saving score:", error);
+      setSaveScoreError("Failed to save score. Please try again.");
+    } finally {
+      setIsSavingScore(false);
+    }
+  };
+
+  const resetPage = () => {
+    setScore(0);
+    setCurrentQuestion(0);
+    setRecordedChunks([]);
+    setIsRecording(false);
+  };
 
   useEffect(() => {
     generateEquation();
@@ -187,19 +232,19 @@ const NumbersActivityPage: React.FC = () => {
             <Col span={12}>
               <div style={{ textAlign: "center" }}>
                 <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "500px" }}></video>
-                <p>🎥 Press <b>Space</b> to Start/Stop Recording</p>
+                <p>🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}</p>
               </div>
             </Col>
             <Col span={12}>
               <div style={{ flex: 1, textAlign: "center" }}>
                 <div style={{ textAlign: "left" }}>
-                  {startTime && <p><b>Start Time:</b> {startTime.toLocaleTimeString()}</p>}
-                  {endTime && <p><b>End Time:</b> {endTime.toLocaleTimeString()}</p>}
-                  {duration !== null && <p><b>Duration:</b> {duration.toFixed(1)} seconds</p>}
+                  {startTime && <p><b>{t("StartTime")} :</b> {startTime.toLocaleTimeString()}</p>}
+                  {endTime && <p><b>{t("EndTime")} :</b> {endTime.toLocaleTimeString()}</p>}
+                  {duration !== null && <p><b>{t("Duration")} :</b> {duration.toFixed(1)} seconds</p>}
                 </div>
                 <div style={contentContainer}>
                   {loading && <p>⏳ {t("Processing")}</p>}
-                  {prediction !== null && !loading && <p>Your Answer: {prediction}</p>}
+                  {prediction !== null && !loading && <p>{t("YourAnswer")}: {prediction}</p>}
                   {resultMessage && (
                     <p style={{ fontSize: "20px", fontWeight: "bold", color: resultMessage.includes("Correct") ? "green" : "red" }}>
                       {resultMessage}
@@ -214,17 +259,25 @@ const NumbersActivityPage: React.FC = () => {
 
         {/* Final Score Modal */}
         <Modal
-          title="Activity Completed"
+          title={t("ActivityCompleted")}
           visible={isModalVisible}
-          footer={[
-            <Button key="continue" type="primary" onClick={() => window.location.reload()}>
-              Continue
+           footer={[
+            <Button
+              key="continue"
+              type="primary"
+              onClick={() => {
+                saveUserScore(); 
+                resetPage(); 
+                setIsModalVisible(false);  
+              }}
+            >
+              {t("Continue")}
             </Button>
           ]}
           closable={false}
           centered
         >
-          <p>Your final score is:</p>
+          <p>{t("YourFinalScoreIs")} :</p>
           <h2>{score} / {TOTAL_QUESTIONS}</h2>
         </Modal>
       </Layout>
