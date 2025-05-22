@@ -132,5 +132,12 @@
   "SelectNumbersRange": "අංක පරාසය තෝරන්න",
   "ActivityCompleted": "ක්‍රියාකාරකම සම්පූර්ණයි.",
   "Continue": "නැවත ආරම්භ කරන්න.",
-  "YourFinalScoreIs" : "ඔබේ අවසන් ලකුණ වන්නේ"
+  "YourFinalScoreIs" : "ඔබේ අවසන් ලකුණ වන්නේ",
+  "StudentRegistration" : "සිසුන් ලියාපදිංචිය",
+  "TeacherRegistration" : "ගුරුවරුන් ලියාපදිංචිය",
+  "firstName_placeholder": "ඔබේ පළමු නම ඇතුළත් කරන්න",
+  "lastName_placeholder": "ඔබේ අවසන් නම ඇතුළත් කරන්න",
+  "role_placeholder": "ඔබේ භූමිකාව ඇතුළත් කරන්න",
+  "teacher" : "ගුරුවරයා",
+  "student" : "සිසුවා"
 }

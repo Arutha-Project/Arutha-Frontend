@@ -21,9 +21,9 @@ const LoginPage: React.FC = () => {
         localStorage.setItem('userDetails', JSON.stringify(jwtTokenAndUserDetails.currentUser));
         console.log('User Details:', jwtTokenAndUserDetails.currentUser);
         if(jwtTokenAndUserDetails.currentUser.roleName === RoleNames.TEACHER) {
-        navigate('/teacher-dashboard');
-        } else if (jwtTokenAndUserDetails.currentUser.roleName === RoleNames.CHILD) {
-          navigate('/');
+        navigate('/home');
+        } else if (jwtTokenAndUserDetails.currentUser.roleName === RoleNames.STUDENT) {
+          navigate('/home');
         } else {
           openNotification(NotificationTypeIndex.ERROR, 'Login Failed', 'Invalid username or password');
         }

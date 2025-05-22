@@ -1,4 +1,4 @@
 export const RoleNames = {
   TEACHER: 'TEACHER',
-  CHILD: 'CHILD',
+  STUDENT: 'STUDENT',
 };
