@@ -9,9 +9,11 @@ import {
   HighlightOutlined,
   LogoutOutlined,
   TeamOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import { SideMenuContainer, Logo, DateTime, LogoutContainer, MenuContainerStyle } from "./SideMenuStyle";
 import { useTranslation } from "react-i18next";
+import { RoleNames } from "../../../constants";
 
 const { Sider } = Layout;
 
@@ -21,6 +23,7 @@ const SideMenu: React.FC = () => {
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
   const [collapsed, setCollapsed] = useState(false);
   const { t } = useTranslation();
+  const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -51,11 +54,16 @@ const SideMenu: React.FC = () => {
       location.pathname.startsWith("/sign-letters") ||
       location.pathname.startsWith("/english-signing") ||
       location.pathname.startsWith("/sinhala-signing") ||
-      location.pathname.startsWith("/letter-identify-activities")
+      location.pathname.startsWith("/letter-identify-activities") ||
+      location.pathname.startsWith("/about-us") ||
+      location.pathname.startsWith("/numbers-Identify-Page") ||
+      location.pathname.startsWith("/object-identifier") ||
+      location.pathname.startsWith("/drawing") ||
+      location.pathname.startsWith("/teacher-dashboard")
     ) {
-      return "/sign-letters"; // Group under "Sign Letters"
+      return location.pathname; // Default to exact match
     }
-    return location.pathname; // Default to exact match
+    return "/home"; // Fallback to home if no match
   };
 
   return (
@@ -71,10 +79,13 @@ const SideMenu: React.FC = () => {
       <Menu
         theme="dark"
         mode="inline"
-        selectedKeys={[getActiveKey()]} 
+        selectedKeys={[getActiveKey()]}
         onClick={({ key }) => navigate(key)}
       >
         <Menu.Item key="/home" icon={<HomeOutlined />}> {t("homePage")} </Menu.Item>
+        {userDetails.roleName === RoleNames.TEACHER && (
+          <Menu.Item key="/teacher-dashboard" icon={<DashboardOutlined />}> {t("Teacher Dashboard")} </Menu.Item>
+        )}
         <Menu.Item key="/about-us" icon={<TeamOutlined />}> {t("aboutUs")} </Menu.Item>
         <Menu.Item key="/sign-letters" icon={<FontSizeOutlined />}> {t("SignLetters")} </Menu.Item>
         <Menu.Item key="/numbers-Identify-Page" icon={<FieldBinaryOutlined />}> {t("SignNumbers")} </Menu.Item>
