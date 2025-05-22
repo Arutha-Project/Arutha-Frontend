@@ -122,5 +122,15 @@
   "PreviousNumber": "Previous Number",
   "NextNumber": "Next Number",
   "Question": "Question",
-  "Score": "Score"
+  "Score": "Score",
+  "GoToSelfStudy": "Go To Self Study",
+  "GoToNumbersActivity": "Go To Numbers Activity",
+  "NumberSigningPractice": "Number Signing Practice",
+  "SignThisNumber": "Sign This Number",
+  "YourAnswer": "Your Answer",
+  "ExpectedNumber": "Expected Number",
+  "SelectNumbersRange": "Select Numbers Range",
+  "ActivityCompleted": "Activity Completed",
+  "Continue": "Continue",
+  "YourFinalScoreIs": "Your Final Score Is"
 }
