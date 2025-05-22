@@ -132,5 +132,12 @@
   "SelectNumbersRange": "Select Numbers Range",
   "ActivityCompleted": "Activity Completed",
   "Continue": "Continue",
-  "YourFinalScoreIs": "Your Final Score Is"
+  "YourFinalScoreIs": "Your Final Score Is",
+  "StudentRegistration" : "Student Registration",
+  "TeacherRegistration" : "Teacher Registration",
+  "firstName_placeholder": "Enter your First Name",
+  "lastName_placeholder": "Enter your Last Name",
+  "role_placeholder": "Enter your Role",
+  "teacher": "Teacher",
+  "student": "Student"
 }

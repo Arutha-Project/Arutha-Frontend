@@ -3,6 +3,7 @@ import { Card, Col, Form, Input, Row, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { cardStyle, inputFieldStyle, submitButtonStyle } from './LoginViewStyle';
 import Button from '../../atoms/Button';
+import { Link } from 'react-router-dom';
 
 interface LoginViewProps {
   onFinish: (values: any) => void;
@@ -24,10 +25,10 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
 
   return (
     <Card style={cardStyle}>
-
+      <img src="src/assets/images/arutha.png" style={{ width: "150px", margin: "0px auto", display: "block" }} />
       <Typography.Title
         level={4}
-        style={{ textAlign: "center", marginBottom: 20, marginTop: 10 }}
+        style={{ textAlign: "center", marginBottom: 20, marginTop: 0 }}
       >
         {t("welcome")}
       </Typography.Title>
@@ -50,6 +51,7 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
                 handleOnClick={onclick} />
             </Form.Item>
           </Col>
+          <Link to="/registration-teacher">Register for Teachers</Link>
         </Row>
       </Form>
     </Card>

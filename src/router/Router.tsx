@@ -11,9 +11,11 @@ import {
   ActivityLetterIdentifyPage,
   TeacherDashboardPage,
 } from "../component/pages";
+import { RegistrationTeacher } from "../component/pages/registrationTeacher";
 import { LettersIdentifyPage } from "../component/pages/lettersIdentifyPage";
 import { EnglishLettersIdentifyPage } from "../component/pages/englishLettersIdentifyPage";
 import { SinhalaLettersIdentifyPage } from "../component/pages/sinhalaLettersIdentifyPage";
+import { RegistrationStudent } from "../component/pages/registrationStudent";
 
 
 function Router() {
@@ -21,6 +23,16 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path={"/"} Component={LoginPage} />
+        <Route
+          path="/registration-teacher"
+          Component={RegistrationTeacher}
+        />
+
+        <Route
+          path="/registration-student"
+          Component={RegistrationStudent}
+        />
+
         <Route
           path="/home"
           Component={HomePage}

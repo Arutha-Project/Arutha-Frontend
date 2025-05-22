@@ -10,4 +10,5 @@ export const inputFieldStyle: React.CSSProperties = {
 
 export const submitButtonStyle: React.CSSProperties = {
   backgroundColor: "green",
+  color: "white",
 }

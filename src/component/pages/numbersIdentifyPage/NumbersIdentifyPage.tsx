@@ -167,10 +167,10 @@ const NumbersIdentifyPage: React.FC = () => {
       <Layout style={mainLayoutContainer}>
       <Space size="middle">
           <Link to="/numbers-Page">
-            <Button type="primary">{t("GoToSelfStudy")}</Button>
+            <Button type="primary" style={{width:200}}>{t("GoToSelfStudy")}</Button>
           </Link>
           <Link to="/numbers-Activity-Page">
-            <Button type="primary">{t("GoToNumbersActivity")}</Button>
+            <Button type="primary"  style={{width:200}}>{t("GoToNumbersActivity")}</Button>
           </Link>
         </Space>
         <div style={contentContainer}>

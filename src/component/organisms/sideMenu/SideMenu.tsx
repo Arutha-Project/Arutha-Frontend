@@ -88,7 +88,7 @@ const SideMenu: React.FC = () => {
         style={MenuContainerStyle}
       >
 
-        <Menu.Item style={LogoutContainer} key="/" icon={<LogoutOutlined />} onClick={() => navigate("/login")}>
+        <Menu.Item style={LogoutContainer} key="/" icon={<LogoutOutlined />} onClick={() => navigate("/")}>
           {t("logOut")}
         </Menu.Item>
       </Menu>
