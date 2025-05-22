@@ -37,7 +37,7 @@ const DrawingView: React.FC = () => {
   const [objectName, setObjectName] = useState<string>(getRandomDrawingObject());
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const totalRounds = 10;
+    const totalRounds = 2;
 
   const onFinish = async () => {
     if (isFinished) return;
@@ -73,12 +73,17 @@ const DrawingView: React.FC = () => {
   };
 
   const saveResultToBackend = async (finalScore: number, total: number) => {
+    const userDetailsStr = localStorage.getItem('userDetails');
+    if (!userDetailsStr) return;
+
+    const userDetails = JSON.parse(userDetailsStr);
     try {
       const payload = {
+        userId: userDetails.id,
         score: finalScore,
         total,
       };
-      await axios.post("/api/save-score", payload);
+      await axios.post("/drawing/", payload);
     } catch (error) {
       console.error("Failed to save score:", error);
     }
