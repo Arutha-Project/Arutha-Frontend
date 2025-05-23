@@ -197,7 +197,7 @@ const generateRandomLetter = () => {
                       onClick={generateRandomLetter}
                       style={{ marginBottom: "20px" }}
                     >
-                      Generate Letter
+                      {t("Generate Letter")}
                     </Button>
                   </div>
                 </div>
@@ -227,7 +227,7 @@ const generateRandomLetter = () => {
                           zIndex: 2,
                         }}
                       >
-                        {result === "Correct" ? "✅ Correct!" : "❌ Incorrect"}
+                        {result === "Correct" ? t("Correct") : t("Incorrect")}
                       </div>
                     )}
                   </div>
