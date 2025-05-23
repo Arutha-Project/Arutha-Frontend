@@ -32,13 +32,15 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const [targetLetter, setTargetLetter] = useState<string>("");
   const [result, setResult] = useState<string | null>(null);
 
-  const generateRandomLetter = () => {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
-    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
-    setTargetLetter(randomLetter);
-    setResult(null);
-  };
+  const targetLetterRef = useRef<string>("");
 
+const generateRandomLetter = () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
+  const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+  setTargetLetter(randomLetter);
+  targetLetterRef.current = randomLetter;
+  setResult(null);
+};
 
 
   const openCamera = async () => {
@@ -55,12 +57,16 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     }
   };
 
+
   const captureAndPredict = async () => {
-    if (result === "Correct") return; // Don't re-check once correct
+    if (result === "Correct") {
+       generateRandomLetter();
+       return;
+    }
 
     const canvas = document.createElement("canvas");
     const video = videoRef.current;
-    if (!video || !targetLetter) return;
+    if (!video || !targetLetterRef.current) return;
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -68,7 +74,6 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const dataUrl = canvas.toDataURL("image/jpeg");
-    console.log("Captured image:", dataUrl.slice(0, 100)); // Print first 100 chars
     const base64Image = dataUrl.split(",")[1];
 
     try {
@@ -85,10 +90,10 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
       if (resultData.predicted_letter) {
         const prediction = resultData.predicted_letter;
-        const isCorrect = prediction === targetLetter;
+        const isCorrect = prediction === targetLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${targetLetter} → ${
+          `Predicted: ${prediction}, Target: ${targetLetterRef.current} → ${
             isCorrect ? "✅ Correct" : "❌ Incorrect"
           }`
         );
@@ -96,10 +101,9 @@ const ActivityLetterIdentifyPage: React.FC = () => {
         setResult(isCorrect ? "Correct" : "Incorrect");
 
         if (isCorrect) {
-          // Delay before moving to the next letter
           setTimeout(() => {
             generateRandomLetter();
-          }, 1500);
+          }, 3000);
         }
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
