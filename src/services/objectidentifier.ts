@@ -7,7 +7,8 @@ export const uploadVideo = async (recordedChunks: BlobPart[], randomName: string
     formData.append('random_name', randomName);
   
     try {
-      const response = await fetch('http://127.0.0.1:2220/predict/', {
+      const response = await fetch('http://0.0.0.0:9090/objectIdentifier/predict/', {
+      // const response = await fetch('http://127.0.0.1:2220/objectIdentifier/predict/', {
         method: 'POST',
         body: formData,
       });
