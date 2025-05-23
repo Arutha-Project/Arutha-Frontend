@@ -227,7 +227,13 @@ const generateRandomLetter = () => {
                           zIndex: 2,
                         }}
                       >
-                        {result === "Correct" ? t("Correct") : t("Incorrect")}
+                        {result === "Correct"
+                          ? t("Correct")
+                          : result === "Incorrect"
+                          ? t("Incorrect")
+                          : result === t("No hand detected")
+                          ? t("No hand detected")
+                          : ""}
                       </div>
                     )}
                   </div>
