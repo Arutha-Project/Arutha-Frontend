@@ -75,7 +75,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
           const formData = new FormData();
           formData.append("file", blob, "frame.jpg");
 
-          fetch("http://localhost:8000/predict-sinhala/", {
+          fetch("http://localhost:8000/predict-letter-sinhala", {
             method: "POST",
             body: formData,
           })
