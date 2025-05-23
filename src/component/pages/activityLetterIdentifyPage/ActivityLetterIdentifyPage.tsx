@@ -59,10 +59,7 @@ const generateRandomLetter = () => {
 
 
   const captureAndPredict = async () => {
-    if (result === "Correct") {
-       generateRandomLetter();
-       return;
-    }
+    if (result === "Correct") return;
 
     const canvas = document.createElement("canvas");
     const video = videoRef.current;
@@ -98,13 +95,15 @@ const generateRandomLetter = () => {
           }`
         );
 
-        setResult(isCorrect ? "Correct" : "Incorrect");
+        setResult(isCorrect ? t("Correct") : t("Incorrect"));
 
         if (isCorrect) {
           setTimeout(() => {
             generateRandomLetter();
           }, 3000);
         }
+      } else if (resultData.error === "No hand detected") {
+        setResult(t("No hand detected"));
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
       }
@@ -112,6 +111,7 @@ const generateRandomLetter = () => {
       console.error("Prediction request failed:", error);
     }
   };
+
 
 
   useEffect(() => {
