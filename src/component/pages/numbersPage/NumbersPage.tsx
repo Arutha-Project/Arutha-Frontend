@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Layout, Row, InputNumber, Select } from 'antd';
+import { Col, Layout, Row, InputNumber, Select, Button } from 'antd';
 import { contentContainer, mainLayoutContainer } from './NumbersPageStyle';
 import { MainLayout } from '../../templates';
 import { useTranslation } from 'react-i18next';
@@ -99,8 +99,8 @@ const NumbersPage: React.FC = () => {
     formData.append("model_key", modelKey);
 
     try {
-      const response = await fetch('http://127.0.0.1:2220/numbers/validate_number/', {
-      // const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/",  {
+      const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/",  {
+      // const response = await fetch('http://127.0.0.1:2220/numbers/validate_number/', {
         method: 'POST',
         body: formData,
       });
@@ -143,6 +143,14 @@ const NumbersPage: React.FC = () => {
                 <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "500px" }}></video>
                 <p>🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}</p>
               </div>
+              <Button
+                type="primary"
+                onClick={toggleRecording}
+                loading={loading}
+                style={{ marginTop: 16, backgroundColor: isRecording ? '#ff4d4f' : '#2e6ae3' }}
+              >
+                {isRecording ? t("StopRecording") : t("startRecoding")}
+              </Button>
 
               <div style={{ marginTop: 20 }}>
                 <label><b>{t("ExpectedNumber")} :</b></label>

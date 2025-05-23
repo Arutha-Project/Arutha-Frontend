@@ -103,8 +103,8 @@ const NumbersIdentifyPage: React.FC = () => {
     formData.append("model_key", modelKey);
   
     try {
-      const response = await fetch('http://127.0.0.1:2220/numbers/validate_number/', {
-      // const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/",  {
+      const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/",  {
+      // const response = await fetch('http://127.0.0.1:2220/numbers/validate_number/', {
         method: "POST",
         body: formData,
       });
@@ -183,6 +183,14 @@ const NumbersIdentifyPage: React.FC = () => {
                 <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "500px" }}></video>
                 <p>🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}</p>
               </div>
+              <Button
+                type="primary"
+                onClick={toggleRecording}
+                loading={loading}
+                style={{ marginTop: 16, backgroundColor: isRecording ? '#ff4d4f' : '#2e6ae3' }}
+              >
+                {isRecording ? t("StopRecording") : t("startRecoding")}
+              </Button>
             </Col>
             <Col span={12}>
               {/* Right Side - Results */}
