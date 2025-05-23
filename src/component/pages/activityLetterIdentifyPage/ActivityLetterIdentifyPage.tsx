@@ -31,10 +31,13 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
   const [targetLetter, setTargetLetter] = useState<string>("");
   const [result, setResult] = useState<string | null>(null);
+  const [sinhalaResult, setSinhalaResult] = useState<string | null>(null);
 
     const [targetSinhalaLetter, setTargetSinhalaLetter] = useState<string>("");
 
   const targetLetterRef = useRef<string>("");
+  const [activeTab, setActiveTab] = useState("1");
+
 
   const generateRandomEnglishLetter = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
@@ -44,13 +47,16 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     setResult(null);
   };
 
-  const generateRandomSinhalaLetter = () => {
-    const letters = "අආඇඉඊඋඌඑඒක්";
-    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
-    setTargetSinhalaLetter(randomLetter);
-    targetLetterRef.current = randomLetter;
-    setResult(null);
-  };
+const sinhalaLetters = ["අ", "ආ", "ඇ", "ඉ", "ඊ", "උ", "ඌ", "එ", "ඒ", "ක්"];
+
+const generateRandomSinhalaLetter = () => {
+  const randomLetter =
+    sinhalaLetters[Math.floor(Math.random() * sinhalaLetters.length)];
+  setTargetSinhalaLetter(randomLetter);
+  targetLetterRef.current = randomLetter;
+  setSinhalaResult(null);
+};
+
 
   const openCamera = async () => {
     try {
@@ -120,16 +126,78 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     }
   };
 
+   const captureAndPredictSinhala = async () => {
+     if (sinhalaResult === "Correct") return;
+
+     const canvas = document.createElement("canvas");
+     const video = videoRef.current;
+     if (!video || !targetLetterRef.current) return;
+
+     canvas.width = video.videoWidth;
+     canvas.height = video.videoHeight;
+     const ctx = canvas.getContext("2d");
+     ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+     const dataUrl = canvas.toDataURL("image/jpeg");
+     const base64Image = dataUrl.split(",")[1];
+
+     try {
+       const response = await fetch(
+         "http://localhost:8000/predict-activity/sinhala-letter",
+         {
+           method: "POST",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ frame: base64Image }),
+         }
+       );
+
+       const resultData = await response.json();
+
+       if (resultData.predicted_letter) {
+         const prediction = resultData.predicted_letter;
+         const isCorrect = prediction === targetLetterRef.current;
+
+         console.log(
+           `Predicted: ${prediction}, Target: ${targetLetterRef.current} → ${
+             isCorrect ? "✅ Correct" : "❌ Incorrect"
+           }`
+         );
+
+         setSinhalaResult(isCorrect ? t("Correct") : t("Incorrect"));
+
+         if (isCorrect) {
+           setTimeout(() => {
+             generateRandomSinhalaLetter();
+           }, 3000);
+         }
+       } else if (resultData.error === "No hand detected") {
+         setSinhalaResult(t("No hand detected"));
+       } else if (resultData.error) {
+         console.log("⚠️ Error from server:", resultData.error);
+       }
+     } catch (error) {
+       console.error("Prediction request failed:", error);
+     }
+   };
+
+
   useEffect(() => {
     openCamera();
     generateRandomEnglishLetter();
     generateRandomSinhalaLetter();
-    const interval = setInterval(() => {
-      captureAndPredict();
-    }, 1000); // every 1 second
 
+    let interval: ReturnType<typeof setInterval>;
+    if (activeTab === "1") {
+      interval = setInterval(() => {
+        captureAndPredict();
+      }, 1000);
+    } else if (activeTab === "2") {
+      interval = setInterval(() => {
+        captureAndPredictSinhala();
+      }, 1000);
+    }
     return () => clearInterval(interval);
-  }, []);
+  }, [activeTab]);
 
   
   return (
@@ -168,7 +236,11 @@ const ActivityLetterIdentifyPage: React.FC = () => {
           </Select>
         </div>
         <div style={contentContainer}>
-          <Tabs defaultActiveKey="1" centered>
+          <Tabs
+            defaultActiveKey="1"
+            centered
+            onChange={(key) => setActiveTab(key)}
+          >
             <TabPane
               tab={
                 <span
@@ -286,13 +358,33 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
                 {/* Right Side Content */}
                 <div style={rightSideSinhala}>
-                  <div style={videoContainer}>
+                  <div style={{ ...videoContainer, position: "relative" }}>
                     <video
                       ref={videoRef}
                       autoPlay
                       playsInline
-                      style={videoStyle}
+                      style={{ ...videoStyle, width: "100%", height: "100%" }}
                     ></video>
+
+                    {sinhalaResult && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: "rgba(0, 0, 0, 0.6)",
+                          padding: "20px 40px",
+                          borderRadius: "10px",
+                          color: "#fff",
+                          fontSize: "36px",
+                          fontWeight: "bold",
+                          zIndex: 2,
+                        }}
+                      >
+                        {sinhalaResult}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
