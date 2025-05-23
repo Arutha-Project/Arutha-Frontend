@@ -35,7 +35,9 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
     const [targetSinhalaLetter, setTargetSinhalaLetter] = useState<string>("");
 
-  const targetLetterRef = useRef<string>("");
+const targetEnglishLetterRef = useRef<string>("");
+const targetSinhalaLetterRef = useRef<string>("");
+
   const [activeTab, setActiveTab] = useState("1");
 
 
@@ -43,7 +45,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
     const randomLetter = letters[Math.floor(Math.random() * letters.length)];
     setTargetLetter(randomLetter);
-    targetLetterRef.current = randomLetter;
+    targetEnglishLetterRef.current = randomLetter;
     setResult(null);
   };
 
@@ -53,7 +55,7 @@ const generateRandomSinhalaLetter = () => {
   const randomLetter =
     sinhalaLetters[Math.floor(Math.random() * sinhalaLetters.length)];
   setTargetSinhalaLetter(randomLetter);
-  targetLetterRef.current = randomLetter;
+  targetSinhalaLetterRef.current = randomLetter;
   setSinhalaResult(null);
 };
 
@@ -77,7 +79,7 @@ const generateRandomSinhalaLetter = () => {
 
     const canvas = document.createElement("canvas");
     const video = videoRef.current;
-    if (!video || !targetLetterRef.current) return;
+    if (!video || !targetEnglishLetterRef.current) return;
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -101,10 +103,10 @@ const generateRandomSinhalaLetter = () => {
 
       if (resultData.predicted_letter) {
         const prediction = resultData.predicted_letter;
-        const isCorrect = prediction === targetLetterRef.current;
+        const isCorrect = prediction === targetEnglishLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${targetLetterRef.current} → ${
+          `Predicted: ${prediction}, Target: ${targetEnglishLetterRef.current} → ${
             isCorrect ? "✅ Correct" : "❌ Incorrect"
           }`
         );
@@ -131,7 +133,7 @@ const generateRandomSinhalaLetter = () => {
 
      const canvas = document.createElement("canvas");
      const video = videoRef.current;
-     if (!video || !targetLetterRef.current) return;
+     if (!video || !targetSinhalaLetterRef.current) return;
 
      canvas.width = video.videoWidth;
      canvas.height = video.videoHeight;
@@ -155,10 +157,10 @@ const generateRandomSinhalaLetter = () => {
 
        if (resultData.predicted_letter) {
          const prediction = resultData.predicted_letter;
-         const isCorrect = prediction === targetLetterRef.current;
+         const isCorrect = prediction === targetSinhalaLetterRef.current;
 
          console.log(
-           `Predicted: ${prediction}, Target: ${targetLetterRef.current} → ${
+           `Predicted: ${prediction}, Target: ${targetSinhalaLetterRef.current} → ${
              isCorrect ? "✅ Correct" : "❌ Incorrect"
            }`
          );
@@ -190,11 +192,11 @@ const generateRandomSinhalaLetter = () => {
     if (activeTab === "1") {
       interval = setInterval(() => {
         captureAndPredict();
-      }, 1000);
+      }, 3000);
     } else if (activeTab === "2") {
       interval = setInterval(() => {
         captureAndPredictSinhala();
-      }, 1000);
+      }, 3000);
     }
     return () => clearInterval(interval);
   }, [activeTab]);
