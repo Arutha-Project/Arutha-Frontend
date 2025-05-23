@@ -40,9 +40,8 @@ export const leftSideEnglish: React.CSSProperties = {
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
-  height: "300px", // Set a fixed height
-  minHeight: "750px", // Ensures it doesn't shrink too much
-
+  height: "250px",
+  minHeight: "650px",
 };
 
 export const leftSideSinhala: React.CSSProperties = {
@@ -54,9 +53,8 @@ export const leftSideSinhala: React.CSSProperties = {
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
-  height: "300px",
-  minHeight: "750px",
-
+  height: "250px", 
+  minHeight: "650px", 
 };
 
 export const rightSideEnglish: React.CSSProperties = {
