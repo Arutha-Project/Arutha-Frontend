@@ -34,14 +34,13 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
   const targetLetterRef = useRef<string>("");
 
-const generateRandomLetter = () => {
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
-  const randomLetter = letters[Math.floor(Math.random() * letters.length)];
-  setTargetLetter(randomLetter);
-  targetLetterRef.current = randomLetter;
-  setResult(null);
-};
-
+  const generateRandomLetter = () => {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
+    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+    setTargetLetter(randomLetter);
+    targetLetterRef.current = randomLetter;
+    setResult(null);
+  };
 
   const openCamera = async () => {
     try {
@@ -56,7 +55,6 @@ const generateRandomLetter = () => {
       console.error("Error accessing camera:", error);
     }
   };
-
 
   const captureAndPredict = async () => {
     if (result === "Correct") return;
@@ -111,8 +109,6 @@ const generateRandomLetter = () => {
       console.error("Prediction request failed:", error);
     }
   };
-
-
 
   useEffect(() => {
     openCamera();
@@ -227,13 +223,7 @@ const generateRandomLetter = () => {
                           zIndex: 2,
                         }}
                       >
-                        {result === "Correct"
-                          ? t("Correct")
-                          : result === "Incorrect"
-                          ? t("Incorrect")
-                          : result === t("No hand detected")
-                          ? t("No hand detected")
-                          : ""}
+                        {result}
                       </div>
                     )}
                   </div>
@@ -257,7 +247,31 @@ const generateRandomLetter = () => {
             >
               <div style={activitySection}>
                 {/* Left Side Content */}
-                <div style={leftSideSinhala}></div>
+                <div style={leftSideSinhala}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: "100%",
+                      textAlign: "center",
+                    }}
+                  >
+                    {/* {targetSinhalaLetter && (
+                      <h2 style={{ fontSize: "100px", fontWeight: "bold" }}>
+                        {targetSinhalaLetter}
+                      </h2>
+                    )} */}
+                    <Button
+                      type="primary"
+                      onClick={generateRandomLetter}
+                      style={{ marginBottom: "20px" }}
+                    >
+                      {t("Generate Letter")}
+                    </Button>
+                  </div>
+                </div>
 
                 {/* Right Side Content */}
                 <div style={rightSideSinhala}>
