@@ -268,6 +268,12 @@ const ObjectIdentifierPage: React.FC = () => {
     const currentUser = localStorage.getItem('userDetails');
     console.log('User data:', currentUser);
 
+    let userId = null;
+    if (currentUser) {
+      const userDetails = JSON.parse(currentUser);
+      userId = userDetails.id || userDetails.userId;
+    }
+
     if (!currentUser || !currentUser) {
       message.error(t("Please log in to save your score"));
       return;
@@ -289,7 +295,7 @@ const ObjectIdentifierPage: React.FC = () => {
 
     try {
       await saveObjectIdentifierScore({
-        userId: 1,
+        userId: userId,
         category: category,
         score: score,
         totalItems: totalItems
