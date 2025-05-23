@@ -32,12 +32,22 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const [targetLetter, setTargetLetter] = useState<string>("");
   const [result, setResult] = useState<string | null>(null);
 
+    const [targetSinhalaLetter, setTargetSinhalaLetter] = useState<string>("");
+
   const targetLetterRef = useRef<string>("");
 
-  const generateRandomLetter = () => {
+  const generateRandomEnglishLetter = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
     const randomLetter = letters[Math.floor(Math.random() * letters.length)];
     setTargetLetter(randomLetter);
+    targetLetterRef.current = randomLetter;
+    setResult(null);
+  };
+
+  const generateRandomSinhalaLetter = () => {
+    const letters = "අආඇඉඊඋඌඑඒක්";
+    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+    setTargetSinhalaLetter(randomLetter);
     targetLetterRef.current = randomLetter;
     setResult(null);
   };
@@ -97,7 +107,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
         if (isCorrect) {
           setTimeout(() => {
-            generateRandomLetter();
+            generateRandomEnglishLetter();
           }, 3000);
         }
       } else if (resultData.error === "No hand detected") {
@@ -112,8 +122,8 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
   useEffect(() => {
     openCamera();
-    generateRandomLetter();
-
+    generateRandomEnglishLetter();
+    generateRandomSinhalaLetter();
     const interval = setInterval(() => {
       captureAndPredict();
     }, 1000); // every 1 second
@@ -121,6 +131,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  
   return (
     <MainLayout>
       <Layout style={mainLayoutContainer}>
@@ -190,7 +201,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                     )}
                     <Button
                       type="primary"
-                      onClick={generateRandomLetter}
+                      onClick={generateRandomEnglishLetter}
                       style={{ marginBottom: "20px" }}
                     >
                       {t("Generate Letter")}
@@ -258,14 +269,14 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       textAlign: "center",
                     }}
                   >
-                    {/* {targetSinhalaLetter && (
+                    {targetSinhalaLetter && (
                       <h2 style={{ fontSize: "100px", fontWeight: "bold" }}>
                         {targetSinhalaLetter}
                       </h2>
-                    )} */}
+                    )}
                     <Button
                       type="primary"
-                      onClick={generateRandomLetter}
+                      onClick={generateRandomSinhalaLetter}
                       style={{ marginBottom: "20px" }}
                     >
                       {t("Generate Letter")}
