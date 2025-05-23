@@ -122,5 +122,22 @@
   "PreviousNumber": "Previous Number",
   "NextNumber": "Next Number",
   "Question": "Question",
-  "Score": "Score"
+  "Score": "Score",
+  "forgot_password": "Forgot Password?",
+  "forgot_password_title": "Forgot Password",
+  "email_found" : "Email Found",
+  "We_found_your_email" : "We found your email in our system. Do you want to reset your password?",
+  "email_not_found" : "Email not found in our system.",
+  "back" : "Back",
+  "reset_password_title" : "Reset Password",
+  "password_required_1" : "Password Required",
+  "password_strength" : "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
+  "new_password" : "New Password",
+  "confirm_password_required" : "Confirm Password Required",
+  "passwords_dont_match" : "Passwords don't match",
+  "confirm_password" : "Confirm Password",
+  "reset_password" : "Reset Password",
+  "password_reset_success" : "Password Reset Successful!",
+  "redirect_message" : "You will be redirected to the login page in a few seconds.",
+  "go_to_login": "Go to Login"
 }

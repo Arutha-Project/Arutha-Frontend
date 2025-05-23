@@ -14,6 +14,8 @@ import {
 import { LettersIdentifyPage } from "../component/pages/lettersIdentifyPage";
 import { EnglishLettersIdentifyPage } from "../component/pages/englishLettersIdentifyPage";
 import { SinhalaLettersIdentifyPage } from "../component/pages/sinhalaLettersIdentifyPage";
+import { forgotPasswordPage } from "../component/pages/forgotPasswordPage";
+import { resetPasswordPage } from "../component/pages/resetPasswordPage";
 
 
 function Router() {
@@ -80,6 +82,16 @@ function Router() {
         <Route
           path="/letter-identify-activities"
           Component={ActivityLetterIdentifyPage}
+        />
+
+        <Route
+          path="/forgotPassword"
+          Component={forgotPasswordPage}
+        />
+
+        <Route
+          path="/reset-password"
+          Component={resetPasswordPage}
         />
         
       </Routes>

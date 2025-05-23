@@ -122,5 +122,22 @@
   "PreviousNumber": "පෙර අංකය",
   "NextNumber": "ඊළඟ අංකය",
   "Question": "ගැටලුව",
-  "Score": "ලකුණු"
+  "Score": "ලකුණු",
+  "forgot_password": "මුරපදය අමතක වුණා ද?",
+  "forgot_password_title": "අමතක මුරපදය මාතෘකාව",
+  "email_found" : "විද්‍යුත් තැපෑල හමු විය",
+  "We_found_your_email" : "අපි ඔබේ විද්‍යුත් තැපෑල අපේ පද්ධතියෙන් සොයා ගත්තා. ඔබට ඔබේ මුරපදය නැවත සැකසීමට අවශ්‍යද?",
+  "email_not_found" : "අපගේ පද්ධතිය තුළ විද්‍යුත් තැපෑල හමු නොවීය.",
+  "back" : "ආපසු",
+  "reset_password_title" : "මුරපදය යළි පිහිටුවන්න",
+  "password_required_1" : "මුරපදය අවශ්‍යයි",
+  "password_strength" : "මුරපදය අවම වශයෙන් අක්ෂර 8ක් දිග විය යුතු අතර ලොකු අකුරු, කුඩා අකුරු, අංකය සහ විශේෂ අක්ෂර ඇතුළත් විය යුතුය.",
+  "new_password" : "නව මුරපදය",
+  "confirm_password_required" : "මුරපදය තහවුරු කිරීම අවශ්‍යයි",
+  "passwords_dont_match" : "මුරපද නොගැලපේ.",
+  "confirm_password" : "මුරපදය තහවුරු කරන්න",
+  "reset_password" : "මුරපදය යළි පිහිටුවන්න",
+  "password_reset_success" : "මුරපදය යළි පිහිටුවීම සාර්ථකයි!",
+  "redirect_message" : "තත්පර කිහිපයකින් ඔබව පිවිසුම් පිටුවට හරවා යවනු ලැබේ.",
+  "go_to_login": "Login වෙත යන්න"
 }

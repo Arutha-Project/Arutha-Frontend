@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Col, Form, Input, Row, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { cardStyle, inputFieldStyle, submitButtonStyle } from './LoginViewStyle';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../atoms/Button';
 
 interface LoginViewProps {
@@ -11,6 +12,7 @@ interface LoginViewProps {
 const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+  const navigate = useNavigate()
 
   const onclick = () => {
     form.validateFields().then((values) => {
@@ -34,22 +36,32 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
 
       <Form form={form} onFinish={onFinish}>
         <Row>
+
           <Col span={24}>
             <Form.Item name="email" rules={[{ required: true, type: 'email', message: t("email_required") }]}>
               <Input style={inputFieldStyle} placeholder={t("email_placeholder")} />
             </Form.Item>
           </Col>
+
           <Col span={24}>
             <Form.Item name="password" rules={[{ required: true, message: t("password_required") }]}>
               <Input style={inputFieldStyle} placeholder={t("password_placeholder")} type="password" />
             </Form.Item>
           </Col>
+
+          <Col span={24} style={{ textAlign: 'right', marginBottom: 10 }}>
+            <Typography.Link onClick={() => navigate('/ForgotPassword')}>
+              {t('forgot_password')}
+            </Typography.Link>
+          </Col>
+
           <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
             <Form.Item>
               <Button type="primary" text={t("signin")} style={submitButtonStyle}
                 handleOnClick={onclick} />
             </Form.Item>
           </Col>
+
         </Row>
       </Form>
     </Card>
