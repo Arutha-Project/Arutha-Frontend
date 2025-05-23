@@ -79,27 +79,36 @@ const EnglishLettersIdentifyPage: React.FC = () => {
     };
   }, []);
 
-  const captureFrame = () => {
-    if (videoRef.current && canvasRef.current) {
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      ctx?.drawImage(video, 0, 0); // Draw the current frame to the canvas
+const captureFrame = () => {
+  if (videoRef.current && canvasRef.current) {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx?.drawImage(video, 0, 0);
 
-      // Capture the frame and send to the server
-      canvas.toBlob((blob: Blob | null) => {
-        if (blob) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            socket.emit("frame", reader.result); // Send the frame data to Flask backend
-          };
-          reader.readAsArrayBuffer(blob); // Convert to ArrayBuffer
-        }
-      });
-    }
-  };
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const formData = new FormData();
+        formData.append("file", blob, "frame.jpg");
+
+        fetch("http://localhost:8000/predict-letter-english", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setPredictedLetter(data.letter || "");
+          })
+          .catch((error) => {
+            console.error("Prediction error:", error);
+          });
+      }
+    }, "image/jpeg");
+  }
+};
+
 
   return (
     <MainLayout>
