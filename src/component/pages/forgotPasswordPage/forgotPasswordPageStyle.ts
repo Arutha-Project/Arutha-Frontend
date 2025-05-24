@@ -21,5 +21,10 @@ export const card: React.CSSProperties = {
   textAlign: 'left',
   boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
   backgroundColor: 'rgb(255, 255, 255, 0.68)',
-  maxWidth: 600,
+  width: 450,
+};
+
+export const inputFieldStyle: React.CSSProperties = {
+  width: "100%",
+  height: "45px",
 };

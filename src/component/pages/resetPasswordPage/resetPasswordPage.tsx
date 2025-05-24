@@ -68,71 +68,71 @@ const ResetPasswordPage: React.FC = () => {
     }
 
     return (
-        <Layout style={ mainLayoutContainer}>
-            <Card style={card}>
-                <Typography.Title level={4} style={{ textAlign: 'center' }}>
-                    {t('reset_password_title')}
-                </Typography.Title>
+      <Layout style={mainLayoutContainer}>
+        <Card style={card}>
+          <Typography.Title level={3} style={{ textAlign: "center" }}>
+            {t("reset_password_title")}
+          </Typography.Title>
 
-                <Form form={form} onFinish={handleSubmit}>
-                    <Form.Item
-                        label={t('email')}
-                        name="email"
-                        initialValue={email} 
-                    >
-                        <Input disabled />
-                    </Form.Item>
+          <Form form={form} onFinish={handleSubmit}>
+            <Form.Item label={<b>{t("email")}</b>}>
+                <span style={{ fontWeight: "bold" }}>{email}</span>
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: t("password_required_1"),
+                },
+                {
+                  pattern: passwordRegex,
+                  message: t("password_strength"),
+                },
+              ]}
+            >
+              <Input.Password placeholder={t("new_password")} />
+            </Form.Item>
 
-                    <Form.Item
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: t('password_required_1'),
-                            },
-                            {
-                                pattern: passwordRegex,
-                                message: t('password_strength'),
-                            },
-                        ]}
-                    >
-                        <Input.Password placeholder={t('new_password')} />
-                    </Form.Item>
+            <Form.Item
+              name="confirmPassword"
+              dependencies={["password"]}
+              rules={[
+                {
+                  required: true,
+                  message: t("confirm_password_required"),
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error(t("passwords_dont_match")));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password placeholder={t("confirm_password")} />
+            </Form.Item>
 
-                    <Form.Item
-                        name="confirmPassword"
-                        dependencies={['password']}
-                        rules={[
-                            {
-                                required: true,
-                                message: t('confirm_password_required'),
-                            },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error(t('passwords_dont_match')));
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input.Password placeholder={t('confirm_password')} />
-                    </Form.Item>
-
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" block loading={isLoading}>
-                            {t('reset_password')}
-                        </Button>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button block onClick={() => navigate('/')}>
-                            {t('go_to_login')}
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Card>
-        </Layout>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                loading={isLoading}
+              >
+                {t("reset_password")}
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button block onClick={() => navigate("/")}>
+                {t("go_to_login")}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Layout>
     );
 };
 

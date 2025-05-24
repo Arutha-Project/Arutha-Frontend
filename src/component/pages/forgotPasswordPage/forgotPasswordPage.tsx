@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Form, Input, Typography, Button, message, Modal, Layout } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { mainLayoutContainer,card } from './forgotPasswordPageStyle';
+import { mainLayoutContainer, card, inputFieldStyle } from './forgotPasswordPageStyle';
 import axios from 'axios';
 
 const ForgotPasswordPage: React.FC = () => {
@@ -66,19 +66,16 @@ const ForgotPasswordPage: React.FC = () => {
               },
             ]}
           >
-            <Input placeholder={t('email_placeholder') || 'Enter your email'} />
+            <Input style={inputFieldStyle} placeholder={t('email_placeholder') || 'Enter your email'} />
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block loading={isLoading}>
-              {t('submit')}
-            </Button>
-          </Form.Item>
-
-          <Form.Item>
-            <Button block onClick={() => navigate('/')}>
+            <Form.Item>
+            <Button style={{ width: '49%', marginRight: '2%'}} onClick={() => navigate('/')}>
               {t('back')}
             </Button>
-          </Form.Item>
+            <Button type="primary" htmlType="submit" loading={isLoading} style={{ width: '49%'}}>
+              {t('submit')}
+            </Button>
+            </Form.Item>
         </Form>
       </Card>
 
