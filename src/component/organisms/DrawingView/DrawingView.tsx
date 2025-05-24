@@ -37,7 +37,7 @@ const DrawingView: React.FC = () => {
   const [objectName, setObjectName] = useState<string>(getRandomDrawingObject());
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const totalRounds = 2;
+  const totalRounds = 10;
 
   const onFinish = async () => {
     if (isFinished) return;
