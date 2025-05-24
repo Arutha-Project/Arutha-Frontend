@@ -23,7 +23,7 @@ const RegistrationView: React.FC<RegistrationViewProps> = ({
             <Card style={card}>
                 <img src="src/assets/images/arutha.png" style={{ width: "150px", margin: "0px auto", display: "block" }} />
                 <Typography.Title
-                    level={4} style={{ textAlign: "center", marginBottom: 20, marginTop: 0 }}>
+                    level={4} style={{ textAlign: "center", marginBottom: "0px auto", marginTop: "0px auto" }}>
                     {t('homePageDescription')}
                 </Typography.Title>
 

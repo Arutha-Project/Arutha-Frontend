@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { t } from "i18next";
 import { commonNotificationBody, NotificationType, NotificationTypeIndex } from "../../../util";
 import { validateUserAndRegister } from "../../../services";
+import { useNavigate } from "react-router-dom"; 
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const RegistrationTeacher: React.FC = () => {
 
@@ -13,6 +15,7 @@ const RegistrationTeacher: React.FC = () => {
     const [api, contextHolder] = notification.useNotification();
     const [isLoading, setIsLoading] = React.useState(false);
     const [form] = Form.useForm();
+    const navigate = useNavigate();
 
     const openNotification = (type: NotificationType, message: string, notice: string) => {
         commonNotificationBody(api, type, message, <Context.Consumer>{() => notice}</Context.Consumer>);
@@ -24,6 +27,7 @@ const RegistrationTeacher: React.FC = () => {
             await validateUserAndRegister(values);
             openNotification(NotificationTypeIndex.SUCCESS, t('Registration Successful'), t('You have successfully registered.'));
             form.resetFields();
+            navigate("/");
         } catch (error: any) {
             if (error.response) {
                 const { status } = error.response;
@@ -43,18 +47,22 @@ const RegistrationTeacher: React.FC = () => {
     };
 
     return (
-        <Layout style={mainLayoutContainer}>
-            <Spin spinning={isLoading} />
-            {contextHolder}
-            <div>
-                <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-                    <Card style={card}>
-                        <h1 style={{ textAlign: "center", color: "white" }}>{t("TeacherRegistration")}</h1>
-                        <RegistrationView onFinish={onFinish} isTeacher={true} form={form} />
-                    </Card>
-                </motion.div>
-            </div>
-        </Layout>
+      <Layout style={mainLayoutContainer}>
+        <Spin spinning={isLoading} />
+        {contextHolder}
+        <div>
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <Card style={card}>
+              <ArrowLeftOutlined
+                style={{ fontSize: 24, color: "white", cursor: "pointer"}}
+                onClick={() => navigate("/")}
+              />
+              <h1 style={{ textAlign: "center", color: "white" }}>{t("TeacherRegistration")}</h1>
+              <RegistrationView onFinish={onFinish} isTeacher={true} form={form} />
+            </Card>
+          </motion.div>
+        </div>
+      </Layout>
     );
 }
 
