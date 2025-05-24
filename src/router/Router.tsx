@@ -18,7 +18,6 @@ import { EnglishLettersIdentifyPage } from "../component/pages/englishLettersIde
 import { SinhalaLettersIdentifyPage } from "../component/pages/sinhalaLettersIdentifyPage";
 import { forgotPasswordPage } from "../component/pages/forgotPasswordPage";
 import { resetPasswordPage } from "../component/pages/resetPasswordPage";
-
 import { RegistrationStudent } from "../component/pages/registrationStudent";
 import ProtectedRoute from "../component/HighOrderComponent/ProtectedRoute";
 
@@ -29,6 +28,15 @@ function Router() {
         {/* Public Routes */}
         <Route path="/" Component={LoginPage} />
         <Route path="/registration-teacher" Component={RegistrationTeacher} />
+        <Route
+          path="/forgotPassword"
+          Component={forgotPasswordPage}
+        />
+
+        <Route
+          path="/reset-password"
+          Component={resetPasswordPage}
+        />
 
         {/* Protected Routes */}
         <Route
@@ -135,17 +143,10 @@ function Router() {
             </ProtectedRoute>
           }
         />
-
         <Route
-          path="/forgotPassword"
-          Component={forgotPasswordPage}
+          path="*"
+          element={<NotFoundPage />}
         />
-
-        <Route
-          path="/reset-password"
-          Component={resetPasswordPage}
-        />
-        
       </Routes>
     </BrowserRouter>
   );
