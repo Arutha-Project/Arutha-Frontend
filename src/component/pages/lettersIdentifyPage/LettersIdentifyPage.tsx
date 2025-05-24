@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Layout, Select } from "antd";
+import { Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   mainLayoutContainer,
@@ -10,8 +10,6 @@ import {
   cardText,
   cardImage,
   overlayContainer,
-  languageSelector,
-  selectorDiv
 } from "./LettersIdentifyPageStyle";
 import { MainLayout } from "../../templates";
 
@@ -45,19 +43,12 @@ const splitText = (text: string) => {
 
 const LettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
-  const { language, changeLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
 
   return (
     <MainLayout>
 
       <Layout style={mainLayoutContainer}>
-        <div style={languageSelector}>
-          <Select value={language} onChange={changeLanguage} style={selectorDiv}>
-            <Select.Option value="en">English</Select.Option>
-            <Select.Option value="si">සිංහල</Select.Option>
-          </Select>
-        </div>
         <div
           style={{
             display: "flex",

@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
-import { Layout, Button, Select } from "antd";
+import React, { useRef, useState, useEffect } from "react";
+import { Layout, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -14,19 +14,14 @@ import {
   titleContainer,
   titleStyle,
   contentRightPanel,
-  selectorDiv,
 } from "./SinhalaLettersIdentifyPageStyle";
 
 import sinhalaLetters from "/src/assets/images/sinhala_letters.png";
 import { MainLayout } from "../../templates";
-import { LanguageContext } from "../../../context/LanguageContext";
 import { useTranslation } from "react-i18next";
-
-// const socket = io("http://localhost:5000");
 
 const SinhalaLettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
-  const { language, changeLanguage } = useContext(LanguageContext);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -116,15 +111,6 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
           >
             ← {t("Back")}
           </Button>
-
-          <Select
-            value={language}
-            onChange={changeLanguage}
-            style={selectorDiv}
-          >
-            <Select.Option value="en">English</Select.Option>
-            <Select.Option value="si">සිංහල</Select.Option>
-          </Select>
         </div>
 
         <div style={pageContainer}>

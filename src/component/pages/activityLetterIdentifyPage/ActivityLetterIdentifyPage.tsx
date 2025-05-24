@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Layout, Button, Tabs, Select } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Layout, Button, Tabs } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   mainLayoutContainer,
@@ -11,19 +11,16 @@ import {
   leftSideSinhala,
   rightSideEnglish,
   rightSideSinhala,
-  selectorDiv,
   videoContainer,
   videoStyle,
 } from "./ActivityLetterIdentifyPageStyle";
 import { MainLayout } from "../../templates";
-import { LanguageContext } from "../../../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 
 const { TabPane } = Tabs;
 
 const ActivityLetterIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
-  const { language, changeLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [, setStream] = useState<MediaStream | null>(null);
@@ -33,10 +30,10 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const [result, setResult] = useState<string | null>(null);
   const [sinhalaResult, setSinhalaResult] = useState<string | null>(null);
 
-    const [targetSinhalaLetter, setTargetSinhalaLetter] = useState<string>("");
+  const [targetSinhalaLetter, setTargetSinhalaLetter] = useState<string>("");
 
-const targetEnglishLetterRef = useRef<string>("");
-const targetSinhalaLetterRef = useRef<string>("");
+  const targetEnglishLetterRef = useRef<string>("");
+  const targetSinhalaLetterRef = useRef<string>("");
 
   const [activeTab, setActiveTab] = useState("1");
 
@@ -49,15 +46,15 @@ const targetSinhalaLetterRef = useRef<string>("");
     setResult(null);
   };
 
-const sinhalaLetters = ["අ", "ආ", "ඇ", "ඉ", "ඊ", "උ", "ඌ", "එ", "ඒ", "ක්"];
+  const sinhalaLetters = ["අ", "ආ", "ඇ", "ඉ", "ඊ", "උ", "ඌ", "එ", "ඒ", "ක්"];
 
-const generateRandomSinhalaLetter = () => {
-  const randomLetter =
-    sinhalaLetters[Math.floor(Math.random() * sinhalaLetters.length)];
-  setTargetSinhalaLetter(randomLetter);
-  targetSinhalaLetterRef.current = randomLetter;
-  setSinhalaResult(null);
-};
+  const generateRandomSinhalaLetter = () => {
+    const randomLetter =
+      sinhalaLetters[Math.floor(Math.random() * sinhalaLetters.length)];
+    setTargetSinhalaLetter(randomLetter);
+    targetSinhalaLetterRef.current = randomLetter;
+    setSinhalaResult(null);
+  };
 
 
   const openCamera = async () => {
@@ -106,8 +103,7 @@ const generateRandomSinhalaLetter = () => {
         const isCorrect = prediction === targetEnglishLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${targetEnglishLetterRef.current} → ${
-            isCorrect ? "✅ Correct" : "❌ Incorrect"
+          `Predicted: ${prediction}, Target: ${targetEnglishLetterRef.current} → ${isCorrect ? "✅ Correct" : "❌ Incorrect"
           }`
         );
 
@@ -128,59 +124,58 @@ const generateRandomSinhalaLetter = () => {
     }
   };
 
-   const captureAndPredictSinhala = async () => {
-     if (sinhalaResult === "Correct") return;
+  const captureAndPredictSinhala = async () => {
+    if (sinhalaResult === "Correct") return;
 
-     const canvas = document.createElement("canvas");
-     const video = videoRef.current;
-     if (!video || !targetSinhalaLetterRef.current) return;
+    const canvas = document.createElement("canvas");
+    const video = videoRef.current;
+    if (!video || !targetSinhalaLetterRef.current) return;
 
-     canvas.width = video.videoWidth;
-     canvas.height = video.videoHeight;
-     const ctx = canvas.getContext("2d");
-     ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-     const dataUrl = canvas.toDataURL("image/jpeg");
-     const base64Image = dataUrl.split(",")[1];
+    const dataUrl = canvas.toDataURL("image/jpeg");
+    const base64Image = dataUrl.split(",")[1];
 
-     try {
-       const response = await fetch(
-         "http://localhost:8000/predict-activity/sinhala-letter",
-         {
-           method: "POST",
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ frame: base64Image }),
-         }
-       );
+    try {
+      const response = await fetch(
+        "http://localhost:8000/predict-activity/sinhala-letter",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ frame: base64Image }),
+        }
+      );
 
-       const resultData = await response.json();
+      const resultData = await response.json();
 
-       if (resultData.predicted_letter) {
-         const prediction = resultData.predicted_letter;
-         const isCorrect = prediction === targetSinhalaLetterRef.current;
+      if (resultData.predicted_letter) {
+        const prediction = resultData.predicted_letter;
+        const isCorrect = prediction === targetSinhalaLetterRef.current;
 
-         console.log(
-           `Predicted: ${prediction}, Target: ${targetSinhalaLetterRef.current} → ${
-             isCorrect ? "✅ Correct" : "❌ Incorrect"
-           }`
-         );
+        console.log(
+          `Predicted: ${prediction}, Target: ${targetSinhalaLetterRef.current} → ${isCorrect ? "✅ Correct" : "❌ Incorrect"
+          }`
+        );
 
-         setSinhalaResult(isCorrect ? t("Correct") : t("Incorrect"));
+        setSinhalaResult(isCorrect ? t("Correct") : t("Incorrect"));
 
-         if (isCorrect) {
-           setTimeout(() => {
-             generateRandomSinhalaLetter();
-           }, 3000);
-         }
-       } else if (resultData.error === "No hand detected") {
-         setSinhalaResult(t("No hand detected"));
-       } else if (resultData.error) {
-         console.log("⚠️ Error from server:", resultData.error);
-       }
-     } catch (error) {
-       console.error("Prediction request failed:", error);
-     }
-   };
+        if (isCorrect) {
+          setTimeout(() => {
+            generateRandomSinhalaLetter();
+          }, 3000);
+        }
+      } else if (resultData.error === "No hand detected") {
+        setSinhalaResult(t("No hand detected"));
+      } else if (resultData.error) {
+        console.log("⚠️ Error from server:", resultData.error);
+      }
+    } catch (error) {
+      console.error("Prediction request failed:", error);
+    }
+  };
 
 
   useEffect(() => {
@@ -201,7 +196,7 @@ const generateRandomSinhalaLetter = () => {
     return () => clearInterval(interval);
   }, [activeTab]);
 
-  
+
   return (
     <MainLayout>
       <Layout style={mainLayoutContainer}>
@@ -226,16 +221,6 @@ const generateRandomSinhalaLetter = () => {
           >
             ← {t("Back")}
           </Button>
-
-          {/* Language Selector */}
-          <Select
-            value={language}
-            onChange={changeLanguage}
-            style={selectorDiv}
-          >
-            <Select.Option value="en">English</Select.Option>
-            <Select.Option value="si">සිංහල</Select.Option>
-          </Select>
         </div>
         <div style={contentContainer}>
           <Tabs
