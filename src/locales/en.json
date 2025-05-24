@@ -134,6 +134,7 @@
   "YourFinalScoreIs": "Your Final Score Is",
   "StudentRegistration" : "Student Registration",
   "TeacherRegistration" : "Teacher Registration",
+  "register": "Register",
   "firstName_placeholder": "Enter your First Name",
   "lastName_placeholder": "Enter your Last Name",
   "role_placeholder": "Enter your Role",

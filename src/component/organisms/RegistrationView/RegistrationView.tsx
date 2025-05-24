@@ -64,8 +64,8 @@ const RegistrationView: React.FC<RegistrationViewProps> = ({
                             <Form.Item>
                                 <Button
                                     type="primary"
-                                    text={t("signin")}
-                                    style={submitButtonStyle}
+                                    text={t("register")}
+                                    style={{ ...submitButtonStyle, width: 200, height: 40 }}
                                     handleOnClick={() => form.submit()}
                                 />
                             </Form.Item>

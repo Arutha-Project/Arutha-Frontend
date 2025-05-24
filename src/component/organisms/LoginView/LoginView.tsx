@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card, Col, Form, Input, Row, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { LanguageContext } from '../../../context/LanguageContext';
 import { cardStyle, inputFieldStyle, submitButtonStyle } from './LoginViewStyle';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../atoms/Button';
@@ -13,7 +14,9 @@ interface LoginViewProps {
 const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { language, changeLanguage } = useContext(LanguageContext);
+  
 
   const onclick = () => {
     form.validateFields().then((values) => {
@@ -27,6 +30,28 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
 
   return (
     <Card style={cardStyle}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+        <Button
+          type="link"
+          text="English"
+          style={{
+            color: language === 'en' ? 'green' : undefined,
+            fontWeight: language === 'en' ? 'bold' : undefined,
+            width: 100,
+          }}
+          handleOnClick={() => changeLanguage('en')}
+        />
+        <Button
+          type="link"
+          text="සිංහල"
+          style={{
+            color: language === 'si' ? 'green' : undefined,
+            fontWeight: language === 'si' ? 'bold' : undefined,
+            width: 100,
+          }}
+          handleOnClick={() => changeLanguage('si')}
+        />
+      </div>
       <img src="src/assets/images/arutha.png" style={{ width: "150px", margin: "0px auto", display: "block" }} />
       <Typography.Title
         level={4}
@@ -58,8 +83,12 @@ const LoginView: React.FC<LoginViewProps> = ({ onFinish }) => {
 
           <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
             <Form.Item>
-              <Button type="primary" text={t("signin")} style={submitButtonStyle}
-                handleOnClick={onclick} />
+              <Button
+                type="primary"
+                text={t("signin")}
+                style={{ ...submitButtonStyle, width: 200 , height: 40 }}
+                handleOnClick={onclick}
+              />
             </Form.Item>
           </Col>
           <Link to="/registration-teacher">Register for Teachers</Link>

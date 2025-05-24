@@ -24,11 +24,12 @@ const HomePage: React.FC = () => {
             {userDetails && userDetails.roleName === "TEACHER" && (
               <React.Fragment>
                 <Link to="/teacher-dashboard">
-                  <Button type="primary" style={{ width: 170 }}>
+                  <Button type="primary" style={{ width: 160 }}>
                     Dashboard
                   </Button>
-                </Link><Link to="/registration-student">
-                  <Button type="primary" style={{ marginLeft: 20, width: 170 }}>
+                </Link>
+                <Link to="/registration-student">
+                  <Button type="primary" style={{ marginLeft: 20, width: 160 }}>
                     Register for Student
                   </Button>
                 </Link>

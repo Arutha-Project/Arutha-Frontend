@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Card, Form, Input, Typography, Button, message, Modal } from 'antd';
+import { Card, Form, Input, Typography, Button, message, Modal, Layout } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { mainLayoutContainer,card } from './forgotPasswordPageStyle';
 import axios from 'axios';
 
 const ForgotPasswordPage: React.FC = () => {
@@ -49,8 +50,8 @@ const ForgotPasswordPage: React.FC = () => {
   };
 
   return (
-    <>
-      <Card style={{ maxWidth: 400, margin: 'auto', marginTop: 100 }}>
+    <Layout style={ mainLayoutContainer}>
+      <Card style={card}>
         <Typography.Title level={4} style={{ textAlign: 'center' }}>
           {t('forgot_password_title') || 'Forgot Password'}
         </Typography.Title>
@@ -93,7 +94,7 @@ const ForgotPasswordPage: React.FC = () => {
           {t('We_found_your_email')}
         </p>
       </Modal>
-    </>
+    </Layout>
   );
 };
 
