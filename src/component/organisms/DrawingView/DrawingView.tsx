@@ -28,16 +28,16 @@ const { Title } = Typography;
 
 const DrawingView: React.FC = () => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
-  const [color, setColor] = useState<string>("#FFFFFF");
+  const [color] = useState<string>("#FFFFFF");
   const [attemptCount, setAttemptCount] = useState(0);
   const [score, setScore] = useState(0);
-  const [results, setResults] = useState<boolean[]>([]);
+  const [, setResults] = useState<boolean[]>([]);
   const [isFinished, setIsFinished] = useState(false);
   const [answer, setAnswer] = useState<string>(QuickDraw.noResult);
   const [objectName, setObjectName] = useState<string>(getRandomDrawingObject());
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const totalRounds = 2;
+  const totalRounds = 2;
 
   const onFinish = async () => {
     if (isFinished) return;
