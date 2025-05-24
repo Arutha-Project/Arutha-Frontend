@@ -29,5 +29,5 @@ export const card: React.CSSProperties = {
   textAlign: 'center',
   boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
   backgroundColor: 'rgba(143, 233, 213, 0.7)',
-  maxWidth: 500,
+  maxWidth: 600,
 };

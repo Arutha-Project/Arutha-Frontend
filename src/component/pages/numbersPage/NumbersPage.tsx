@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Layout, Row, InputNumber, Select } from 'antd';
+import { Col, Layout, Row, InputNumber, Select, Button } from 'antd';
 import { contentContainer, mainLayoutContainer } from './NumbersPageStyle';
 import { MainLayout } from '../../templates';
 import { useTranslation } from 'react-i18next';
@@ -99,7 +99,8 @@ const NumbersPage: React.FC = () => {
     formData.append("model_key", modelKey);
 
     try {
-      const response = await fetch('http://127.0.0.1:2220/validate_number/', {
+      const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/",  {
+      // const response = await fetch('http://127.0.0.1:2220/numbers/validate_number/', {
         method: 'POST',
         body: formData,
       });
@@ -140,11 +141,19 @@ const NumbersPage: React.FC = () => {
             <Col span={12}>
               <div style={{ flex: 1, textAlign: "center" }}>
                 <video ref={videoRef} autoPlay playsInline style={{ width: "100%", maxWidth: "500px" }}></video>
-                <p>🎥 Press <b>Space</b> to Start/Stop Recording</p>
+                <p>🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}</p>
               </div>
+              <Button
+                type="primary"
+                onClick={toggleRecording}
+                loading={loading}
+                style={{ marginTop: 16, backgroundColor: isRecording ? '#ff4d4f' : '#2e6ae3' }}
+              >
+                {isRecording ? t("StopRecording") : t("startRecoding")}
+              </Button>
 
               <div style={{ marginTop: 20 }}>
-                <label><b>Expected Number:</b></label>
+                <label><b>{t("ExpectedNumber")} :</b></label>
                 <InputNumber
                   min={0}
                   max={50}
@@ -155,7 +164,7 @@ const NumbersPage: React.FC = () => {
               </div>
 
               <div style={{ marginTop: 10 }}>
-                <label><b>Select Numbers Range:</b></label>
+                <label><b>{t("SelectNumbersRange")} :</b></label>
                 <Select
                   value={modelKey}
                   onChange={(value) => setModelKey(value)}
@@ -173,9 +182,9 @@ const NumbersPage: React.FC = () => {
             <Col span={12}>
               <div style={{ flex: 1, textAlign: "center" }}>
                 <div style={{ textAlign: "left" }}>
-                  {startTime && <p><b>Start Time:</b> {startTime.toLocaleTimeString()}</p>}
-                  {endTime && <p><b>End Time:</b> {endTime.toLocaleTimeString()}</p>}
-                  {duration !== null && <p><b>Duration:</b> {duration.toFixed(1)} seconds</p>}
+                  {startTime && <p><b>{t("StartTime")} :</b> {startTime.toLocaleTimeString()}</p>}
+                  {endTime && <p><b>{t("EndTime")} :</b> {endTime.toLocaleTimeString()}</p>}
+                  {duration !== null && <p><b>{t("Duration")} :</b> {duration.toFixed(1)} seconds</p>}
                 </div>
                 {loading && <p>⏳ {t("Processing")}</p>}
                 {prediction && <p style={{ fontSize: '18px', fontWeight: 'bold' }}>{prediction}</p>}

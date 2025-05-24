@@ -115,10 +115,14 @@ export const submitButtonStyle: React.CSSProperties = {
   color: "white",
 }
 
-
 export const buttonDivStyle: React.CSSProperties = {
   marginTop: 20, 
   display: "flex", 
   justifyContent: "center",
   backgroundColor: "rgba(255, 255, 255, 0.72)" 
 }
+
+export const modalContainerStyle: React.CSSProperties = {
+    minWidth: '40%',
+    maxWidth: '40%',
+};
