@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,7 +17,6 @@ import englishImg from "/src/assets/images/english_sign.png";
 import sinhalaImg from "/src/assets/images/sinhala_sign.png";
 import activitiesImg from "/src/assets/images/activities.png";
 import arutheImg from "/src/assets/images/arutha.png";
-import { LanguageContext } from "../../../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 
