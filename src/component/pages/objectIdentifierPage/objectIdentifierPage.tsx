@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { uploadVideo, saveObjectIdentifierScore } from '../../../services';
 import { t } from 'i18next';
-import { Layout, Select, message } from 'antd';
+import { Layout, message } from 'antd';
 import { LanguageContext } from '../../../context/LanguageContext';
 import { pageHeader, nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle, startRecordingButtonStyle, startRecordingButtonDisabledStyle, stopButtonStyle, stopButtonDisabledStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
 import { MainLayout } from '../../templates';
@@ -21,7 +21,7 @@ const ObjectIdentifierPage: React.FC = () => {
   const [recordingEnabled, setRecordingEnabled] = useState<boolean>(false);
   const [randomName, setRandomName] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [, setElapsedTime] = useState<number>(0);
   const intervalRef = useRef<number | null>(null);
   const [category, setCategory] = useState<CategoryType | null>(null);
 
@@ -32,7 +32,7 @@ const ObjectIdentifierPage: React.FC = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [attempts, setAttempts] = useState<number>(0);
 
-  const { language, changeLanguage } = React.useContext(LanguageContext);
+  const { language } = React.useContext(LanguageContext);
 
   // For saving score state
   const [isSavingScore, setIsSavingScore] = useState<boolean>(false);

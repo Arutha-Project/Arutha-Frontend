@@ -3,12 +3,12 @@ import { Button, Col, Layout, Modal, Row } from 'antd';
 import { contentContainer, mainLayoutContainer } from './NumbersActivityPageStyle';
 import { MainLayout } from '../../templates';
 import { useTranslation } from "react-i18next";
-import axios from '../../../services/axiosInstance'; 
+import axios from '../../../services/axiosInstance';
 import { CheckCircleOutlined } from '@ant-design/icons';
 
 const TOTAL_QUESTIONS = 10;
 
-  const NumbersActivityPage: React.FC = () => {
+const NumbersActivityPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
@@ -24,8 +24,8 @@ const TOTAL_QUESTIONS = 10;
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [isSavingScore, setIsSavingScore] = useState<boolean>(false);
-  const [saveScoreError, setSaveScoreError] = useState<string | null>(null);
+  const [, setIsSavingScore] = useState<boolean>(false);
+  const [, setSaveScoreError] = useState<string | null>(null);
   const { t } = useTranslation();
 
   const generateEquation = () => {
@@ -34,13 +34,12 @@ const TOTAL_QUESTIONS = 10;
     const num1 = Math.floor(Math.random() * 25) + 1;
     const num2 = Math.floor(Math.random() * 25) + 1;
     const isAddition = Math.random() > 0.5;
-    const currnetUser = localStorage.getItem('userDetails');
-  
+
     if (!isAddition && num1 < num2) {
       generateEquation();
       return;
     }
-  
+
     const equationText = isAddition ? `${num1} + ${num2}` : `${num1} - ${num2}`;
     setEquation(equationText);
     setCorrectAnswer(isAddition ? num1 + num2 : num1 - num2);
@@ -76,7 +75,7 @@ const TOTAL_QUESTIONS = 10;
     setStartTime(new Date());
     setEndTime(null);
     setDuration(null);
-    
+
     const stream = videoRef.current.srcObject as MediaStream;
     const mediaRecorder = new MediaRecorder(stream);
     mediaRecorderRef.current = mediaRecorder;
@@ -113,32 +112,31 @@ const TOTAL_QUESTIONS = 10;
   const submitVideo = async () => {
     setLoading(true);
     if (recordedChunks.length === 0 || correctAnswer === null) return;
-  
+
     const blob = new Blob(recordedChunks, { type: "video/webm" });
     const formData = new FormData();
     formData.append("file", blob, "recording.webm");
     formData.append("expected_number", correctAnswer.toString());
-  
+
     let modelKey = "";
     if (correctAnswer >= 0 && correctAnswer <= 10) modelKey = "0-10";
     else if (correctAnswer >= 11 && correctAnswer <= 20) modelKey = "11-20";
     else if (correctAnswer >= 21 && correctAnswer <= 30) modelKey = "21-30";
     else if (correctAnswer >= 31 && correctAnswer <= 40) modelKey = "31-40";
     else if (correctAnswer >= 41 && correctAnswer <= 50) modelKey = "41-50";
-  
+
     formData.append("model_key", modelKey);
-  
+
     try {
-      const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/",  {
-        // const response = await fetch('http://127.0.0.1:2220/numbers/validate_number/',  {
+      const response = await fetch("http://0.0.0.0:9090/numbers/validate_number/", {
         method: 'POST',
         body: formData,
       });
-  
+
       if (response.ok) {
         const result = await response.json();
         setPrediction(result.predicted_number);
-  
+
         if (result.correct) {
           if (currentQuestion < TOTAL_QUESTIONS - 1) {
             setScore(score + 1);
@@ -159,22 +157,22 @@ const TOTAL_QUESTIONS = 10;
           setCurrentQuestion(currentQuestion + 1);
           generateEquation();
         } else {
-          setIsModalVisible(true); 
+          setIsModalVisible(true);
         }
       }, 1000);
     }
-  };  
+  };
 
   // save the user's score to the database
   const saveUserScore = async () => {
     try {
       setIsSavingScore(true);
       setSaveScoreError(null);
-      
+
       const userDetailsStr = localStorage.getItem('userDetails');
       // console.log("User details from localStorage:", userDetailsStr);
-      
-      let userId = null; 
+
+      let userId = null;
       if (userDetailsStr) {
         try {
           const userDetails = JSON.parse(userDetailsStr);
@@ -188,7 +186,7 @@ const TOTAL_QUESTIONS = 10;
         userId: userId,
         score: score
       });
-      
+
       console.log("Score saved successfully:", response.data);
     } catch (error) {
       console.error("Error saving score:", error);
@@ -277,14 +275,14 @@ const TOTAL_QUESTIONS = 10;
             </div>
           }
           visible={isModalVisible}
-           footer={[
+          footer={[
             <Button
               key="continue"
               type="primary"
               onClick={() => {
-                saveUserScore(); 
-                resetPage(); 
-                setIsModalVisible(false);  
+                saveUserScore();
+                resetPage();
+                setIsModalVisible(false);
               }}
             >
               {t("Continue")}

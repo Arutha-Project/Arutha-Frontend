@@ -53,7 +53,7 @@
   "Processing": "සකසමින්... කරුණාකර රැඳී සිටින්න...",
   "PredictedSign": "පරිවර්තනය කළ ලකුණ",
   "Press": "ඔබන්න",
-  "Space": "අවකාශය බොත්තම",
+  "Space": "Space button",
   "Start/StopRecording": "පටිගත කිරීම ආරම්භ කිරීමට/නැවැත්වීමට",
   "Start": "ආරම්භ කරන්න",
   "RandomName": "අහඹු නම",
@@ -161,5 +161,7 @@
   "Last Name Required": "අවසන් නම අවශ්‍යයි",
   "Role Required": "භූමිකාව අවශ්‍යයි",
   "Email Required": "ඊමේල් ලිපිනය අවශ්‍යයි",
-  "Password Required": "මුරපදය අවශ්‍යයි"
+  "Password Required": "මුරපදය අවශ්‍යයි",
+  "Generate Letter": "අකුරු ජනනය කරන්න",
+  "No hand detected": "👋 අත හඳුනාගත නොහැක"
 }

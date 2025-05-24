@@ -118,7 +118,7 @@
   "MathsActivity": "Maths Sign Language Activity",
   "OBJECT IDENTIFICATION": "OBJECT IDENTIFICATION",
   "For more accurate results, try recording for at least 15 seconds.": "For more accurate results, try recording for at least 15 seconds.",
-  "Self-Study":"Self Study",
+  "Self-Study": "Self Study",
   "PreviousNumber": "Previous Number",
   "NextNumber": "Next Number",
   "Question": "Question",
@@ -133,11 +133,13 @@
   "ActivityCompleted": "Activity Completed",
   "Continue": "Continue",
   "YourFinalScoreIs": "Your Final Score Is",
-  "StudentRegistration" : "Student Registration",
-  "TeacherRegistration" : "Teacher Registration",
+  "StudentRegistration": "Student Registration",
+  "TeacherRegistration": "Teacher Registration",
   "firstName_placeholder": "Enter your First Name",
   "lastName_placeholder": "Enter your Last Name",
   "role_placeholder": "Enter your Role",
   "teacher": "Teacher",
-  "student": "Student"
+  "student": "Student",
+  "Generate Letter": "Generate Letter",
+  "No hand detected": "👋 No hand detected"
 }
