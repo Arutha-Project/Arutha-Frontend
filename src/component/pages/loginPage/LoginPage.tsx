@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { LanguageContext } from '../../../context/LanguageContext';
 import { mainLayoutContainer } from './LoginPageStyle';
 import { commonNotificationBody, NotificationType, NotificationTypeIndex } from '../../../util';
+import { useTranslation } from 'react-i18next';
 
 const LoginPage: React.FC = () => {
   const { language, changeLanguage } = React.useContext(LanguageContext);
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
   const Context = React.createContext({ name: 'Default' });
+  const { t } = useTranslation();
 
   const onFinish = async (values: LoginDataIndex) => {
     await validateUserAndValidate(values)
@@ -25,20 +27,20 @@ const LoginPage: React.FC = () => {
         } else if (jwtTokenAndUserDetails.currentUser.roleName === RoleNames.STUDENT) {
           navigate('/home');
         } else {
-          openNotification(NotificationTypeIndex.ERROR, 'Login Failed', 'Invalid username or password');
+          openNotification(NotificationTypeIndex.ERROR, t('Login Failed'), t('Invalid username or password'));
         }
       }).catch(error => {
         if (error.response) {
           const { status } = error.response;
           if (status === 401) {
-            openNotification(NotificationTypeIndex.ERROR, 'Login Failed', 'Invalid username or password');
+            openNotification(NotificationTypeIndex.ERROR, t('Login Failed'), t('Invalid username or password'));
           } else if (status === 500) {
-            openNotification(NotificationTypeIndex.ERROR, 'System Error', 'Please contact system administrator.');
+            openNotification(NotificationTypeIndex.ERROR, t('System Error'), t('Please contact system administrator'));
           } else {
-            openNotification(NotificationTypeIndex.ERROR, 'Validation Error', 'Invalid input provided.');
+            openNotification(NotificationTypeIndex.ERROR, t('Validation Error'), t('Invalid input provided'));
           }
         } else {
-          openNotification(NotificationTypeIndex.ERROR, 'System Error', 'Please contact system administrator.');
+          openNotification(NotificationTypeIndex.ERROR, t('System Error'), t('Please contact system administrator'));
         }
       });
   };

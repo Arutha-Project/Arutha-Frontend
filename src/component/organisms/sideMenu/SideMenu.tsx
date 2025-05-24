@@ -66,6 +66,12 @@ const SideMenu: React.FC = () => {
     return "/home"; // Fallback to home if no match
   };
 
+  const Logout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userDetails");
+    navigate("/");
+  };
+
   return (
     <Sider
       collapsible
@@ -99,7 +105,7 @@ const SideMenu: React.FC = () => {
         style={MenuContainerStyle}
       >
 
-        <Menu.Item style={LogoutContainer} key="/" icon={<LogoutOutlined />} onClick={() => navigate("/")}>
+        <Menu.Item style={LogoutContainer} key="/" icon={<LogoutOutlined />} onClick={Logout}>
           {t("logOut")}
         </Menu.Item>
       </Menu>

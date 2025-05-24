@@ -22,20 +22,20 @@ const RegistrationTeacher: React.FC = () => {
         try {
             setIsLoading(true);
             await validateUserAndRegister(values);
-            openNotification(NotificationTypeIndex.SUCCESS, "Registration Successful", "You have successfully registered.");
+            openNotification(NotificationTypeIndex.SUCCESS, t('Registration Successful'), t('You have successfully registered.'));
             form.resetFields();
         } catch (error: any) {
             if (error.response) {
                 const { status } = error.response;
                 if (status === 401) {
-                    openNotification(NotificationTypeIndex.ERROR, "Registration Failed", "Invalid username or password");
+                    openNotification(NotificationTypeIndex.ERROR, t('Registration Failed'), t('Invalid username or password'));
                 } else if (status === 500) {
-                    openNotification(NotificationTypeIndex.ERROR, "System Error", "Please contact system administrator.");
+                    openNotification(NotificationTypeIndex.ERROR, t('System Error'), t('Please contact system administrator.'));
                 } else {
-                    openNotification(NotificationTypeIndex.ERROR, "Validation Error", "Invalid input provided.");
+                    openNotification(NotificationTypeIndex.ERROR, t('Validation Error'), t('Invalid input provided.'));
                 }
             } else if (error.request) {
-                openNotification(NotificationTypeIndex.ERROR, "Network Error", "No response received from the server.");
+                openNotification(NotificationTypeIndex.ERROR, t('Network Error'), t('No response received from the server.'));
             }
         } finally {
             setIsLoading(false);
