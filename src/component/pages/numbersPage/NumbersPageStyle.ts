@@ -29,7 +29,7 @@ padding: "20px",
 borderRadius: "10px",
 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0)",
 textAlign: "center",
-maxWidth: "800px",
+maxWidth: "90%",
 width: "100%",
 margin: "20px auto",
 };

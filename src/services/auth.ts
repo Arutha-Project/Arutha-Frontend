@@ -9,3 +9,12 @@ export const validateUserAndValidate = async (payload: any) => {
     return Promise.reject(error);
   }
 };
+
+export const validateUserAndRegister = async (payload: any) => {
+  try {
+    const { data } = await axios.post(BASE_URL + '/users/', payload);
+    return Promise.resolve(data);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}

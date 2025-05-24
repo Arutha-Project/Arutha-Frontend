@@ -12,7 +12,6 @@ export const mainLayoutContainer: React.CSSProperties = {
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
   justifyContent: 'center',
-  alignItems: 'center',
   height: '100vh',  
   width: 'flex',   
 };

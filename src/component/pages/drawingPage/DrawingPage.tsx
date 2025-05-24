@@ -14,7 +14,7 @@ const DrawingPage: React.FC = () => {
         <Select
           value={language}
           onChange={changeLanguage}
-          style={{ width: 120, marginBottom: 10 }}>
+          style={{ width: 120, marginBottom: 10, marginLeft: 10 }}>
           <Select.Option value="en">English</Select.Option>
           <Select.Option value="si">සිංහල</Select.Option>
         </Select>

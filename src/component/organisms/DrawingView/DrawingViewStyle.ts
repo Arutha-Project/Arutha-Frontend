@@ -16,8 +16,27 @@ export const canvasStyle: React.CSSProperties = {
 };
 
 export const buttonContainer: React.CSSProperties = {
-  margin: "10px",
-  height: "40px"
+  borderRadius: '38px',
+  height: '44px',
+  maxHeight: '44px',
+  minWidth: '126px',
+  marginTop: '10px',
+  marginBottom: '10px',
+  marginLeft: '105px',
+  background: '#007bff',
+  color: "white",
+};
+
+export const colorPickerContainer: React.CSSProperties = {
+  borderRadius: '38px',
+  height: '44px',
+  maxHeight: '44px',
+  minWidth: '126px',
+  marginTop: '10px',
+  marginBottom: '20px',
+  marginLeft: '105px',
+  background: '#007bff',
+  color: "white",
 };
 
 export const cardLayerStyle: React.CSSProperties = {
@@ -49,7 +68,7 @@ export const predictionsContainer = (answer: string): React.CSSProperties => {
       color = "gray";
   }
   return {
-    fontSize: 50,
+    fontSize: 70,
     color,
   };
 };
@@ -75,8 +94,35 @@ export const predictionsTitle = (answer: string): React.CSSProperties => {
 };
 
 export const nextButtonStyle: React.CSSProperties = {
-  margin: "10px",
-  width: "50wh",
-  height: "40px",
-  fontSize: "20px"
+  borderRadius: '38px',
+  height: '44px',
+  maxHeight: '44px',
+  minWidth: '126px',
+  marginTop: '10px',
+  marginLeft: '105px',
+  background: '#ed7409',
+  color: "white",
 }
+
+export const submitButtonStyle: React.CSSProperties = {
+  borderRadius: '38px',
+  height: '44px',
+  maxHeight: '44px',
+  minWidth: '126px',
+  marginTop: '10px',
+  marginLeft: '105px',
+  background: '#32a852',
+  color: "white",
+}
+
+export const buttonDivStyle: React.CSSProperties = {
+  marginTop: 20, 
+  display: "flex", 
+  justifyContent: "center",
+  backgroundColor: "rgba(255, 255, 255, 0.72)" 
+}
+
+export const modalContainerStyle: React.CSSProperties = {
+    minWidth: '40%',
+    maxWidth: '40%',
+};

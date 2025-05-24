@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Layout, Select } from "antd";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import {
   mainLayoutContainer,
   cardContainer,

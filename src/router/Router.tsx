@@ -9,73 +9,133 @@ import {
   DrawingPage,
   ObjectIdentifierPage,
   ActivityLetterIdentifyPage,
+  TeacherDashboardPage,
+  NotFoundPage,
 } from "../component/pages";
+import { RegistrationTeacher } from "../component/pages/registrationTeacher";
 import { LettersIdentifyPage } from "../component/pages/lettersIdentifyPage";
 import { EnglishLettersIdentifyPage } from "../component/pages/englishLettersIdentifyPage";
 import { SinhalaLettersIdentifyPage } from "../component/pages/sinhalaLettersIdentifyPage";
-
+import { RegistrationStudent } from "../component/pages/registrationStudent";
+import ProtectedRoute from "../component/HighOrderComponent/ProtectedRoute";
 
 function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={"/"} Component={LoginPage} />
+        {/* Public Routes */}
+        <Route path="/" Component={LoginPage} />
+        <Route path="/registration-teacher" Component={RegistrationTeacher} />
+
+        {/* Protected Routes */}
         <Route
           path="/home"
-          Component={HomePage}
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
         />
-
+        <Route
+          path="/registration-student"
+          element={
+            <ProtectedRoute>
+              <RegistrationStudent />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teacher-dashboard"
+          element={
+            <ProtectedRoute>
+              <TeacherDashboardPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/about-us"
-          Component={AboutUs}
+          element={
+            <ProtectedRoute>
+              <AboutUs />
+            </ProtectedRoute>
+          }
         />
-
         <Route
           path="/object-identifier"
-          Component={ObjectIdentifierPage}
+          element={
+            <ProtectedRoute>
+              <ObjectIdentifierPage />
+            </ProtectedRoute>
+          }
         />
-
         <Route
           path="/numbers-Page"
-          Component={NumbersPage}
+          element={
+            <ProtectedRoute>
+              <NumbersPage />
+            </ProtectedRoute>
+          }
         />
-
         <Route
           path="/numbers-Activity-Page"
-          Component={NumbersActivityPage}
+          element={
+            <ProtectedRoute>
+              <NumbersActivityPage />
+            </ProtectedRoute>
+          }
         />
-
         <Route
           path="/numbers-Identify-Page"
-          Component={NumbersIdentifyPage}
+          element={
+            <ProtectedRoute>
+              <NumbersIdentifyPage />
+            </ProtectedRoute>
+          }
         />
         <Route
-          path={"/home"}
-          Component={HomePage}
-        />
-        <Route
-          path={"/drawing"}
-          Component={DrawingPage}
+          path="/drawing"
+          element={
+            <ProtectedRoute>
+              <DrawingPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/sign-letters"
-          Component={LettersIdentifyPage}
+          element={
+            <ProtectedRoute>
+              <LettersIdentifyPage />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/english-signing"
-          Component={EnglishLettersIdentifyPage}
+          element={
+            <ProtectedRoute>
+              <EnglishLettersIdentifyPage />
+            </ProtectedRoute>
+          }
         />
-
-         <Route
+        <Route
           path="/sinhala-signing"
-          Component={SinhalaLettersIdentifyPage}
+          element={
+            <ProtectedRoute>
+              <SinhalaLettersIdentifyPage />
+            </ProtectedRoute>
+          }
         />
-
         <Route
           path="/letter-identify-activities"
-          Component={ActivityLetterIdentifyPage}
+          element={
+            <ProtectedRoute>
+              <ActivityLetterIdentifyPage />
+            </ProtectedRoute>
+          }
         />
-        
+        <Route
+            path="*"
+            element={<NotFoundPage />}
+          />
       </Routes>
     </BrowserRouter>
   );
