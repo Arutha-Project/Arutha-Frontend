@@ -19,6 +19,7 @@ import {
 import sinhalaLetters from "/src/assets/images/sinhala_letters.png";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
+import { getSinhalaLetterPrediction } from "../../../services";
 
 const SinhalaLettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
@@ -71,11 +72,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
         if (blob) {
           const formData = new FormData();
           formData.append("file", blob, "frame.jpg");
-
-          fetch("http://localhost:8000/predict-letter-sinhala", {
-            method: "POST",
-            body: formData,
-          })
+          getSinhalaLetterPrediction(formData)
             .then((res) => res.json())
             .then((data) => {
               setPredictedLetter(data.letter || "");

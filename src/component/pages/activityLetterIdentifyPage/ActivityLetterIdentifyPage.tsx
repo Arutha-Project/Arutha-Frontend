@@ -16,6 +16,7 @@ import {
 } from "./ActivityLetterIdentifyPageStyle";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
+import { getEnglishLetterActivityPrediction, getSinhalaLetterActivityPrediction } from "../../../services";
 
 const { TabPane } = Tabs;
 
@@ -84,15 +85,12 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const dataUrl = canvas.toDataURL("image/jpeg");
-    const base64Image = dataUrl.split(",")[1];
+    const base64Image = JSON.stringify(dataUrl.split(",")[1]);
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/predict-activity/english-letter",
+      const response = await getEnglishLetterActivityPrediction(
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ frame: base64Image }),
+          frame: base64Image,
         }
       );
 
@@ -137,15 +135,12 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const dataUrl = canvas.toDataURL("image/jpeg");
-    const base64Image = dataUrl.split(",")[1];
+    const base64Image = JSON.stringify(dataUrl.split(",")[1]);
 
     try {
-      const response = await fetch(
-        "http://localhost:8000/predict-activity/sinhala-letter",
+      const response = await getSinhalaLetterActivityPrediction(
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ frame: base64Image }),
+          frame: base64Image,
         }
       );
 

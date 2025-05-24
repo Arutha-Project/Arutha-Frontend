@@ -19,6 +19,7 @@ import {
 import englishLetters from "/src/assets/images/english_letters.png";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
+import { getEnglishLetterPrediction } from "../../../services";
 
 const EnglishLettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
@@ -71,11 +72,7 @@ const EnglishLettersIdentifyPage: React.FC = () => {
         if (blob) {
           const formData = new FormData();
           formData.append("file", blob, "frame.jpg");
-
-          fetch("http://localhost:8000/predict-letter-english", {
-            method: "POST",
-            body: formData,
-          })
+          getEnglishLetterPrediction(formData)
             .then((res) => res.json())
             .then((data) => {
               setPredictedLetter(data.letter || "");
