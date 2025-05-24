@@ -31,19 +31,19 @@ const RegistrationView: React.FC<RegistrationViewProps> = ({
                     <Row>
                         <Row gutter={24}>
                             <Col span={12}>
-                                <Form.Item name="firstName" rules={[{ required: true, message: t("firstName_required") }]}>
+                                <Form.Item name="firstName" rules={[{ required: true, message: t("First Name Required") }]}>
                                     <Input style={inputFieldStyle} placeholder={t("firstName_placeholder")} />
                                 </Form.Item>
                             </Col>
 
                             <Col span={12}>
-                                <Form.Item name="lastName" rules={[{ required: true, message: t("lastName_required") }]}>
+                                <Form.Item name="lastName" rules={[{ required: true, message: t("Last Name Required") }]}>
                                     <Input style={inputFieldStyle} placeholder={t("lastName_placeholder")} />
                                 </Form.Item>
                             </Col>
                         </Row>
                         <Col span={24}>
-                            <Form.Item name="roleId" rules={[{ required: true, message: t("role_required") }]}>
+                            <Form.Item name="roleId" rules={[{ required: true, message: t("Role Required") }]}>
                                 <Select style={inputFieldStyle} placeholder={t("role_placeholder")}>
                                     {isTeacher && <Select.Option value="1" style={{ fontSize: "16px" }}>{t("teacher")}</Select.Option>}
                                     {!isTeacher && <Select.Option value="2" style={{ fontSize: "16px" }}>{t("student")}</Select.Option>}
@@ -51,12 +51,12 @@ const RegistrationView: React.FC<RegistrationViewProps> = ({
                             </Form.Item>
                         </Col>
                         <Col span={24}>
-                            <Form.Item name="email" rules={[{ required: true, type: 'email', message: t("email_required") }]}>
+                            <Form.Item name="email" rules={[{ required: true, type: 'email', message: t("Email Required") }]}>
                                 <Input style={inputFieldStyle} placeholder={t("email_placeholder")} />
                             </Form.Item>
                         </Col>
                         <Col span={24}>
-                            <Form.Item name="password" rules={[{ required: true, message: t("password_required") }]}>
+                            <Form.Item name="password" rules={[{ required: true, message: t("Password Required") }]}>
                                 <Input style={inputFieldStyle} placeholder={t("password_placeholder")} type="password" />
                             </Form.Item>
                         </Col>

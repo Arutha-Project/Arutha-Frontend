@@ -8,6 +8,7 @@ import { NumbersIdentifyPage } from "./numbersIdentifyPage";
 import { AboutUs } from "./aboutUs";
 import { ActivityLetterIdentifyPage } from "./activityLetterIdentifyPage";
 import { TeacherDashboardPage } from "./teacherDashboard";
+import  NotFoundPage  from "./NotFoundPage";
 
 export { 
   LoginPage,
@@ -19,7 +20,8 @@ export {
   NumbersIdentifyPage,
   AboutUs,
   ActivityLetterIdentifyPage,
-  TeacherDashboardPage
+  TeacherDashboardPage,
+  NotFoundPage
  };
  
  
