@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Layout, Button, Tabs } from "antd";
+import { Layout, Button, Tabs, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   mainLayoutContainer,
@@ -17,6 +17,7 @@ import {
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
 import axios from "../../../services/axiosInstance";
+import { LanguageContext } from "../../../context/LanguageContext";
 
 const { TabPane } = Tabs;
 
@@ -47,6 +48,8 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
   const finalEnglishScoreRef = useRef(0);
   const finalSinhalaScoreRef = useRef(0);
+
+   const { language, changeLanguage } = React.useContext(LanguageContext);
 
   const generateRandomEnglishLetter = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
@@ -252,29 +255,30 @@ const handleEnglishSkip = () => {
     }
   };
 
-  const handleEnglishRestart = () => {
-    setScore(0);
-    setRound(0);
-    setGameOver(false);
-    setResult(null);
-    generateRandomEnglishLetter();
+const handleEnglishRestart = () => {
+  setScore(0);
+  setRound(0);
+  setGameOver(false);
+  setResult(null);
+  generateRandomEnglishLetter();
 
-    if (!stream) {
-      openCamera();
-    }
-  };
+  if (!stream) {
+    openCamera();
+  }
+};
 
-  const handleSinhalaRestart = () => {
-    setSinhalaScore(0);
-    setSinhalaRound(0);
-    setSinhalaGameOver(false);
-    setSinhalaResult(null);
-    generateRandomSinhalaLetter();
+const handleSinhalaRestart = () => {
+  setSinhalaScore(0);
+  setSinhalaRound(0);
+  setSinhalaGameOver(false);
+  setSinhalaResult(null);
+  generateRandomSinhalaLetter();
 
-    if (!stream) {
-      openCamera();
-    }
-  };
+  if (!stream) {
+    openCamera();
+  }
+};
+
 
   const handleEnglishNextRound = (addScore: boolean) => {
     setRound((prev) => {
@@ -348,6 +352,27 @@ const handleEnglishSkip = () => {
     finalSinhalaScoreRef.current = sinhalaScore;
   }, [sinhalaScore]);
 
+
+  const stopCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      setStream(null);
+    }
+  };
+
+  useEffect(() => {
+    if (gameOver && activeTab === "1") {
+      stopCamera();
+    }
+  }, [gameOver, activeTab]);
+
+  useEffect(() => {
+    if (sinhalaGameOver && activeTab === "2") {
+      stopCamera();
+    }
+  }, [sinhalaGameOver, activeTab]);
+
+
   return (
     <MainLayout>
       <Layout style={mainLayoutContainer}>
@@ -372,6 +397,16 @@ const handleEnglishSkip = () => {
           >
             ← {t("Back")}
           </Button>
+
+          <Select
+            value={language}
+            onChange={changeLanguage}
+            style={{ width: 120, marginBottom: 10, marginLeft: 10 }}
+          >
+            <Select.Option value="en">English</Select.Option>
+            <Select.Option value="si">සිංහල</Select.Option>
+          </Select>
+          
         </div>
         <div style={contentContainer}>
           <Tabs
@@ -427,6 +462,23 @@ const handleEnglishSkip = () => {
                       playsInline
                       style={{ ...videoStyle, width: "100%", height: "100%" }}
                     ></video>
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        left: 8,
+                        zIndex: 10,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        color: "white",
+                        padding: "4px 10px",
+                        borderRadius: 6,
+                        fontWeight: "bold",
+                        fontSize: 16,
+                      }}
+                    >
+                      {t("Round")}: {round} / 10
+                    </div>
 
                     {gameOver && (
                       <div
@@ -540,6 +592,23 @@ const handleEnglishSkip = () => {
                       playsInline
                       style={{ ...videoStyle, width: "100%", height: "100%" }}
                     ></video>
+
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        left: 8,
+                        zIndex: 10,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        color: "white",
+                        padding: "4px 10px",
+                        borderRadius: 6,
+                        fontWeight: "bold",
+                        fontSize: 16,
+                      }}
+                    >
+                      {t("Round")}: {sinhalaRound} / 10
+                    </div>
 
                     {sinhalaGameOver && (
                       <div
