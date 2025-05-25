@@ -88,7 +88,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/predict-activity/english-letter",
+        "http://localhost:8000/letter/predict-activity/english-letter",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -141,7 +141,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/predict-activity/sinhala-letter",
+        "http://0.0.0.0:9090/letter/predict-activity/sinhala-letter",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
