@@ -141,5 +141,7 @@
   "teacher": "Teacher",
   "student": "Student",
   "Skip": "Skip",
-  "No hand detected": "👋 No hand detected"
+  "No hand detected": "👋 No hand detected",
+  "Activity Over": "Activity Over ‼️",
+  "Restart": "Restart"
 }

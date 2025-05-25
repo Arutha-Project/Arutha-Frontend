@@ -23,7 +23,6 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [, setStream] = useState<MediaStream | null>(null);
   const [isHovered, setIsHovered] = React.useState(false);
 
   const [targetLetter, setTargetLetter] = useState<string>("");
@@ -37,6 +36,13 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState("1");
 
+  const [score, setScore] = useState(0);
+  const [round, setRound] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [sinhalaScore, setSinhalaScore] = useState(0);
+  const [sinhalaRound, setSinhalaRound] = useState(0);
+  const [sinhalaGameOver, setSinhalaGameOver] = useState(false);
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
   const generateRandomEnglishLetter = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
@@ -56,7 +62,6 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     setSinhalaResult(null);
   };
 
-
   const openCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -72,6 +77,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   };
 
   const captureAndPredict = async () => {
+    if (gameOver) return;
     if (result === "Correct") return;
 
     const canvas = document.createElement("canvas");
@@ -98,24 +104,44 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
       const resultData = await response.json();
 
+      if (resultData.error === "No hand detected") {
+        if (!gameOver) {
+          setResult(t("No hand detected"));
+        }
+        return;
+      }
+
       if (resultData.predicted_letter) {
         const prediction = resultData.predicted_letter;
         const isCorrect = prediction === targetEnglishLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${targetEnglishLetterRef.current} → ${isCorrect ? "✅ Correct" : "❌ Incorrect"
-          }`
+          `Predicted: ${prediction}, Target: ${
+            targetEnglishLetterRef.current
+          } → ${isCorrect ? "✅ Correct" : "❌ Incorrect"}`
         );
 
-        setResult(isCorrect ? t("Correct") : t("Incorrect"));
-
-        if (isCorrect) {
-          setTimeout(() => {
-            generateRandomEnglishLetter();
-          }, 3000);
+        if (!gameOver) {
+          setResult(isCorrect ? t("Correct") : t("Incorrect"));
         }
-      } else if (resultData.error === "No hand detected") {
-        setResult(t("No hand detected"));
+
+        if (isCorrect && !gameOver) {
+          setScore((prev) => prev + 10);
+
+          setRound((prev) => {
+            const newRound = prev + 1;
+            if (newRound >= 10) {
+              setGameOver(true);
+            }
+            return newRound;
+          });
+
+          if (!gameOver) {
+            setTimeout(() => {
+              generateRandomEnglishLetter();
+            }, 3000);
+          }
+        }
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
       }
@@ -125,6 +151,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   };
 
   const captureAndPredictSinhala = async () => {
+    if (sinhalaGameOver) return;
     if (sinhalaResult === "Correct") return;
 
     const canvas = document.createElement("canvas");
@@ -151,24 +178,44 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
       const resultData = await response.json();
 
+      if (resultData.error === "No hand detected") {
+        if (!sinhalaGameOver) {
+          setSinhalaResult(t("No hand detected"));
+        }
+        return;
+      }
+
       if (resultData.predicted_letter) {
         const prediction = resultData.predicted_letter;
         const isCorrect = prediction === targetSinhalaLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${targetSinhalaLetterRef.current} → ${isCorrect ? "✅ Correct" : "❌ Incorrect"
-          }`
+          `Predicted: ${prediction}, Target: ${
+            targetSinhalaLetterRef.current
+          } → ${isCorrect ? "✅ Correct" : "❌ Incorrect"}`
         );
 
-        setSinhalaResult(isCorrect ? t("Correct") : t("Incorrect"));
-
-        if (isCorrect) {
-          setTimeout(() => {
-            generateRandomSinhalaLetter();
-          }, 3000);
+        if (!sinhalaGameOver) {
+          setSinhalaResult(isCorrect ? t("Correct") : t("Incorrect"));
         }
-      } else if (resultData.error === "No hand detected") {
-        setSinhalaResult(t("No hand detected"));
+
+        if (isCorrect && !sinhalaGameOver) {
+          setSinhalaScore((prev) => prev + 10);
+
+          setSinhalaRound((prev) => {
+            const newRound = prev + 1;
+            if (newRound >= 10) {
+              setSinhalaGameOver(true);
+            }
+            return newRound;
+          });
+
+          if (!sinhalaGameOver) {
+            setTimeout(() => {
+              generateRandomSinhalaLetter();
+            }, 3000);
+          }
+        }
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
       }
@@ -177,6 +224,57 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     }
   };
 
+  const handleEnglishSkip = () => {
+    if (gameOver) return;
+
+    setRound((prev) => {
+      const newRound = prev + 1;
+      if (newRound >= 10) {
+        setGameOver(true);
+      }
+      return newRound;
+    });
+
+    generateRandomEnglishLetter();
+  };
+
+  const handleSinhalaSkip = () => {
+    if (sinhalaGameOver) return;
+
+    setSinhalaRound((prev) => {
+      const newRound = prev + 1;
+      if (newRound >= 10) {
+        setSinhalaGameOver(true);
+      }
+      return newRound;
+    });
+
+    generateRandomSinhalaLetter();
+  };
+
+  const handleEnglishRestart = () => {
+    setScore(0);
+    setRound(0);
+    setGameOver(false);
+    setResult(null);
+    generateRandomEnglishLetter();
+
+    if (!stream) {
+      openCamera();
+    }
+  };
+
+  const handleSinhalaRestart = () => {
+    setSinhalaScore(0);
+    setSinhalaRound(0);
+    setSinhalaGameOver(false);
+    setSinhalaResult(null);
+    generateRandomSinhalaLetter();
+
+    if (!stream) {
+      openCamera();
+    }
+  };
 
   useEffect(() => {
     openCamera();
@@ -196,6 +294,12 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     return () => clearInterval(interval);
   }, [activeTab]);
 
+  useEffect(() => {
+    if (gameOver && stream && activeTab === "1") {
+      stream.getTracks().forEach((track) => track.stop());
+      setStream(null);
+    }
+  }, [gameOver, stream, activeTab]);
 
   return (
     <MainLayout>
@@ -260,7 +364,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                     )}
                     <Button
                       type="primary"
-                      onClick={generateRandomEnglishLetter}
+                      onClick={handleEnglishSkip}
                       style={{ marginBottom: "20px" }}
                     >
                       {t("Skip")}
@@ -277,7 +381,44 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       style={{ ...videoStyle, width: "100%", height: "100%" }}
                     ></video>
 
-                    {result && (
+                    {gameOver && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: "rgba(54, 60, 123, 0.6)",
+                          padding: "30px 50px",
+                          borderRadius: "12px",
+                          color: "#fff",
+                          fontSize: "36px",
+                          fontWeight: "bold",
+                          zIndex: 2,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        {t("Activity Over")}
+                        <br />
+                        {t("Your Score")}: {score} / 100
+                        <Button
+                          type="primary"
+                          onClick={handleEnglishRestart}
+                          style={{
+                            marginTop: "20px",
+                            fontSize: "18px",
+                            padding: "6px 20px",
+                          }}
+                        >
+                          {t("Restart")}
+                        </Button>
+                      </div>
+                    )}
+
+                    {result && !gameOver && (
                       <div
                         style={{
                           position: "absolute",
@@ -335,7 +476,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                     )}
                     <Button
                       type="primary"
-                      onClick={generateRandomSinhalaLetter}
+                      onClick={handleSinhalaSkip}
                       style={{ marginBottom: "20px" }}
                     >
                       {t("Skip")}
@@ -353,7 +494,44 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       style={{ ...videoStyle, width: "100%", height: "100%" }}
                     ></video>
 
-                    {sinhalaResult && (
+                    {sinhalaGameOver && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: "rgba(54, 60, 123, 0.6)",
+                          padding: "30px 50px",
+                          borderRadius: "12px",
+                          color: "#fff",
+                          fontSize: "36px",
+                          fontWeight: "bold",
+                          zIndex: 2,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        {t("Activity Over")}
+                        <br />
+                        {t("Your Score")}: {score} / 100
+                        <Button
+                          type="primary"
+                          onClick={handleSinhalaRestart}
+                          style={{
+                            marginTop: "20px",
+                            fontSize: "18px",
+                            padding: "6px 20px",
+                          }}
+                        >
+                          {t("Restart")}
+                        </Button>
+                      </div>
+                    )}
+
+                    {sinhalaResult && !sinhalaGameOver && (
                       <div
                         style={{
                           position: "absolute",
