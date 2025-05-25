@@ -20,7 +20,6 @@ import arutheImg from "/src/assets/images/arutha.png";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 
-
 const splitText = (text: string) => {
   return text.split("").map((char, index) => (
     <motion.span
@@ -44,9 +43,9 @@ const LettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+
   return (
     <MainLayout>
-
       <Layout style={mainLayoutContainer}>
         <div
           style={{
@@ -58,7 +57,6 @@ const LettersIdentifyPage: React.FC = () => {
           }}
         >
 
-
           <motion.img
             src={arutheImg}
             alt="Arutha Icon"
@@ -69,12 +67,26 @@ const LettersIdentifyPage: React.FC = () => {
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
           />
-          <h1 style={{ fontSize: "45px", color: "#164673", fontFamily: "'Comic Sans MS', cursive, sans-serif" }}>{splitText(t("SignLettersPractice"))}</h1>
+
+          <h1
+            style={{
+              fontSize: "45px",
+              color: "#164673",
+              fontFamily: "'Comic Sans MS', cursive, sans-serif",
+            }}
+          >
+            {splitText(t("SignLettersPractice"))}
+          </h1>
         </div>
 
         <div style={cardContainer}>
-
-          <div style={{ backgroundColor: "black", borderRadius: "15px", padding: "20px" }}>
+          <div
+            style={{
+              backgroundColor: "black",
+              borderRadius: "15px",
+              padding: "20px",
+            }}
+          >
             <motion.div
               style={englishCard}
               whileHover={{ scale: 1.1, rotate: 5 }}
@@ -87,8 +99,13 @@ const LettersIdentifyPage: React.FC = () => {
             </motion.div>
           </div>
 
-
-          <div style={{ backgroundColor: "black", borderRadius: "15px", padding: "20px" }}>
+          <div
+            style={{
+              backgroundColor: "black",
+              borderRadius: "15px",
+              padding: "20px",
+            }}
+          >
             <motion.div
               style={sinhalaCard}
               whileHover={{ scale: 1.1, rotate: -5 }}
@@ -101,7 +118,13 @@ const LettersIdentifyPage: React.FC = () => {
             </motion.div>
           </div>
 
-          <div style={{ backgroundColor: "black", borderRadius: "15px", padding: "30px" }}>
+          <div
+            style={{
+              backgroundColor: "black",
+              borderRadius: "15px",
+              padding: "30px",
+            }}
+          >
             <motion.div
               style={activitiesCard}
               whileHover={{ scale: 1.1, rotate: 5 }}
@@ -114,8 +137,6 @@ const LettersIdentifyPage: React.FC = () => {
             </motion.div>
           </div>
         </div>
-
-
       </Layout>
     </MainLayout>
   );

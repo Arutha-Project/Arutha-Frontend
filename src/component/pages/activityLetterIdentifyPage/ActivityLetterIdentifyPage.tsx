@@ -16,6 +16,7 @@ import {
 } from "./ActivityLetterIdentifyPageStyle";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
+import axios from "../../../services/axiosInstance";
 
 const { TabPane } = Tabs;
 
@@ -23,7 +24,6 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [, setStream] = useState<MediaStream | null>(null);
   const [isHovered, setIsHovered] = React.useState(false);
 
   const [targetLetter, setTargetLetter] = useState<string>("");
@@ -37,9 +37,20 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState("1");
 
+  const [score, setScore] = useState(0);
+  const [round, setRound] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+  const [sinhalaScore, setSinhalaScore] = useState(0);
+  const [sinhalaRound, setSinhalaRound] = useState(0);
+  const [sinhalaGameOver, setSinhalaGameOver] = useState(false);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+
+  const finalEnglishScoreRef = useRef(0);
+  const finalSinhalaScoreRef = useRef(0);
+
 
   const generateRandomEnglishLetter = () => {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
+    const letters = "ABCDEFGHIJKLMNPQRSTUVWXY";
     const randomLetter = letters[Math.floor(Math.random() * letters.length)];
     setTargetLetter(randomLetter);
     targetEnglishLetterRef.current = randomLetter;
@@ -56,7 +67,6 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     setSinhalaResult(null);
   };
 
-
   const openCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -71,7 +81,36 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     }
   };
 
+  const saveLetterScore = async (score: number, language: string) => {
+    const userDetailsStr = localStorage.getItem("userDetails");
+    const userId = userDetailsStr ? JSON.parse(userDetailsStr).id : null;
+
+    if (!userId) {
+      console.error("⚠️ User ID not found in localStorage.");
+      return;
+    }
+
+    console.log("📝 Saving score...");
+    console.log("User ID:", userId);
+    console.log("Language:", language);
+    console.log("Score:", score);
+    console.log("Total Items:", 10);
+
+    try {
+      await axios.post(`/letter-scores/save`, {
+        score,
+        language,
+        totalItems: 10,
+        userId,
+      });
+      console.log(`✅ ${language} score saved`);
+    } catch (err) {
+      console.error(`❌ Failed to save ${language} score:`, err);
+    }
+  };
+
   const captureAndPredict = async () => {
+    if (gameOver) return;
     if (result === "Correct") return;
 
     const canvas = document.createElement("canvas");
@@ -88,7 +127,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/predict-activity/english-letter",
+        "http://0.0.0.0:9090/letter/predict-activity/english-letter",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -98,24 +137,35 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
       const resultData = await response.json();
 
+      if (resultData.error === "No hand detected") {
+        if (!gameOver) {
+          setResult(t("No hand detected"));
+        }
+        return;
+      }
+
       if (resultData.predicted_letter) {
         const prediction = resultData.predicted_letter;
         const isCorrect = prediction === targetEnglishLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${targetEnglishLetterRef.current} → ${isCorrect ? "✅ Correct" : "❌ Incorrect"
-          }`
+          `Predicted: ${prediction}, Target: ${
+            targetEnglishLetterRef.current
+          } → ${isCorrect ? "✅ Correct" : "❌ Incorrect"}`
         );
 
-        setResult(isCorrect ? t("Correct") : t("Incorrect"));
+        if (!gameOver) {
+          setResult(isCorrect ? t("Correct") : t("Incorrect"));
+        }
 
-        if (isCorrect) {
+        if (!gameOver && isCorrect) {
+          setResult(t("Correct"));
+
           setTimeout(() => {
-            generateRandomEnglishLetter();
+            handleEnglishNextRound(true);
+            setResult(null);
           }, 3000);
         }
-      } else if (resultData.error === "No hand detected") {
-        setResult(t("No hand detected"));
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
       }
@@ -125,6 +175,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   };
 
   const captureAndPredictSinhala = async () => {
+    if (sinhalaGameOver) return;
     if (sinhalaResult === "Correct") return;
 
     const canvas = document.createElement("canvas");
@@ -141,7 +192,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/predict-activity/sinhala-letter",
+        "http://0.0.0.0:9090/letter/predict-activity/sinhala-letter",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -151,24 +202,35 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
       const resultData = await response.json();
 
+      if (resultData.error === "No hand detected") {
+        if (!sinhalaGameOver) {
+          setSinhalaResult(t("No hand detected"));
+        }
+        return;
+      }
+
       if (resultData.predicted_letter) {
         const prediction = resultData.predicted_letter;
         const isCorrect = prediction === targetSinhalaLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${targetSinhalaLetterRef.current} → ${isCorrect ? "✅ Correct" : "❌ Incorrect"
-          }`
+          `Predicted: ${prediction}, Target: ${
+            targetSinhalaLetterRef.current
+          } → ${isCorrect ? "✅ Correct" : "❌ Incorrect"}`
         );
 
-        setSinhalaResult(isCorrect ? t("Correct") : t("Incorrect"));
+        if (!sinhalaGameOver) {
+          setSinhalaResult(isCorrect ? t("Correct") : t("Incorrect"));
+        }
 
-        if (isCorrect) {
+        if (!sinhalaGameOver && isCorrect) {
+          setSinhalaResult(t("Correct"));
+
           setTimeout(() => {
-            generateRandomSinhalaLetter();
+            handleSinhalaNextRound(true);
+            setSinhalaResult(null);
           }, 3000);
         }
-      } else if (resultData.error === "No hand detected") {
-        setSinhalaResult(t("No hand detected"));
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
       }
@@ -177,6 +239,75 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     }
   };
 
+  const handleEnglishSkip = () => {
+    if (!gameOver) {
+      handleEnglishNextRound(false);
+    }
+  };
+
+  const handleSinhalaSkip = () => {
+    if (!sinhalaGameOver) {
+      handleSinhalaNextRound(false); // skip: no score
+    }
+  };
+
+  const handleEnglishRestart = () => {
+    setScore(0);
+    setRound(0);
+    setGameOver(false);
+    setResult(null);
+    generateRandomEnglishLetter();
+
+    if (!stream) {
+      openCamera();
+    }
+  };
+
+  const handleSinhalaRestart = () => {
+    setSinhalaScore(0);
+    setSinhalaRound(0);
+    setSinhalaGameOver(false);
+    setSinhalaResult(null);
+    generateRandomSinhalaLetter();
+
+    if (!stream) {
+      openCamera();
+    }
+  };
+
+  const handleEnglishNextRound = (addScore: boolean) => {
+    setRound((prev) => {
+      const newRound = prev + 1;
+      if (addScore) {
+        setScore((prevScore) => prevScore + 10);
+      }
+
+      if (newRound >= 10) {
+        setGameOver(true);
+      } else {
+        generateRandomEnglishLetter();
+      }
+
+      return newRound;
+    });
+  };
+
+  const handleSinhalaNextRound = (addScore: boolean) => {
+    setSinhalaRound((prev) => {
+      const newRound = prev + 1;
+      if (addScore) {
+        setSinhalaScore((prevScore) => prevScore + 10);
+      }
+
+      if (newRound >= 10) {
+        setSinhalaGameOver(true);
+      } else {
+        generateRandomSinhalaLetter();
+      }
+
+      return newRound;
+    });
+  };
 
   useEffect(() => {
     openCamera();
@@ -196,6 +327,44 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     return () => clearInterval(interval);
   }, [activeTab]);
 
+  useEffect(() => {
+    if (gameOver) {
+      saveLetterScore(score, "English");
+    }
+  }, [gameOver]);
+
+  useEffect(() => {
+    if (sinhalaGameOver) {
+      saveLetterScore(sinhalaScore, "Sinhala");
+    }
+  }, [sinhalaGameOver]);
+
+  useEffect(() => {
+    finalEnglishScoreRef.current = score;
+  }, [score]);
+
+  useEffect(() => {
+    finalSinhalaScoreRef.current = sinhalaScore;
+  }, [sinhalaScore]);
+
+  const stopCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      setStream(null);
+    }
+  };
+
+  useEffect(() => {
+    if (gameOver && activeTab === "1") {
+      stopCamera();
+    }
+  }, [gameOver, activeTab]);
+
+  useEffect(() => {
+    if (sinhalaGameOver && activeTab === "2") {
+      stopCamera();
+    }
+  }, [sinhalaGameOver, activeTab]);
 
   return (
     <MainLayout>
@@ -221,6 +390,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
           >
             ← {t("Back")}
           </Button>
+
         </div>
         <div style={contentContainer}>
           <Tabs
@@ -260,10 +430,10 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                     )}
                     <Button
                       type="primary"
-                      onClick={generateRandomEnglishLetter}
+                      onClick={handleEnglishSkip}
                       style={{ marginBottom: "20px" }}
                     >
-                      {t("Generate Letter")}
+                      {t("Skip")}
                     </Button>
                   </div>
                 </div>
@@ -277,7 +447,61 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       style={{ ...videoStyle, width: "100%", height: "100%" }}
                     ></video>
 
-                    {result && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        left: 8,
+                        zIndex: 10,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        color: "white",
+                        padding: "4px 10px",
+                        borderRadius: 6,
+                        fontWeight: "bold",
+                        fontSize: 16,
+                      }}
+                    >
+                      {t("Round")}: {round} / 10
+                    </div>
+
+                    {gameOver && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: "rgba(54, 60, 123, 0.6)",
+                          padding: "30px 50px",
+                          borderRadius: "12px",
+                          color: "#fff",
+                          fontSize: "36px",
+                          fontWeight: "bold",
+                          zIndex: 2,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        {t("Activity Over")}
+                        <br />
+                        {t("Your Score")}: {finalEnglishScoreRef.current} / 100
+                        <Button
+                          type="primary"
+                          onClick={handleEnglishRestart}
+                          style={{
+                            marginTop: "20px",
+                            fontSize: "18px",
+                            padding: "6px 20px",
+                          }}
+                        >
+                          {t("Restart")}
+                        </Button>
+                      </div>
+                    )}
+
+                    {result && !gameOver && (
                       <div
                         style={{
                           position: "absolute",
@@ -335,10 +559,10 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                     )}
                     <Button
                       type="primary"
-                      onClick={generateRandomSinhalaLetter}
+                      onClick={handleSinhalaSkip}
                       style={{ marginBottom: "20px" }}
                     >
-                      {t("Generate Letter")}
+                      {t("Skip")}
                     </Button>
                   </div>
                 </div>
@@ -353,7 +577,61 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       style={{ ...videoStyle, width: "100%", height: "100%" }}
                     ></video>
 
-                    {sinhalaResult && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        left: 8,
+                        zIndex: 10,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        color: "white",
+                        padding: "4px 10px",
+                        borderRadius: 6,
+                        fontWeight: "bold",
+                        fontSize: 16,
+                      }}
+                    >
+                      {t("Round")}: {sinhalaRound} / 10
+                    </div>
+
+                    {sinhalaGameOver && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: "rgba(54, 123, 65, 0.6)",
+                          padding: "30px 50px",
+                          borderRadius: "12px",
+                          color: "#fff",
+                          fontSize: "36px",
+                          fontWeight: "bold",
+                          zIndex: 2,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        {t("Activity Over")}
+                        <br />
+                        {t("Your Score")}: {finalSinhalaScoreRef.current} / 100
+                        <Button
+                          type="primary"
+                          onClick={handleSinhalaRestart}
+                          style={{
+                            marginTop: "20px",
+                            fontSize: "18px",
+                            padding: "6px 20px",
+                          }}
+                        >
+                          {t("Restart")}
+                        </Button>
+                      </div>
+                    )}
+
+                    {sinhalaResult && !sinhalaGameOver && (
                       <div
                         style={{
                           position: "absolute",
