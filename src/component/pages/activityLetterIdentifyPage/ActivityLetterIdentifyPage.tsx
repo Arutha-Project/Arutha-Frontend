@@ -548,7 +548,7 @@ const handleEnglishSkip = () => {
                           top: "50%",
                           left: "50%",
                           transform: "translate(-50%, -50%)",
-                          backgroundColor: "rgba(54, 60, 123, 0.6)",
+                          backgroundColor: "rgba(54, 123, 65, 0.6)",
                           padding: "30px 50px",
                           borderRadius: "12px",
                           color: "#fff",
