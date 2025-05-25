@@ -52,7 +52,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const { language, changeLanguage } = React.useContext(LanguageContext);
 
   const generateRandomEnglishLetter = () => {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
+    const letters = "ABCDEFGHIJKLMNPQRSTUVWXY";
     const randomLetter = letters[Math.floor(Math.random() * letters.length)];
     setTargetLetter(randomLetter);
     targetEnglishLetterRef.current = randomLetter;
