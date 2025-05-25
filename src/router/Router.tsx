@@ -32,7 +32,6 @@ function Router() {
           path="/forgotPassword"
           Component={forgotPasswordPage}
         />
-
         <Route
           path="/reset-password"
           Component={resetPasswordPage}
