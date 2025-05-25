@@ -13,7 +13,7 @@ import {
   rightSideSinhala,
   videoContainer,
   videoStyle,
-} from "./ActivityLetterIdentifyPageStyle";
+} from "../activityLetterIdentifyPage/ActivityLetterIdentifyPageStyle";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
 import axios from "../../../services/axiosInstance";
@@ -52,7 +52,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const { language, changeLanguage } = React.useContext(LanguageContext);
 
   const generateRandomEnglishLetter = () => {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
+    const letters = "ABCDEFGHIJKLMNPQRSTUVWXY";
     const randomLetter = letters[Math.floor(Math.random() * letters.length)];
     setTargetLetter(randomLetter);
     targetEnglishLetterRef.current = randomLetter;
