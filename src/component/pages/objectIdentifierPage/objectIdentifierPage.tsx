@@ -1,5 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { uploadVideo } from '../../../services';
+import { uploadVideo, saveObjectIdentifierScore } from '../../../services';
+import { t } from 'i18next';
+import { Layout, message } from 'antd';
+import { LanguageContext } from '../../../context/LanguageContext';
+import { pageHeader, nextButtonStyle, startButtonStyle, videoStyle, Container1, mainLayoutContainerOI, leftShowingData, processingGif, startButtonDevTagStyle, startRecordingButtonStyle, startRecordingButtonDisabledStyle, stopButtonStyle, stopButtonDisabledStyle } from '../objectIdentifierPage/objectIdentifierPageStyle';
+import { MainLayout } from '../../templates';
 
 const ObjectIdentifierPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -12,6 +17,65 @@ const ObjectIdentifierPage: React.FC = () => {
   const [duration, setDuration] = useState<number | null>(null);
   const [prediction, setPrediction] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showRecordingDetails, setShowRecordingDetails] = useState<boolean>(false);
+  const [recordingEnabled, setRecordingEnabled] = useState<boolean>(false);
+  const [randomName, setRandomName] = useState<string | null>(null);
+  const [result, setResult] = useState<string | null>(null);
+  const [, setElapsedTime] = useState<number>(0);
+  const intervalRef = useRef<number | null>(null);
+  const [category, setCategory] = useState<CategoryType | null>(null);
+
+  const [showCompletionPopup, setShowCompletionPopup] = useState<boolean>(false);
+  const [remainingItems, setRemainingItems] = useState<string[]>([]);
+
+  const [score, setScore] = useState<number>(0);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [attempts, setAttempts] = useState<number>(0);
+
+  const { language } = React.useContext(LanguageContext);
+
+  // For saving score state
+  const [isSavingScore, setIsSavingScore] = useState<boolean>(false);
+  const [scoreSubmitted, setScoreSubmitted] = useState<boolean>(false);
+
+  const [categories, setCategories] = useState<{
+    shapes: string[];
+    animals: string[];
+    fruits: string[];
+  }>({
+    shapes: [],
+    animals: [],
+    fruits: [],
+  });
+
+  useEffect(() => {
+    setCategories({
+      shapes: language === 'si' ? ["වෘත්තය", "සෘජුකෝණාස්‍රය", "සමචතුරස්‍රය", "ත්‍රිකෝණය"] : ["circle", "rectangle", "square", "triangle"],
+      animals: language === 'si' ? ["අලියා", "පූසා1", "පූසා2", "බල්ලා1", "බල්ලා2", "ගිරවා", "සමනලයා"] : ["elephant", "cat1", "cat2", "dog1", "dog2", "Parrot", "butterfly"],
+      fruits: language === 'si' ? ["ඇපල්", "කෙසෙල්1", "කෙසෙල්2", "අඹ", "අන්නාසි", "දෙළුම්"] : ["apple", "banana1", "banana2", "Mango", "Pineapple", "pomegranate"],
+    });
+  }, [language]);
+
+  type CategoryType = keyof typeof categories;
+
+  const selectCategory = (selectedCategory: CategoryType) => {
+    setCategory(selectedCategory);
+    setShowRecordingDetails(true);
+    setRecordingEnabled(true);
+
+    const items = [...categories[selectedCategory]]; // clone the array
+    setRemainingItems(items);
+
+    const firstItem = items[Math.floor(Math.random() * items.length)];
+    setRandomName(firstItem);
+    setRemainingItems(prev => prev.filter(item => item !== firstItem)); // Remove from remaining
+
+    // Reset score tracking
+    setScore(0);
+    setAttempts(0);
+    setTotalItems(items.length); // set max attempts for the category
+    setScoreSubmitted(false);
+  };
 
   const openCamera = async () => {
     try {
@@ -21,7 +85,6 @@ const ObjectIdentifierPage: React.FC = () => {
         videoRef.current.srcObject = mediaStream;
       }
 
-      // Initialize MediaRecorder when camera is opened
       const mediaRecorder = new MediaRecorder(mediaStream);
       mediaRecorderRef.current = mediaRecorder;
 
@@ -30,23 +93,58 @@ const ObjectIdentifierPage: React.FC = () => {
           setRecordedChunks((prev) => [...prev, event.data]);
         }
       };
+
+      mediaRecorder.onstop = async () => {
+        const end = new Date();
+        setEndTime(end);
+        if (startTime) {
+          const totalDuration = (end.getTime() - startTime.getTime()) / 1000;
+          setDuration(Number(totalDuration.toFixed(1)));
+          setElapsedTime(Number(totalDuration.toFixed(1)));
+        }
+      };
+
+
     } catch (error) {
       console.error('Error accessing camera:', error);
     }
   };
 
-  const startRecording = () => {
-    if (!mediaRecorderRef.current || isRecording) return;
+  useEffect(() => {
+    openCamera();
 
-    setRecordedChunks([]); // Clear previous recordings
-    setStartTime(new Date());
+    // Cleanup function
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  const startRecording = () => {
+    if (!mediaRecorderRef.current || isRecording || !recordingEnabled) return;
+
+    setRecordedChunks([]);
+    const newStartTime = new Date();
+    setStartTime(newStartTime);
     setEndTime(null);
     setDuration(null);
+    setElapsedTime(0);
     setPrediction(null);
     setLoading(false);
 
     mediaRecorderRef.current.start();
     setIsRecording(true);
+
+    if (intervalRef.current !== null) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = window.setInterval(() => {
+      const now = new Date();
+      const elapsed = (now.getTime() - newStartTime.getTime()) / 1000;
+      setElapsedTime(Number(elapsed.toFixed(1)));
+    }, 100);
   };
 
   const stopRecording = () => {
@@ -54,34 +152,52 @@ const ObjectIdentifierPage: React.FC = () => {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
 
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+
       const end = new Date();
       setEndTime(end);
       if (startTime) {
-        setDuration((end.getTime() - startTime.getTime()) / 1000);
+        const totalDuration = (end.getTime() - startTime.getTime()) / 1000;
+        setDuration(Number(totalDuration.toFixed(1)));
+        setElapsedTime(Number(totalDuration.toFixed(1)));
       }
     }
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-      isRecording ? stopRecording() : startRecording();
-    }
-  };
-
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isRecording]); // Keep event listener updated with latest recording state
+    if (recordedChunks.length > 0) {
+      submitVideo();
+    }
+  }, [recordedChunks]);
 
   const submitVideo = async () => {
     setLoading(true);
 
-    uploadVideo(recordedChunks)
+    const recordedVideo = document.createElement("video");
+    recordedVideo.src = URL.createObjectURL(new Blob(recordedChunks, { type: "video/webm" }));
+    recordedVideo.style.transform = "scaleX(-1)";
+
+    uploadVideo(recordedChunks, randomName || "")
       .then(prediction => {
         setPrediction(prediction);
+
+        const isCorrect = t(prediction) === randomName;
+        if (randomName) {
+          setResult(isCorrect ? t("Correct") : t("Incorrect"));
+        }
+
+        // Update score and attempts
+        setAttempts(prev => prev + 1);
+        if (isCorrect) {
+          setScore(prev => prev + 1);
+        }
+
+        if (attempts + 1 >= totalItems) {
+          setShowCompletionPopup(true);
+        }
       })
       .catch(error => {
         console.error('Error uploading video:', error);
@@ -91,39 +207,314 @@ const ObjectIdentifierPage: React.FC = () => {
       });
   };
 
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.code === 'Space' && recordingEnabled) {
+      event.preventDefault();
+      isRecording ? stopRecording() : startRecording();
+    }
+  };
+
+  const startNewRound = () => {
+    if (attempts >= totalItems || remainingItems.length === 0) {
+      message.info(t("You have completed all items in this category!"));
+      return;
+    }
+
+    setShowRecordingDetails(true);
+    setRecordingEnabled(true);
+    setIsRecording(false);
+    setRecordedChunks([]);
+    setStartTime(null);
+    setEndTime(null);
+    setDuration(null);
+    setPrediction(null);
+    setResult(null);
+    setElapsedTime(0);
+
+    // Choose a new random item from the remaining ones
+    const newIndex = Math.floor(Math.random() * remainingItems.length);
+    const newRandomName = remainingItems[newIndex];
+    setRandomName(newRandomName);
+
+    // Remove it from remainingItems so it doesn't repeat
+    setRemainingItems(prev => prev.filter((_, index) => index !== newIndex));
+  };
+
+  const resetGame = () => {
+    setRecordedChunks([]);
+    setIsRecording(false);
+    setStartTime(null);
+    setEndTime(null);
+    setDuration(null);
+    setElapsedTime(0);
+    setPrediction(null);
+    setResult(null);
+    setScore(0);
+    setAttempts(0);
+    setTotalItems(0);
+    setCategory(null);
+    setRandomName(null);
+    setRecordingEnabled(false);
+    setRemainingItems([]);
+    setShowRecordingDetails(false);
+    setShowCompletionPopup(false);
+    setScoreSubmitted(false);
+  };
+
+  // Function to submit score to backend
+  const handleSubmitScore = async () => {
+
+    const currentUser = localStorage.getItem('userDetails');
+    console.log('User data:', currentUser);
+
+    let userId = null;
+    if (currentUser) {
+      const userDetails = JSON.parse(currentUser);
+      userId = userDetails.id || userDetails.userId;
+    }
+
+    if (!currentUser || !currentUser) {
+      message.error(t("Please log in to save your score"));
+      return;
+    }
+
+    // Prevent duplicate submissions
+    if (scoreSubmitted) {
+      message.info(t("Score already submitted"));
+      return;
+    }
+
+    // Check if category is selected
+    if (!category) {
+      message.error(t("Category information is missing"));
+      return;
+    }
+
+    setIsSavingScore(true);
+
+    try {
+      await saveObjectIdentifierScore({
+        userId: userId,
+        category: category,
+        score: score,
+        totalItems: totalItems
+      });
+
+      message.success(t("Score saved successfully!"));
+      setScoreSubmitted(true);
+      setShowCompletionPopup(false);
+      setShowRecordingDetails(false);
+    } catch (error) {
+      console.error('Error saving score:', error);
+      message.error(t("Failed to save score. Please try again."));
+    } finally {
+      setIsSavingScore(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+
+      // Clear any interval on unmount
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isRecording, recordingEnabled]);
+
   return (
     <div>
-      <h1>Welcome to the Object Identifier Page</h1>
-      <video ref={videoRef} autoPlay playsInline style={{ width: '100%', maxWidth: '600px', transform: 'scaleX(-1)' }}></video>
-      
-      <div>
-        <button onClick={openCamera}>Open Camera</button>
-        <button onClick={startRecording} disabled={isRecording}>Start Recording</button>
-        <button onClick={stopRecording} disabled={!isRecording}>Stop Recording</button>
-        <button onClick={submitVideo}>Submit</button>
-      </div>
+      <MainLayout>
+        <Layout style={mainLayoutContainerOI}>
+          <div style={Container1}>
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                style={videoStyle}></video>
 
-      <div style={{ marginTop: '20px' }}>
-        {startTime && <p>📍 Start Time: {startTime.toLocaleTimeString()}</p>}
-        {endTime && <p>🛑 End Time: {endTime.toLocaleTimeString()}</p>}
-        {duration !== null && <p>⏳ Duration: {duration.toFixed(2)} seconds</p>}
-      </div>
+              <div style={{ marginTop: '15px' }}>
+                <button
+                  onClick={startRecording}
+                  disabled={!recordingEnabled || isRecording}
+                  style={!recordingEnabled || isRecording ? startRecordingButtonDisabledStyle : startRecordingButtonStyle}
+                >
+                  {t("startRecoding")}
+                </button>
 
-      {loading && (
-        <div style={{ marginTop: '20px', fontSize: '18px', fontWeight: 'bold', color: 'blue' }}>
-          ⏳ Processing... Please wait...
-        </div>
-      )}
+                <button
+                  onClick={stopRecording}
+                  disabled={!recordingEnabled || !isRecording}
+                  style={!recordingEnabled || !isRecording ? stopButtonDisabledStyle : stopButtonStyle}
+                >
+                  {t("StopRecording")}
+                </button>
+              </div>
+            </div>
 
-      {prediction && !loading && (
-        <p style={{ fontSize: '18px', fontWeight: 'bold', color: 'green' }}>
-          🔍 Predicted Sign: {prediction}
-        </p>
-      )}
+            <div style={{ flex: 1, textAlign: 'left' }}>
+              {!showRecordingDetails ? (
+                <div style={startButtonDevTagStyle}>
 
-      <p style={{ marginTop: '20px', fontSize: '16px' }}>
-        🎥 Press <b>Space</b> to Start/Stop Recording
-      </p>
+                  <p style={pageHeader}>{t("OBJECT IDENTIFICATION")}</p>
+
+                  <button onClick={() => selectCategory('shapes')} style={startButtonStyle}>{t("Shapes")}</button>
+                  <button onClick={() => selectCategory('animals')} style={startButtonStyle}>{t("Animals")}</button>
+                  <button onClick={() => selectCategory('fruits')} style={startButtonStyle}>{t("Fruits")}</button>
+
+                  <div style={{
+                    marginTop: '40px',
+                    marginBottom: '40px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '5px'
+                  }}>
+                    <p style={{
+                      margin: 0,
+                      fontSize: '16px',
+                      textAlign: 'center'
+                    }}>
+                      🎥 {t("Press")} <b>{t("Space")}</b> {t("Start/StopRecording")}
+                    </p>
+
+                    <p style={{
+                      margin: 0,
+                      fontSize: '16px',
+                      textAlign: 'center'
+                    }}>
+                      ⏳ {t("For more accurate results, try recording for at least 15 seconds.")}
+                    </p>
+                  </div>
+
+                </div>
+              ) : (
+                <>
+                  <div style={leftShowingData}>
+                    {randomName && (
+                      <p>🌟 <b>{t("RandomName")}:</b> {randomName}</p>
+                    )}
+
+                    {startTime && <p>📍 <b>{t("StartTime")}:</b> {startTime.toLocaleTimeString()}</p>}
+
+                    {endTime && <p>🛑 <b>{t("EndTime")}:</b> {endTime.toLocaleTimeString()}</p>}
+
+                    {isRecording ? (
+                      <p>⏳ </p>
+                    ) : duration !== null && (
+                      <p>⏳ <b>{t("Duration")}:</b> {duration.toFixed(1)} {t("seconds")}</p>
+                    )}
+
+                    {loading && (
+                      <div style={processingGif}>
+                        ⏳ {t("Processing")}
+                      </div>
+                    )}
+                  </div>
+
+                  {prediction && !loading && (
+                    <div style={{ textAlign: "center", marginTop: "20px" }}>
+                      <p style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "10px" }}>
+                        🔍 <b>{t("PredictedSign")}:</b> {t(prediction)}
+                      </p>
+                      <p style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "50px", color: t(prediction) == randomName ? "green" : "red" }}>
+                        {result}
+                      </p>
+
+                      {attempts > 0 && (
+                        <div style={{ textAlign: "center", marginTop: "10px" }}>
+                          <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                            🧮 {t("Score")}: {score} / {totalItems}
+                          </p>
+                        </div>
+                      )}
+
+                    </div>
+                  )}
+
+                  {!showCompletionPopup && (
+                    <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                      <button
+                        onClick={startNewRound}
+                        style={nextButtonStyle}
+                      >
+                        {t("Next")}
+                      </button>
+                    </div>
+                  )}
+
+                </>
+              )}
+            </div>
+          </div>
+        </Layout>
+
+        {showCompletionPopup && (
+          <div style={{
+            position: 'fixed',
+            top: 0, left: 0,
+            width: '100%', height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            zIndex: 1000
+          }}>
+            <div style={{
+              backgroundColor: '#fff',
+              padding: '30px',
+              borderRadius: '10px',
+              textAlign: 'center',
+              width: '300px',
+              boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+            }}>
+              <h3>{t("You've completed all attempts!")}</h3>
+              <p style={{ fontSize: "18px", fontWeight: "bold", margin: "20px 0" }}>
+                {t("Your score is")}: {score} / {totalItems}
+              </p>
+
+              <button
+                style={{
+                  margin: '10px',
+                  padding: '10px 20px',
+                  backgroundColor: '#f0f0f0',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+                onClick={resetGame}
+              >
+                {t("Back to Menu")}
+              </button>
+
+              <button
+                style={{
+                  margin: '10px',
+                  padding: '10px 20px',
+                  backgroundColor: scoreSubmitted ? '#d9d9d9' : '#4caf50',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: scoreSubmitted ? 'not-allowed' : 'pointer'
+                }}
+                onClick={handleSubmitScore}
+                disabled={isSavingScore || scoreSubmitted || !1}
+              >
+                {isSavingScore ? t("Saving...") : scoreSubmitted ? t("Submitted") : t("Submit")}
+              </button>
+
+              {!1 && (
+                <p style={{ color: 'red', fontSize: '14px', marginTop: '10px' }}>
+                  {t("Please log in to save your score")}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+      </MainLayout>
     </div>
   );
 };
