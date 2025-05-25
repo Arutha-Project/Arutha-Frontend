@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Select } from "antd";
+import { Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   mainLayoutContainer,
@@ -19,7 +19,6 @@ import activitiesImg from "/src/assets/images/activities.png";
 import arutheImg from "/src/assets/images/arutha.png";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { LanguageContext } from "../../../context/LanguageContext";
 
 const splitText = (text: string) => {
   return text.split("").map((char, index) => (
@@ -44,7 +43,6 @@ const LettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { language, changeLanguage } = React.useContext(LanguageContext);
 
   return (
     <MainLayout>
@@ -58,16 +56,6 @@ const LettersIdentifyPage: React.FC = () => {
             marginTop: "70px",
           }}
         >
-          <div style={{ position: "absolute", top: 10, right: 10 }}>
-            <Select
-              value={language}
-              onChange={changeLanguage}
-              style={{ width: 120 }}
-            >
-              <Select.Option value="en">English</Select.Option>
-              <Select.Option value="si">සිංහල</Select.Option>
-            </Select>
-          </div>
 
           <motion.img
             src={arutheImg}

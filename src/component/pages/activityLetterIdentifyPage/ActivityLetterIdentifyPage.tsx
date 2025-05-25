@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Layout, Button, Tabs, Select } from "antd";
+import { Layout, Button, Tabs } from "antd";
 import { useNavigate } from "react-router-dom";
 import {
   mainLayoutContainer,
@@ -17,7 +17,6 @@ import {
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
 import axios from "../../../services/axiosInstance";
-import { LanguageContext } from "../../../context/LanguageContext";
 
 const { TabPane } = Tabs;
 
@@ -49,7 +48,6 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const finalEnglishScoreRef = useRef(0);
   const finalSinhalaScoreRef = useRef(0);
 
-  const { language, changeLanguage } = React.useContext(LanguageContext);
 
   const generateRandomEnglishLetter = () => {
     const letters = "ABCDEFGHIJKLMNPQRSTUVWXY";
@@ -393,14 +391,6 @@ const ActivityLetterIdentifyPage: React.FC = () => {
             ← {t("Back")}
           </Button>
 
-          <Select
-            value={language}
-            onChange={changeLanguage}
-            style={{ width: 120, marginBottom: 10, marginLeft: 10 }}
-          >
-            <Select.Option value="en">English</Select.Option>
-            <Select.Option value="si">සිංහල</Select.Option>
-          </Select>
         </div>
         <div style={contentContainer}>
           <Tabs
