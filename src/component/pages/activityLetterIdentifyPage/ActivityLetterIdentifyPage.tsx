@@ -263,7 +263,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       onClick={generateRandomEnglishLetter}
                       style={{ marginBottom: "20px" }}
                     >
-                      {t("Generate Letter")}
+                      {t("Skip")}
                     </Button>
                   </div>
                 </div>
@@ -338,7 +338,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       onClick={generateRandomSinhalaLetter}
                       style={{ marginBottom: "20px" }}
                     >
-                      {t("Generate Letter")}
+                      {t("Skip")}
                     </Button>
                   </div>
                 </div>
