@@ -134,11 +134,13 @@ const DrawingView: React.FC = () => {
               </>
             )}
             <Row style={{ marginTop: 40 }}>
-              <Col span={12}>
-                <Button type="primary" handleOnClick={onFinish} style={submitButtonStyle} text={t('submit')} />
-              </Col>
-              <Col span={12}>
-                <Button type="primary" style={nextButtonStyle} handleOnClick={handleNext} text={t('nextDrawing')} />
+              {answer !== QuickDraw.correct && (
+                <Col span={12}>
+                  <Button type="primary" handleOnClick={onFinish} style={submitButtonStyle} text={t('submit')} />
+                </Col>
+              )}
+              <Col span={answer !== QuickDraw.correct ? 12 : 24}>
+                <Button type="primary" style={nextButtonStyle(answer)} handleOnClick={handleNext} text={t('nextDrawing')} />
               </Col>
             </Row>
             {attemptCount > 0 && !isFinished && (
