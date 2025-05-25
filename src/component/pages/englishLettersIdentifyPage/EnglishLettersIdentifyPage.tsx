@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Layout, Button } from "antd";
 import { useNavigate } from "react-router-dom";
+import { Layout, Button, Select } from "antd";
 
 import {
   mainLayoutContainer,
@@ -19,6 +19,7 @@ import {
 import englishLetters from "/src/assets/images/english_letters.png";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
+import { LanguageContext } from "../../../context/LanguageContext";
 
 const EnglishLettersIdentifyPage: React.FC = () => {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ const EnglishLettersIdentifyPage: React.FC = () => {
   const [predictedLetter, setPredictedLetter] = useState<string>("");
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+  const { language, changeLanguage } = React.useContext(LanguageContext);
 
   // Open camera on mount
   useEffect(() => {
@@ -111,6 +113,15 @@ const EnglishLettersIdentifyPage: React.FC = () => {
           >
             ← {t("Back")}
           </Button>
+
+          <Select
+            value={language}
+            onChange={changeLanguage}
+            style={{ width: 120, marginBottom: 10, marginLeft: 10 }}
+          >
+            <Select.Option value="en">English</Select.Option>
+            <Select.Option value="si">සිංහල</Select.Option>
+          </Select>
         </div>
 
         <div style={pageContainer}>

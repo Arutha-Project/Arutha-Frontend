@@ -49,7 +49,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const finalEnglishScoreRef = useRef(0);
   const finalSinhalaScoreRef = useRef(0);
 
-   const { language, changeLanguage } = React.useContext(LanguageContext);
+  const { language, changeLanguage } = React.useContext(LanguageContext);
 
   const generateRandomEnglishLetter = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
@@ -160,15 +160,14 @@ const ActivityLetterIdentifyPage: React.FC = () => {
           setResult(isCorrect ? t("Correct") : t("Incorrect"));
         }
 
-       if (!gameOver && isCorrect) {
-         setResult(t("Correct"));
+        if (!gameOver && isCorrect) {
+          setResult(t("Correct"));
 
-         setTimeout(() => {
-           handleEnglishNextRound(true);
-           setResult(null);
-         }, 3000);
-       }
-
+          setTimeout(() => {
+            handleEnglishNextRound(true);
+            setResult(null);
+          }, 3000);
+        }
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
       }
@@ -242,12 +241,11 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     }
   };
 
-const handleEnglishSkip = () => {
-  if (!gameOver) {
-    handleEnglishNextRound(false);
-  }
-};
-
+  const handleEnglishSkip = () => {
+    if (!gameOver) {
+      handleEnglishNextRound(false);
+    }
+  };
 
   const handleSinhalaSkip = () => {
     if (!sinhalaGameOver) {
@@ -255,30 +253,29 @@ const handleEnglishSkip = () => {
     }
   };
 
-const handleEnglishRestart = () => {
-  setScore(0);
-  setRound(0);
-  setGameOver(false);
-  setResult(null);
-  generateRandomEnglishLetter();
+  const handleEnglishRestart = () => {
+    setScore(0);
+    setRound(0);
+    setGameOver(false);
+    setResult(null);
+    generateRandomEnglishLetter();
 
-  if (!stream) {
-    openCamera();
-  }
-};
+    if (!stream) {
+      openCamera();
+    }
+  };
 
-const handleSinhalaRestart = () => {
-  setSinhalaScore(0);
-  setSinhalaRound(0);
-  setSinhalaGameOver(false);
-  setSinhalaResult(null);
-  generateRandomSinhalaLetter();
+  const handleSinhalaRestart = () => {
+    setSinhalaScore(0);
+    setSinhalaRound(0);
+    setSinhalaGameOver(false);
+    setSinhalaResult(null);
+    generateRandomSinhalaLetter();
 
-  if (!stream) {
-    openCamera();
-  }
-};
-
+    if (!stream) {
+      openCamera();
+    }
+  };
 
   const handleEnglishNextRound = (addScore: boolean) => {
     setRound((prev) => {
@@ -352,7 +349,6 @@ const handleSinhalaRestart = () => {
     finalSinhalaScoreRef.current = sinhalaScore;
   }, [sinhalaScore]);
 
-
   const stopCamera = () => {
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -371,7 +367,6 @@ const handleSinhalaRestart = () => {
       stopCamera();
     }
   }, [sinhalaGameOver, activeTab]);
-
 
   return (
     <MainLayout>
@@ -406,7 +401,6 @@ const handleSinhalaRestart = () => {
             <Select.Option value="en">English</Select.Option>
             <Select.Option value="si">සිංහල</Select.Option>
           </Select>
-          
         </div>
         <div style={contentContainer}>
           <Tabs

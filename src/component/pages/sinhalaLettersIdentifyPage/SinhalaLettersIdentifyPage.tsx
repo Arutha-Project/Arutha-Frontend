@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Layout, Button } from "antd";
+import { Layout, Button, Select } from "antd";
 import { useNavigate } from "react-router-dom";
+import { LanguageContext } from "../../../context/LanguageContext";
 
 import {
   mainLayoutContainer,
@@ -28,6 +29,7 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
   const [predictedLetter, setPredictedLetter] = useState("");
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+  const { language, changeLanguage } = React.useContext(LanguageContext);
 
   useEffect(() => {
     // Start video capture on mount
@@ -111,6 +113,15 @@ const SinhalaLettersIdentifyPage: React.FC = () => {
           >
             ← {t("Back")}
           </Button>
+
+          <Select
+            value={language}
+            onChange={changeLanguage}
+            style={{ width: 120, marginBottom: 10, marginLeft: 10 }}
+          >
+            <Select.Option value="en">English</Select.Option>
+            <Select.Option value="si">සිංහල</Select.Option>
+          </Select>
         </div>
 
         <div style={pageContainer}>
