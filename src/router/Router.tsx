@@ -26,11 +26,7 @@ function Router() {
         {/* Public Routes */}
         <Route path="/" Component={LoginPage} />
         <Route path="/registration-teacher" Component={RegistrationTeacher} />
-        <Route
-          path="/letter-identify-activities"
-          Component={ActivityLetterIdentifyPage}
-        />
-
+        
         {/* Protected Routes */}
         <Route
           path="/home"
