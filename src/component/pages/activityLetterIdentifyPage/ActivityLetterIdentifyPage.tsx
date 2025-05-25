@@ -13,7 +13,7 @@ import {
   rightSideSinhala,
   videoContainer,
   videoStyle,
-} from "../activityLetterIdentifyPage/ActivityLetterIdentifyPageStyle";
+} from "./ActivityLetterIdentifyPageStyle";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
 import axios from "../../../services/axiosInstance";

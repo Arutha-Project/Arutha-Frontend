@@ -1,3 +1,3 @@
-import ActivityLetterIdentifyPage from "../aboutUs/ActivityLetterIdentifyPage";
+import ActivityLetterIdentifyPage from "./ActivityLetterIdentifyPage";
 
 export { ActivityLetterIdentifyPage };
