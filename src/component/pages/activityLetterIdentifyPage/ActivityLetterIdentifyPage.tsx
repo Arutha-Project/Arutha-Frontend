@@ -16,6 +16,7 @@ import {
 } from "./ActivityLetterIdentifyPageStyle";
 import { MainLayout } from "../../templates";
 import { useTranslation } from "react-i18next";
+import axios from "../../../services/axiosInstance";
 
 const { TabPane } = Tabs;
 
@@ -43,6 +44,9 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   const [sinhalaRound, setSinhalaRound] = useState(0);
   const [sinhalaGameOver, setSinhalaGameOver] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
+
+  const finalEnglishScoreRef = useRef(0);
+  const finalSinhalaScoreRef = useRef(0);
 
   const generateRandomEnglishLetter = () => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXY";
@@ -73,6 +77,34 @@ const ActivityLetterIdentifyPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error accessing camera:", error);
+    }
+  };
+
+  const saveLetterScore = async (score: number, language: string) => {
+    const userDetailsStr = localStorage.getItem("userDetails");
+    const userId = userDetailsStr ? JSON.parse(userDetailsStr).id : null;
+
+    if (!userId) {
+      console.error("⚠️ User ID not found in localStorage.");
+      return;
+    }
+
+    console.log("📝 Saving score...");
+    console.log("User ID:", userId);
+    console.log("Language:", language);
+    console.log("Score:", score);
+    console.log("Total Items:", 10);
+
+    try {
+      await axios.post(`/letter-scores/save`, {
+        score,
+        language,
+        totalItems: 10,
+        userId,
+      });
+      console.log(`✅ ${language} score saved`);
+    } catch (err) {
+      console.error(`❌ Failed to save ${language} score:`, err);
     }
   };
 
@@ -125,23 +157,15 @@ const ActivityLetterIdentifyPage: React.FC = () => {
           setResult(isCorrect ? t("Correct") : t("Incorrect"));
         }
 
-        if (isCorrect && !gameOver) {
-          setScore((prev) => prev + 10);
+       if (!gameOver && isCorrect) {
+         setResult(t("Correct"));
 
-          setRound((prev) => {
-            const newRound = prev + 1;
-            if (newRound >= 10) {
-              setGameOver(true);
-            }
-            return newRound;
-          });
+         setTimeout(() => {
+           handleEnglishNextRound(true);
+           setResult(null);
+         }, 3000);
+       }
 
-          if (!gameOver) {
-            setTimeout(() => {
-              generateRandomEnglishLetter();
-            }, 3000);
-          }
-        }
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
       }
@@ -199,22 +223,13 @@ const ActivityLetterIdentifyPage: React.FC = () => {
           setSinhalaResult(isCorrect ? t("Correct") : t("Incorrect"));
         }
 
-        if (isCorrect && !sinhalaGameOver) {
-          setSinhalaScore((prev) => prev + 10);
+        if (!sinhalaGameOver && isCorrect) {
+          setSinhalaResult(t("Correct"));
 
-          setSinhalaRound((prev) => {
-            const newRound = prev + 1;
-            if (newRound >= 10) {
-              setSinhalaGameOver(true);
-            }
-            return newRound;
-          });
-
-          if (!sinhalaGameOver) {
-            setTimeout(() => {
-              generateRandomSinhalaLetter();
-            }, 3000);
-          }
+          setTimeout(() => {
+            handleSinhalaNextRound(true);
+            setSinhalaResult(null);
+          }, 3000);
         }
       } else if (resultData.error) {
         console.log("⚠️ Error from server:", resultData.error);
@@ -224,32 +239,17 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     }
   };
 
-  const handleEnglishSkip = () => {
-    if (gameOver) return;
+const handleEnglishSkip = () => {
+  if (!gameOver) {
+    handleEnglishNextRound(false);
+  }
+};
 
-    setRound((prev) => {
-      const newRound = prev + 1;
-      if (newRound >= 10) {
-        setGameOver(true);
-      }
-      return newRound;
-    });
-
-    generateRandomEnglishLetter();
-  };
 
   const handleSinhalaSkip = () => {
-    if (sinhalaGameOver) return;
-
-    setSinhalaRound((prev) => {
-      const newRound = prev + 1;
-      if (newRound >= 10) {
-        setSinhalaGameOver(true);
-      }
-      return newRound;
-    });
-
-    generateRandomSinhalaLetter();
+    if (!sinhalaGameOver) {
+      handleSinhalaNextRound(false); // skip: no score
+    }
   };
 
   const handleEnglishRestart = () => {
@@ -276,6 +276,40 @@ const ActivityLetterIdentifyPage: React.FC = () => {
     }
   };
 
+  const handleEnglishNextRound = (addScore: boolean) => {
+    setRound((prev) => {
+      const newRound = prev + 1;
+      if (addScore) {
+        setScore((prevScore) => prevScore + 10);
+      }
+
+      if (newRound >= 10) {
+        setGameOver(true);
+      } else {
+        generateRandomEnglishLetter();
+      }
+
+      return newRound;
+    });
+  };
+
+  const handleSinhalaNextRound = (addScore: boolean) => {
+    setSinhalaRound((prev) => {
+      const newRound = prev + 1;
+      if (addScore) {
+        setSinhalaScore((prevScore) => prevScore + 10);
+      }
+
+      if (newRound >= 10) {
+        setSinhalaGameOver(true);
+      } else {
+        generateRandomSinhalaLetter();
+      }
+
+      return newRound;
+    });
+  };
+
   useEffect(() => {
     openCamera();
     generateRandomEnglishLetter();
@@ -295,11 +329,24 @@ const ActivityLetterIdentifyPage: React.FC = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    if (gameOver && stream && activeTab === "1") {
-      stream.getTracks().forEach((track) => track.stop());
-      setStream(null);
+    if (gameOver) {
+      saveLetterScore(score, "English");
     }
-  }, [gameOver, stream, activeTab]);
+  }, [gameOver]);
+
+  useEffect(() => {
+    if (sinhalaGameOver) {
+      saveLetterScore(sinhalaScore, "Sinhala");
+    }
+  }, [sinhalaGameOver]);
+
+  useEffect(() => {
+    finalEnglishScoreRef.current = score;
+  }, [score]);
+
+  useEffect(() => {
+    finalSinhalaScoreRef.current = sinhalaScore;
+  }, [sinhalaScore]);
 
   return (
     <MainLayout>
@@ -403,7 +450,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       >
                         {t("Activity Over")}
                         <br />
-                        {t("Your Score")}: {score} / 100
+                        {t("Your Score")}: {finalEnglishScoreRef.current} / 100
                         <Button
                           type="primary"
                           onClick={handleEnglishRestart}
@@ -516,7 +563,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
                       >
                         {t("Activity Over")}
                         <br />
-                        {t("Your Score")}: {score} / 100
+                        {t("Your Score")}: {finalSinhalaScoreRef.current} / 100
                         <Button
                           type="primary"
                           onClick={handleSinhalaRestart}
