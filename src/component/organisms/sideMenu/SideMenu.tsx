@@ -93,7 +93,7 @@ const SideMenu: React.FC = () => {
       style={SideMenuContainer}
     >
       <div style={Logo(collapsed)}></div>
-      {!collapsed && userName && <div style={ user }>{userName}</div>}
+      {!collapsed && userName && <div style={user}>{userName}</div>}
       {!collapsed && <div style={DateTime}>{currentDateTime}</div>}
 
       <Menu
@@ -112,10 +112,6 @@ const SideMenu: React.FC = () => {
             {t("Teacher Dashboard")}{" "}
           </Menu.Item>
         )}
-        <Menu.Item key="/about-us" icon={<TeamOutlined />}>
-          {" "}
-          {t("aboutUs")}{" "}
-        </Menu.Item>
         <Menu.Item key="/sign-letters" icon={<FontSizeOutlined />}>
           {" "}
           {t("SignLetters")}{" "}
@@ -131,6 +127,10 @@ const SideMenu: React.FC = () => {
         <Menu.Item key="/drawing" icon={<HighlightOutlined />}>
           {" "}
           {t("Drawing")}{" "}
+        </Menu.Item>
+        <Menu.Item key="/about-us" icon={<TeamOutlined />}>
+          {" "}
+          {t("aboutUs")}{" "}
         </Menu.Item>
       </Menu>
 
