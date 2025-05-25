@@ -1,16 +1,14 @@
 import React from 'react';
-import { Layout, notification, Select,  } from 'antd';
+import { Layout, notification} from 'antd';
 import { LoginView } from '../../organisms';
 import { validateUserAndValidate } from '../../../services';
 import { LoginDataIndex, RoleNames } from '../../../constants';
 import { useNavigate } from 'react-router-dom';
-import { LanguageContext } from '../../../context/LanguageContext';
 import { mainLayoutContainer } from './LoginPageStyle';
 import { commonNotificationBody, NotificationType, NotificationTypeIndex } from '../../../util';
 import { useTranslation } from 'react-i18next';
 
 const LoginPage: React.FC = () => {
-  const { language, changeLanguage } = React.useContext(LanguageContext);
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
   const Context = React.createContext({ name: 'Default' });
@@ -52,10 +50,6 @@ const LoginPage: React.FC = () => {
   return (
     <Layout style={mainLayoutContainer}>
       {contextHolder}
-       <Select value={language} onChange={changeLanguage} style={{ width: 120, marginBottom: 10 }}>
-        <Select.Option value="en">English</Select.Option>
-        <Select.Option value="si">සිංහල</Select.Option>
-      </Select>
       <div>
         <LoginView onFinish={onFinish} />
       </div>

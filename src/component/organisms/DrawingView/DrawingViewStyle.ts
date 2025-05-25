@@ -1,41 +1,40 @@
 import { QuickDraw } from "../../../constants";
 
-export const mainLayoutContainer: React.CSSProperties = {
-};
+export const mainLayoutContainer: React.CSSProperties = {};
 
 export const canvasContainer: React.CSSProperties = {
   height: "500px",
   marginLeft: "5px",
-  border: "1px solid #ddd"
+  border: "1px solid #ddd",
 };
 
 export const canvasStyle: React.CSSProperties = {
   width: "100%",
   height: "100%",
-  border: "1px solid #ddd"
+  border: "1px solid #ddd",
 };
 
 export const buttonContainer: React.CSSProperties = {
-  borderRadius: '38px',
-  height: '44px',
-  maxHeight: '44px',
-  minWidth: '126px',
-  marginTop: '10px',
-  marginBottom: '10px',
-  marginLeft: '105px',
-  background: '#007bff',
+  borderRadius: "38px",
+  height: "44px",
+  maxHeight: "44px",
+  minWidth: "126px",
+  marginTop: "10px",
+  marginBottom: "10px",
+  marginLeft: "105px",
+  background: "#007bff",
   color: "white",
 };
 
 export const colorPickerContainer: React.CSSProperties = {
-  borderRadius: '38px',
-  height: '44px',
-  maxHeight: '44px',
-  minWidth: '126px',
-  marginTop: '10px',
-  marginBottom: '20px',
-  marginLeft: '105px',
-  background: '#007bff',
+  borderRadius: "38px",
+  height: "44px",
+  maxHeight: "44px",
+  minWidth: "126px",
+  marginTop: "10px",
+  marginBottom: "20px",
+  marginLeft: "105px",
+  background: "#007bff",
   color: "white",
 };
 
@@ -49,7 +48,7 @@ export const cardLayerStyle: React.CSSProperties = {
 export const randomSelector: React.CSSProperties = {
   textAlign: "center",
   marginBottom: 20,
-  marginTop: 10
+  marginTop: 10,
 };
 
 export const predictionsContainer = (answer: string): React.CSSProperties => {
@@ -93,36 +92,38 @@ export const predictionsTitle = (answer: string): React.CSSProperties => {
   };
 };
 
-export const nextButtonStyle: React.CSSProperties = {
-  borderRadius: '38px',
-  height: '44px',
-  maxHeight: '44px',
-  minWidth: '126px',
-  marginTop: '10px',
-  marginLeft: '105px',
-  background: '#ed7409',
-  color: "white",
-}
+export const nextButtonStyle = (answer: string): React.CSSProperties => {
+  return {
+    borderRadius: "38px",
+    height: "44px",
+    maxHeight: "44px",
+    minWidth: "126px",
+    marginTop: "10px",
+    marginLeft: answer === QuickDraw.correct ? "" : "105px",
+    background: "#ed7409",
+    color: "white",
+  };
+};
 
 export const submitButtonStyle: React.CSSProperties = {
-  borderRadius: '38px',
-  height: '44px',
-  maxHeight: '44px',
-  minWidth: '126px',
-  marginTop: '10px',
-  marginLeft: '105px',
-  background: '#32a852',
+  borderRadius: "38px",
+  height: "44px",
+  maxHeight: "44px",
+  minWidth: "126px",
+  marginTop: "10px",
+  marginLeft: "105px",
+  background: "#32a852",
   color: "white",
-}
+};
 
 export const buttonDivStyle: React.CSSProperties = {
-  marginTop: 20, 
-  display: "flex", 
+  marginTop: 20,
+  display: "flex",
   justifyContent: "center",
-  backgroundColor: "rgba(255, 255, 255, 0.72)" 
-}
+  backgroundColor: "rgba(255, 255, 255, 0.72)",
+};
 
 export const modalContainerStyle: React.CSSProperties = {
-    minWidth: '40%',
-    maxWidth: '40%',
+  minWidth: "40%",
+  maxWidth: "40%",
 };
