@@ -11,7 +11,7 @@ import {
   TeamOutlined,
   DashboardOutlined,
 } from "@ant-design/icons";
-import { SideMenuContainer, Logo, DateTime, LogoutContainer, MenuContainerStyle } from "./SideMenuStyle";
+import { SideMenuContainer, Logo, DateTime, LogoutContainer, MenuContainerStyle, user } from "./SideMenuStyle";
 import { useTranslation } from "react-i18next";
 import { RoleNames } from "../../../constants";
 
@@ -23,7 +23,7 @@ const SideMenu: React.FC = () => {
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
   const [collapsed, setCollapsed] = useState(false);
   const { t } = useTranslation();
-  const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
+  const userDetails = JSON.parse(localStorage.getItem("userDetails") || "{}");
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -72,6 +72,19 @@ const SideMenu: React.FC = () => {
     navigate("/");
   };
 
+  const userDetailsStr = localStorage.getItem("userDetails");
+  // console.log("User details menu:", userDetailsStr);
+  let userName = null;
+  if (userDetailsStr) {
+    try {
+      const userDetails = JSON.parse(userDetailsStr);
+      userName = userDetails.firstName || userDetails.firstName;
+      // console.log("User ID from menu:", userName);
+    } catch (e) {
+      console.error("Failed to parse user details:", e);
+    }
+  }
+
   return (
     <Sider
       collapsible
@@ -80,6 +93,7 @@ const SideMenu: React.FC = () => {
       style={SideMenuContainer}
     >
       <div style={Logo(collapsed)}></div>
+      {!collapsed && userName && <div style={ user }>{userName}</div>}
       {!collapsed && <div style={DateTime}>{currentDateTime}</div>}
 
       <Menu
@@ -88,24 +102,45 @@ const SideMenu: React.FC = () => {
         selectedKeys={[getActiveKey()]}
         onClick={({ key }) => navigate(key)}
       >
-        <Menu.Item key="/home" icon={<HomeOutlined />}> {t("homePage")} </Menu.Item>
+        <Menu.Item key="/home" icon={<HomeOutlined />}>
+          {" "}
+          {t("homePage")}{" "}
+        </Menu.Item>
         {userDetails.roleName === RoleNames.TEACHER && (
-          <Menu.Item key="/teacher-dashboard" icon={<DashboardOutlined />}> {t("Teacher Dashboard")} </Menu.Item>
+          <Menu.Item key="/teacher-dashboard" icon={<DashboardOutlined />}>
+            {" "}
+            {t("Teacher Dashboard")}{" "}
+          </Menu.Item>
         )}
-        <Menu.Item key="/about-us" icon={<TeamOutlined />}> {t("aboutUs")} </Menu.Item>
-        <Menu.Item key="/sign-letters" icon={<FontSizeOutlined />}> {t("SignLetters")} </Menu.Item>
-        <Menu.Item key="/numbers-Identify-Page" icon={<FieldBinaryOutlined />}> {t("SignNumbers")} </Menu.Item>
-        <Menu.Item key="/object-identifier" icon={<PictureOutlined />}> {t("ObjectIdentification")} </Menu.Item>
-        <Menu.Item key="/drawing" icon={<HighlightOutlined />}> {t("Drawing")} </Menu.Item>
+        <Menu.Item key="/about-us" icon={<TeamOutlined />}>
+          {" "}
+          {t("aboutUs")}{" "}
+        </Menu.Item>
+        <Menu.Item key="/sign-letters" icon={<FontSizeOutlined />}>
+          {" "}
+          {t("SignLetters")}{" "}
+        </Menu.Item>
+        <Menu.Item key="/numbers-Identify-Page" icon={<FieldBinaryOutlined />}>
+          {" "}
+          {t("SignNumbers")}{" "}
+        </Menu.Item>
+        <Menu.Item key="/object-identifier" icon={<PictureOutlined />}>
+          {" "}
+          {t("ObjectIdentification")}{" "}
+        </Menu.Item>
+        <Menu.Item key="/drawing" icon={<HighlightOutlined />}>
+          {" "}
+          {t("Drawing")}{" "}
+        </Menu.Item>
       </Menu>
 
-      <Menu
-        theme="dark"
-        mode="inline"
-        style={MenuContainerStyle}
-      >
-
-        <Menu.Item style={LogoutContainer} key="/" icon={<LogoutOutlined />} onClick={Logout}>
+      <Menu theme="dark" mode="inline" style={MenuContainerStyle}>
+        <Menu.Item
+          style={LogoutContainer}
+          key="/"
+          icon={<LogoutOutlined />}
+          onClick={Logout}
+        >
           {t("logOut")}
         </Menu.Item>
       </Menu>
