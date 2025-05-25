@@ -40,3 +40,12 @@ export const MenuContainerStyle: React.CSSProperties = {
   marginTop: "auto", 
   borderTop: "1px solid rgba(255, 255, 255, 0.1)" 
 };
+
+export const user: React.CSSProperties = {
+  color: "#ffffff",
+  fontSize: "20px",
+  fontWeight: "bold",
+  textAlign: "center",
+  marginBottom: "20px",
+  whiteSpace: "pre-line",
+};
