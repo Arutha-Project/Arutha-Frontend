@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, notification} from 'antd';
+import { Layout, notification } from 'antd';
 import { LoginView } from '../../organisms';
 import { validateUserAndValidate } from '../../../services';
 import { LoginDataIndex, RoleNames } from '../../../constants';
@@ -11,17 +11,19 @@ import { useTranslation } from 'react-i18next';
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
+  const [isLoading, setIsLoading] = React.useState(false);
   const Context = React.createContext({ name: 'Default' });
   const { t } = useTranslation();
 
   const onFinish = async (values: LoginDataIndex) => {
+    setIsLoading(true);
     await validateUserAndValidate(values)
       .then(jwtTokenAndUserDetails => {
         localStorage.setItem('accessToken', jwtTokenAndUserDetails.jwtToken);
         localStorage.setItem('userDetails', JSON.stringify(jwtTokenAndUserDetails.currentUser));
         console.log('User Details:', jwtTokenAndUserDetails.currentUser);
-        if(jwtTokenAndUserDetails.currentUser.roleName === RoleNames.TEACHER) {
-        navigate('/home');
+        if (jwtTokenAndUserDetails.currentUser.roleName === RoleNames.TEACHER) {
+          navigate('/home');
         } else if (jwtTokenAndUserDetails.currentUser.roleName === RoleNames.STUDENT) {
           navigate('/home');
         } else {
@@ -40,6 +42,8 @@ const LoginPage: React.FC = () => {
         } else {
           openNotification(NotificationTypeIndex.ERROR, t('System Error'), t('Please contact system administrator'));
         }
+      }).finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -51,7 +55,7 @@ const LoginPage: React.FC = () => {
     <Layout style={mainLayoutContainer}>
       {contextHolder}
       <div>
-        <LoginView onFinish={onFinish} />
+        <LoginView onFinish={onFinish} isLoading={isLoading} />
       </div>
     </Layout>
   );
