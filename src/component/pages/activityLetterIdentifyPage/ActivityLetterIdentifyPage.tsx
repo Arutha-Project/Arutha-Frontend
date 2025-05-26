@@ -50,7 +50,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
 
 
   const generateRandomEnglishLetter = () => {
-    const letters = "ABCDEFGHIJKLMNPQRSTUVWXY";
+    const letters = "ABCDEFGHIJKLMNRSTVWY";
     const randomLetter = letters[Math.floor(Math.random() * letters.length)];
     setTargetLetter(randomLetter);
     targetEnglishLetterRef.current = randomLetter;
@@ -149,8 +149,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
         const isCorrect = prediction === targetEnglishLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${
-            targetEnglishLetterRef.current
+          `Predicted: ${prediction}, Target: ${targetEnglishLetterRef.current
           } → ${isCorrect ? "✅ Correct" : "❌ Incorrect"}`
         );
 
@@ -214,8 +213,7 @@ const ActivityLetterIdentifyPage: React.FC = () => {
         const isCorrect = prediction === targetSinhalaLetterRef.current;
 
         console.log(
-          `Predicted: ${prediction}, Target: ${
-            targetSinhalaLetterRef.current
+          `Predicted: ${prediction}, Target: ${targetSinhalaLetterRef.current
           } → ${isCorrect ? "✅ Correct" : "❌ Incorrect"}`
         );
 
