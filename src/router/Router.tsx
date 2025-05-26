@@ -32,7 +32,6 @@ function Router() {
           path="/forgotPassword"
           Component={forgotPasswordPage}
         />
-
         <Route
           path="/reset-password"
           Component={resetPasswordPage}
@@ -143,10 +142,7 @@ function Router() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="*"
-          element={<NotFoundPage />}
-        />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
